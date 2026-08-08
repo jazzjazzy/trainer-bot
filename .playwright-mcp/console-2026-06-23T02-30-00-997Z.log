@@ -1,0 +1,5 @@
+[     324ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=a5671618:21550
+[  132574ms] [ERROR] SyntaxError: The requested module '/src/lib/progress.ts?t=1782181933564' does not provide an export named 'setQuizScore' @ http://localhost:5175/@vite/client:173
+[  132574ms] [ERROR] [hmr] Failed to reload /src/components/CourseView.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5175/@vite/client:175
+[  132574ms] [ERROR] SyntaxError: The requested module '/src/lib/progress.ts?t=1782181933564' does not provide an export named 'setQuizScore' @ http://localhost:5175/@vite/client:173
+[  132574ms] [ERROR] [hmr] Failed to reload /src/components/Quiz.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5175/@vite/client:175

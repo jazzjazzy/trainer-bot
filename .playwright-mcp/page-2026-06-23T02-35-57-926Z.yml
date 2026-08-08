@@ -1,0 +1,514 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - complementary [ref=e4]:
+        - generic [ref=e5]:
+          - button "← All courses" [ref=e6] [cursor=pointer]
+          - generic [ref=e7]:
+            - generic [ref=e8]: TS
+            - generic [ref=e9]:
+              - generic [ref=e10]: TypeScript for PHP Veterans
+              - generic [ref=e11]: 30 sections
+          - generic [ref=e14]: 0/30 done · 0%
+        - navigation [ref=e15]:
+          - generic [ref=e16]:
+            - generic [ref=e17]: Foundations
+            - button "1 Why TypeScript & the Compile Step" [ref=e18] [cursor=pointer]:
+              - generic [ref=e19]: "1"
+              - generic [ref=e20]: Why TypeScript & the Compile Step
+            - button "2 Setup & Tooling" [ref=e21] [cursor=pointer]:
+              - generic [ref=e22]: "2"
+              - generic [ref=e23]: Setup & Tooling
+            - button "3 The JavaScript Underneath" [ref=e24] [cursor=pointer]:
+              - generic [ref=e25]: "3"
+              - generic [ref=e26]: The JavaScript Underneath
+            - button "4 Variables & Primitive Types" [ref=e27] [cursor=pointer]:
+              - generic [ref=e28]: "4"
+              - generic [ref=e29]: Variables & Primitive Types
+            - button "5 Type Annotations & Inference" [ref=e30] [cursor=pointer]:
+              - generic [ref=e31]: "5"
+              - generic [ref=e32]: Type Annotations & Inference
+            - button "6 Functions" [ref=e33] [cursor=pointer]:
+              - generic [ref=e34]: "6"
+              - generic [ref=e35]: Functions
+          - generic [ref=e36]:
+            - generic [ref=e37]: The Type System
+            - button "7 Arrays & Tuples" [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]: "7"
+              - generic [ref=e40]: Arrays & Tuples
+            - button "8 Objects & Object Types" [ref=e41] [cursor=pointer]:
+              - generic [ref=e42]: "8"
+              - generic [ref=e43]: Objects & Object Types
+            - button "9 Interfaces" [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]: "9"
+              - generic [ref=e46]: Interfaces
+            - button "10 Type Aliases, Unions & Literal Types" [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: "10"
+              - generic [ref=e49]: Type Aliases, Unions & Literal Types
+            - button "11 Intersections & Composition" [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]: "11"
+              - generic [ref=e52]: Intersections & Composition
+            - button "12 Enums" [ref=e53] [cursor=pointer]:
+              - generic [ref=e54]: "12"
+              - generic [ref=e55]: Enums
+            - button "13 Narrowing & Type Guards" [ref=e56] [cursor=pointer]:
+              - generic [ref=e57]: "13"
+              - generic [ref=e58]: Narrowing & Type Guards
+            - button "14 Generics" [ref=e59] [cursor=pointer]:
+              - generic [ref=e60]: "14"
+              - generic [ref=e61]: Generics
+            - button "15 Utility & Advanced Types" [ref=e62] [cursor=pointer]:
+              - generic [ref=e63]: "15"
+              - generic [ref=e64]: Utility & Advanced Types
+          - generic [ref=e65]:
+            - generic [ref=e66]: Object-Oriented TypeScript
+            - button "16 Classes" [ref=e67] [cursor=pointer]:
+              - generic [ref=e68]: "16"
+              - generic [ref=e69]: Classes
+            - button "17 Inheritance & Abstract Classes" [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]: "17"
+              - generic [ref=e72]: Inheritance & Abstract Classes
+            - button "18 Interfaces vs Abstract Classes & implements" [ref=e73] [cursor=pointer]:
+              - generic [ref=e74]: "18"
+              - generic [ref=e75]: Interfaces vs Abstract Classes & implements
+            - button "19 Static Members, Accessors & this" [ref=e76] [cursor=pointer]:
+              - generic [ref=e77]: "19"
+              - generic [ref=e78]: Static Members, Accessors & this
+            - 'button "20 Modules: import / export" [ref=e79] [cursor=pointer]':
+              - generic [ref=e80]: "20"
+              - generic [ref=e81]: "Modules: import / export"
+            - button "21 Decorators & PHP 8 Attributes" [ref=e82] [cursor=pointer]:
+              - generic [ref=e83]: "21"
+              - generic [ref=e84]: Decorators & PHP 8 Attributes
+          - generic [ref=e85]:
+            - generic [ref=e86]: Modern Runtime & Async
+            - button "22 Modern Syntax & Operators" [ref=e87] [cursor=pointer]:
+              - generic [ref=e88]: "22"
+              - generic [ref=e89]: Modern Syntax & Operators
+            - button "23 Array & Collection Methods" [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]: "23"
+              - generic [ref=e92]: Array & Collection Methods
+            - button "24 Asynchronous TypeScript" [ref=e93] [cursor=pointer]:
+              - generic [ref=e94]: "24"
+              - generic [ref=e95]: Asynchronous TypeScript
+            - button "25 Error Handling & Exceptions" [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]: "25"
+              - generic [ref=e98]: Error Handling & Exceptions
+          - generic [ref=e99]:
+            - generic [ref=e100]: Ecosystem & Interview
+            - button "26 tsconfig & Strict Mode" [ref=e101] [cursor=pointer]:
+              - generic [ref=e102]: "26"
+              - generic [ref=e103]: tsconfig & Strict Mode
+            - button "27 npm, @types & the Package Ecosystem" [ref=e104] [cursor=pointer]:
+              - generic [ref=e105]: "27"
+              - generic [ref=e106]: npm, @types & the Package Ecosystem
+            - button "28 Typing the Real World" [ref=e107] [cursor=pointer]:
+              - generic [ref=e108]: "28"
+              - generic [ref=e109]: Typing the Real World
+            - button "29 Best Practices, Patterns & Pitfalls" [ref=e110] [cursor=pointer]:
+              - generic [ref=e111]: "29"
+              - generic [ref=e112]: Best Practices, Patterns & Pitfalls
+            - button "30 Mock Interview & PHP→TS Cheat Sheet" [ref=e113] [cursor=pointer]:
+              - generic [ref=e114]: "30"
+              - generic [ref=e115]: Mock Interview & PHP→TS Cheat Sheet
+      - main [ref=e116]:
+        - article [ref=e693]:
+          - generic [ref=e694]:
+            - generic [ref=e695]:
+              - generic [ref=e696]: Foundations
+              - generic [ref=e697]: Section 4 of 30
+              - generic [ref=e698]: ~12 min
+            - heading "Variables & Primitive Types" [level=1] [ref=e699]
+            - paragraph [ref=e700]: The handful of primitive types TypeScript actually has, how const/let inference works, and the template literals and typeof that replace your PHP string and gettype habits.
+            - button "✨ Ask AI about this lesson" [ref=e701] [cursor=pointer]
+          - generic [ref=e702]:
+            - generic [ref=e703]:
+              - generic [ref=e704]: 📘
+              - heading "Concept" [level=2] [ref=e705]
+            - generic [ref=e706]:
+              - paragraph [ref=e707]:
+                - text: PHP gives you a small zoo of scalar types —
+                - code [ref=e708]: int
+                - text: ","
+                - code [ref=e709]: float
+                - text: ","
+                - code [ref=e710]: string
+                - text: ","
+                - code [ref=e711]: bool
+                - text: — plus
+                - code [ref=e712]: "null"
+                - text: . TypeScript's set of
+                - strong [ref=e713]: primitives
+                - text: "is similar in spirit but with one surprise that trips up every PHP developer on day one: there is"
+                - strong [ref=e714]:
+                  - text: "no"
+                  - code [ref=e715]: int
+                  - text: vs
+                  - code [ref=e716]: float
+                - text: . Just one numeric type.
+              - heading "The seven primitives" [level=3] [ref=e717]
+              - list [ref=e718]:
+                - listitem [ref=e719]:
+                  - code [ref=e720]: string
+                  - text: — text. Same idea as PHP's
+                  - code [ref=e721]: string
+                  - text: .
+                - listitem [ref=e722]:
+                  - code [ref=e723]: number
+                  - text: —
+                  - strong [ref=e724]: every
+                  - text: "number:"
+                  - code [ref=e725]: "42"
+                  - text: ","
+                  - code [ref=e726]: "-7"
+                  - text: ","
+                  - code [ref=e727]: "3.14"
+                  - text: ","
+                  - code [ref=e728]: "0xff"
+                  - text: . PHP's
+                  - code [ref=e729]: int
+                  - emphasis [ref=e730]: and
+                  - code [ref=e731]: float
+                  - text: collapse into this one type. Under the hood it's an IEEE-754 double.
+                - listitem [ref=e732]:
+                  - code [ref=e733]: boolean
+                  - text: —
+                  - code [ref=e734]: "true"
+                  - text: /
+                  - code [ref=e735]: "false"
+                  - text: . (Note the full word — not
+                  - code [ref=e736]: bool
+                  - text: .)
+                - listitem [ref=e737]:
+                  - code [ref=e738]: "null"
+                  - text: — the intentional "no value", like PHP's
+                  - code [ref=e739]: "null"
+                  - text: .
+                - listitem [ref=e740]:
+                  - code [ref=e741]: undefined
+                  - text: — a variable that was declared but never assigned. PHP has no direct equivalent; think of it as "uninitialized".
+                - listitem [ref=e742]:
+                  - code [ref=e743]: bigint
+                  - text: — for integers beyond
+                  - code [ref=e744]: number
+                  - text: "'s safe range, written"
+                  - code [ref=e745]: 123n
+                  - text: . Reach for it like PHP's GMP/BCMath, only when
+                  - code [ref=e746]: number
+                  - text: isn't precise enough.
+                - listitem [ref=e747]:
+                  - code [ref=e748]: symbol
+                  - text: — unique, unforgeable keys. Niche; you'll rarely hand-write one.
+              - heading "const, let, and inference" [level=3] [ref=e749]
+              - paragraph [ref=e750]:
+                - text: You almost never write the type for a primitive. TypeScript
+                - strong [ref=e751]: infers
+                - text: it from the value, just like PHP figures out
+                - code [ref=e752]: $x = 5
+                - text: is an int.
+              - code [ref=e755]: "const name = \"Ada\"; // inferred: string let count = 0; // inferred: number count = 5; // fine count = \"five\"; // compile error — count is number"
+              - paragraph [ref=e756]:
+                - text: Prefer
+                - code [ref=e757]: const
+                - text: (the variable can't be reassigned) and fall back to
+                - code [ref=e758]: let
+                - text: only when you must reassign. PHP has no such distinction — every
+                - code [ref=e759]: $var
+                - text: is mutable.
+              - heading "Literal types & typeof" [level=3] [ref=e760]
+              - paragraph [ref=e761]:
+                - text: Annotate a
+                - code [ref=e762]: const
+                - text: with a value and you get a
+                - strong [ref=e763]: literal type
+                - text: — the type
+                - emphasis [ref=e764]: is
+                - text: "that exact value, not just \"some string\":"
+              - code [ref=e767]: "const dir = \"north\"; // type is the literal \"north\" let mode: \"on\" | \"off\" = \"on\"; // only these two strings allowed"
+              - heading "Template literals" [level=3] [ref=e768]
+              - paragraph [ref=e769]:
+                - text: Backtick strings with
+                - code [ref=e770]: "${...}"
+                - text: interpolation replace PHP's
+                - code [ref=e771]: "\"Hi $name\""
+                - text: and heredocs — and they span multiple lines for free.
+              - heading "Checking a type at runtime" [level=3] [ref=e772]
+              - paragraph [ref=e773]:
+                - code [ref=e774]: typeof x
+                - text: returns a string like
+                - code [ref=e775]: "\"number\""
+                - text: or
+                - code [ref=e776]: "\"string\""
+                - text: — the runtime cousin of PHP's
+                - code [ref=e777]: gettype()
+                - text: .
+          - generic [ref=e778]:
+            - generic [ref=e779]:
+              - generic [ref=e780]: 🔀
+              - heading "PHP → TypeScript" [level=2] [ref=e781]
+              - generic [ref=e782]: What you know, beside what's new
+            - generic [ref=e783]:
+              - generic [ref=e784]:
+                - 'heading "Numbers: one type, not two" [level=4] [ref=e785]'
+                - generic [ref=e786]:
+                  - generic [ref=e787]:
+                    - generic [ref=e788]: PHP
+                    - code [ref=e790]: <?php declare(strict_types=1); $count = 42; // int (PHP can't annotate locals, $price = 9.99; // float but int and float are distinct) $total = $count + $price; // float
+                  - generic [ref=e791]:
+                    - generic [ref=e792]: TypeScript
+                    - code [ref=e794]: const count = 42; // number const price = 9.99; // number const total = count + price; // number // There is no int / float — just number.
+                - paragraph [ref=e795]:
+                  - strong [ref=e796]: "Difference:"
+                  - text: PHP splits whole vs decimal into int/float. TypeScript has one number type covering both.
+                - button "✨ Ask AI about this" [ref=e797] [cursor=pointer]
+              - generic [ref=e798]:
+                - heading "Booleans and null" [level=4] [ref=e799]
+                - generic [ref=e800]:
+                  - generic [ref=e801]:
+                    - generic [ref=e802]: PHP
+                    - code [ref=e804]: <?php $active = true; // bool $missing = null; // null
+                  - generic [ref=e805]:
+                    - generic [ref=e806]: TypeScript
+                    - code [ref=e808]: "const active: boolean = true; // not \"bool\" const missing: null = null; let maybe: string | null = null; // explicit \"can be null\""
+                - paragraph [ref=e809]:
+                  - strong [ref=e810]: "Difference:"
+                  - text: TypeScript spells it boolean in full, and null is its own type you opt into via a union.
+                - button "✨ Ask AI about this" [ref=e811] [cursor=pointer]
+              - generic [ref=e812]:
+                - 'heading "Interpolation: heredoc vs template literal" [level=4] [ref=e813]'
+                - generic [ref=e814]:
+                  - generic [ref=e815]:
+                    - generic [ref=e816]: PHP
+                    - code [ref=e818]:
+                      - text: <?php $name = "Ada"; $greet =
+                      - generic [ref=e819]: "\"Hi $name!\""
+                      - text: ; // double-quote interpolation $block =
+                      - generic [ref=e820]: <<<TXT Dear $name, Welcome aboard. TXT
+                      - text: ;
+                  - generic [ref=e821]:
+                    - generic [ref=e822]: TypeScript
+                    - code [ref=e824]:
+                      - text: const name = "Ada"; const greet =
+                      - generic [ref=e825]: "`Hi ${name}!`"
+                      - text: "; // backticks + ${ } const block ="
+                      - generic [ref=e826]: "`Dear ${name}, Welcome aboard.`"
+                      - text: ; // multi-line, no heredoc needed
+                - paragraph [ref=e827]:
+                  - strong [ref=e828]: "Difference:"
+                  - text: "Backticks replace heredoc/nowdoc; ${expr} interpolates any expression, not just variables."
+                - button "✨ Ask AI about this" [ref=e829] [cursor=pointer]
+              - generic [ref=e830]:
+                - heading "Inspecting a type at runtime" [level=4] [ref=e831]
+                - generic [ref=e832]:
+                  - generic [ref=e833]:
+                    - generic [ref=e834]: PHP
+                    - code [ref=e836]: <?php $x = 3.14; echo gettype($x); // "double" echo gettype("hi"); // "string" echo gettype(true); // "boolean"
+                  - generic [ref=e837]:
+                    - generic [ref=e838]: TypeScript
+                    - code [ref=e840]: const x = 3.14; console.log(typeof x); // "number" console.log(typeof "hi"); // "string" console.log(typeof true); // "boolean"
+                - paragraph [ref=e841]:
+                  - strong [ref=e842]: "Difference:"
+                  - text: typeof is the gettype() of JS — but note floats report as "number", and typeof null is the famous "object".
+                - button "✨ Ask AI about this" [ref=e843] [cursor=pointer]
+          - generic [ref=e844]:
+            - generic [ref=e845]:
+              - generic [ref=e846]: 🧪
+              - heading "Live Playground" [level=2] [ref=e847]
+              - generic [ref=e848]: Edit & run real TypeScript
+            - generic [ref=e849]:
+              - paragraph [ref=e850]: Run this to see the single number type cover integers and decimals, a template literal in action, and what typeof reports. Then try changing isReady to a number and watch the editor complain.
+              - generic [ref=e853]: Loading...
+              - generic [ref=e854]:
+                - button "▶ Run" [ref=e855] [cursor=pointer]
+                - button "Reset" [ref=e856] [cursor=pointer]
+                - button "✨ Ask AI" [ref=e857] [cursor=pointer]
+                - generic [ref=e858]: Edit the code, then Run. Type errors show inline as you type.
+          - generic [ref=e859]:
+            - generic [ref=e860]:
+              - generic [ref=e861]: 🎯
+              - heading "Key Points" [level=2] [ref=e862]
+            - list [ref=e863]:
+              - listitem [ref=e864]:
+                - text: →
+                - paragraph [ref=e866]:
+                  - text: TypeScript has
+                  - strong [ref=e867]: one
+                  - text: numeric type,
+                  - code [ref=e868]: number
+                  - text: — PHP's
+                  - code [ref=e869]: int
+                  - text: and
+                  - code [ref=e870]: float
+                  - text: both map to it.
+              - listitem [ref=e871]:
+                - text: →
+                - paragraph [ref=e873]:
+                  - text: The primitives are
+                  - code [ref=e874]: string
+                  - text: ","
+                  - code [ref=e875]: number
+                  - text: ","
+                  - code [ref=e876]: boolean
+                  - text: ","
+                  - code [ref=e877]: "null"
+                  - text: ","
+                  - code [ref=e878]: undefined
+                  - text: ","
+                  - code [ref=e879]: bigint
+                  - text: ","
+                  - code [ref=e880]: symbol
+                  - text: . Note
+                  - code [ref=e881]: boolean
+                  - text: is spelled in full.
+              - listitem [ref=e882]:
+                - text: →
+                - paragraph [ref=e884]:
+                  - code [ref=e885]: undefined
+                  - text: (declared, never assigned) has no real PHP equivalent;
+                  - code [ref=e886]: "null"
+                  - text: is the deliberate empty value.
+              - listitem [ref=e887]:
+                - text: →
+                - paragraph [ref=e889]:
+                  - text: Prefer
+                  - code [ref=e890]: const
+                  - text: ; use
+                  - code [ref=e891]: let
+                  - text: only when you must reassign. PHP has no const/let distinction for locals.
+              - listitem [ref=e892]:
+                - text: →
+                - paragraph [ref=e894]:
+                  - text: Template literals use backticks and
+                  - code [ref=e895]: "${expr}"
+                  - text: — they replace
+                  - code [ref=e896]: "\"$x\""
+                  - text: interpolation and heredocs, and are multi-line.
+              - listitem [ref=e897]:
+                - text: →
+                - paragraph [ref=e899]:
+                  - code [ref=e900]: typeof x
+                  - text: is the runtime check, like
+                  - code [ref=e901]: gettype()
+                  - text: — but
+                  - code [ref=e902]: typeof null
+                  - text: is the famous
+                  - code [ref=e903]: "\"object\""
+                  - text: quirk.
+          - generic [ref=e904]:
+            - generic [ref=e905]:
+              - generic [ref=e906]: 💼
+              - heading "Interview Prep" [level=2] [ref=e907]
+              - generic [ref=e908]: Click a question to reveal
+            - generic [ref=e909]:
+              - group [ref=e910]:
+                - generic "Q Coming from PHP, what's the most important thing to know about numbers in TypeScript?" [ref=e911] [cursor=pointer]:
+                  - generic [ref=e912]: Q
+                  - text: Coming from PHP, what's the most important thing to know about numbers in TypeScript?
+              - group [ref=e913]:
+                - 'generic "Q What''s the difference between `null` and `undefined`?" [ref=e914] [cursor=pointer]':
+                  - generic [ref=e915]: Q
+                  - text: "What's the difference between `null` and `undefined`?"
+              - group [ref=e916]:
+                - generic "Q How do template literals improve on PHP string handling?" [ref=e917] [cursor=pointer]:
+                  - generic [ref=e918]: Q
+                  - text: How do template literals improve on PHP string handling?
+              - group [ref=e919]:
+                - generic "Q What is a literal type, and why is it useful?" [ref=e920] [cursor=pointer]:
+                  - generic [ref=e921]: Q
+                  - text: What is a literal type, and why is it useful?
+              - group [ref=e922]:
+                - 'generic "Q Is `typeof` enough to safely narrow types?" [ref=e923] [cursor=pointer]':
+                  - generic [ref=e924]: Q
+                  - text: "Is `typeof` enough to safely narrow types?"
+          - generic [ref=e925]:
+            - generic [ref=e926]:
+              - generic [ref=e927]: ✅
+              - heading "Quiz" [level=2] [ref=e928]
+            - generic [ref=e929]:
+              - generic [ref=e930]:
+                - paragraph [ref=e931]:
+                  - generic [ref=e932]: "1."
+                  - text: "What does `typeof 3.14` evaluate to in TypeScript/JavaScript?"
+                - generic [ref=e933]:
+                  - button "A \"float\"" [ref=e934] [cursor=pointer]:
+                    - generic [ref=e935]: A
+                    - text: "\"float\""
+                  - button "B \"double\"" [ref=e936] [cursor=pointer]:
+                    - generic [ref=e937]: B
+                    - text: "\"double\""
+                  - button "C \"number\"" [ref=e938] [cursor=pointer]:
+                    - generic [ref=e939]: C
+                    - text: "\"number\""
+                  - button "D \"decimal\"" [ref=e940] [cursor=pointer]:
+                    - generic [ref=e941]: D
+                    - text: "\"decimal\""
+              - generic [ref=e942]:
+                - paragraph [ref=e943]:
+                  - generic [ref=e944]: "2."
+                  - text: Which declaration creates a literal type that only allows the exact string "on" or "off"?
+                - generic [ref=e945]:
+                  - 'button "A let mode: string = \"on\";" [ref=e946] [cursor=pointer]':
+                    - generic [ref=e947]: A
+                    - text: "let mode: string = \"on\";"
+                  - 'button "B let mode: \"on\" | \"off\" = \"on\";" [ref=e948] [cursor=pointer]':
+                    - generic [ref=e949]: B
+                    - text: "let mode: \"on\" | \"off\" = \"on\";"
+                  - button "C const mode = \"on\" || \"off\";" [ref=e950] [cursor=pointer]:
+                    - generic [ref=e951]: C
+                    - text: const mode = "on" || "off";
+                  - 'button "D let mode: boolean = true;" [ref=e952] [cursor=pointer]':
+                    - generic [ref=e953]: D
+                    - text: "let mode: boolean = true;"
+              - generic [ref=e954]:
+                - paragraph [ref=e955]:
+                  - generic [ref=e956]: "3."
+                  - text: How do you embed an expression inside a string in modern TypeScript?
+                - generic [ref=e957]:
+                  - 'button "A \"Total: $total\"" [ref=e958] [cursor=pointer]':
+                    - generic [ref=e959]: A
+                    - text: "\"Total: $total\""
+                  - 'button "B \"Total: \" . $total" [ref=e960] [cursor=pointer]':
+                    - generic [ref=e961]: B
+                    - text: "\"Total: \" . $total"
+                  - 'button "C `Total: ${price * qty}`" [ref=e962] [cursor=pointer]':
+                    - generic [ref=e963]: C
+                    - text: "`Total: ${price * qty}`"
+                  - 'button "D ''Total: {price * qty}''" [ref=e964] [cursor=pointer]':
+                    - generic [ref=e965]: D
+                    - text: "'Total: {price * qty}'"
+              - button "Check answers" [disabled] [ref=e967]
+          - generic [ref=e968]:
+            - generic [ref=e969] [cursor=pointer]:
+              - checkbox "Mark this section complete" [ref=e970]
+              - text: Mark this section complete
+            - generic [ref=e971]:
+              - button "← Previous" [ref=e972] [cursor=pointer]
+              - button "Next →" [ref=e973] [cursor=pointer]
+    - button "Ask the AI tutor" [ref=e412] [cursor=pointer]:
+      - generic [ref=e413]: ✨
+      - text: Ask AI
+    - complementary "AI tutor" [ref=e414]:
+      - generic [ref=e415]:
+        - generic [ref=e416]:
+          - generic [ref=e417]:
+            - generic [ref=e418]: ✨
+            - text: AI Tutor
+          - generic [ref=e419]: "Lesson: Functions"
+        - button "✕" [ref=e421] [cursor=pointer]
+      - generic [ref=e423]:
+        - paragraph [ref=e424]:
+          - text: Ask about anything in this lesson — or hit
+          - strong [ref=e425]: ✨ Ask AI
+          - text: on any code example to get it explained.
+        - generic [ref=e426]:
+          - button "Explain this lesson simply, with a PHP comparison." [ref=e427] [cursor=pointer]
+          - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e428] [cursor=pointer]'
+          - button "Give me a tiny real-world example." [ref=e429] [cursor=pointer]
+          - button "Quiz me with one tricky question on this topic." [ref=e430] [cursor=pointer]
+      - generic [ref=e431]:
+        - textbox "Ask a follow-up… (Enter to send)" [ref=e432]
+        - button "Send" [disabled] [ref=e433]
+      - generic [ref=e434]: Powered by Claude (Haiku 4.5)
+  - generic [ref=e527]:
+    - alert
+    - alert

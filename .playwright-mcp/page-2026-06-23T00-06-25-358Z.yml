@@ -1,0 +1,457 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e49]:
+      - complementary [ref=e50]:
+        - generic [ref=e51]:
+          - button "← All courses" [ref=e52] [cursor=pointer]
+          - generic [ref=e53]:
+            - generic [ref=e54]: TS
+            - generic [ref=e55]:
+              - generic [ref=e56]: TypeScript for PHP Veterans
+              - generic [ref=e57]: 30 sections
+          - generic [ref=e60]: 0/30 done · 0%
+        - navigation [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]: Foundations
+            - button "1 Why TypeScript & the Compile Step" [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]: "1"
+              - generic [ref=e66]: Why TypeScript & the Compile Step
+            - button "2 Setup & Tooling" [ref=e67] [cursor=pointer]:
+              - generic [ref=e68]: "2"
+              - generic [ref=e69]: Setup & Tooling
+            - button "3 The JavaScript Underneath" [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]: "3"
+              - generic [ref=e72]: The JavaScript Underneath
+            - button "4 Variables & Primitive Types" [ref=e73] [cursor=pointer]:
+              - generic [ref=e74]: "4"
+              - generic [ref=e75]: Variables & Primitive Types
+            - button "5 Type Annotations & Inference" [ref=e76] [cursor=pointer]:
+              - generic [ref=e77]: "5"
+              - generic [ref=e78]: Type Annotations & Inference
+            - button "6 Functions" [ref=e79] [cursor=pointer]:
+              - generic [ref=e80]: "6"
+              - generic [ref=e81]: Functions
+          - generic [ref=e82]:
+            - generic [ref=e83]: The Type System
+            - button "7 Arrays & Tuples" [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]: "7"
+              - generic [ref=e86]: Arrays & Tuples
+            - button "8 Objects & Object Types" [ref=e87] [cursor=pointer]:
+              - generic [ref=e88]: "8"
+              - generic [ref=e89]: Objects & Object Types
+            - button "9 Interfaces" [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]: "9"
+              - generic [ref=e92]: Interfaces
+            - button "10 Type Aliases, Unions & Literal Types" [ref=e93] [cursor=pointer]:
+              - generic [ref=e94]: "10"
+              - generic [ref=e95]: Type Aliases, Unions & Literal Types
+            - button "11 Intersections & Composition" [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]: "11"
+              - generic [ref=e98]: Intersections & Composition
+            - button "12 Enums" [ref=e99] [cursor=pointer]:
+              - generic [ref=e100]: "12"
+              - generic [ref=e101]: Enums
+            - button "13 Narrowing & Type Guards" [ref=e102] [cursor=pointer]:
+              - generic [ref=e103]: "13"
+              - generic [ref=e104]: Narrowing & Type Guards
+            - button "14 Generics" [ref=e105] [cursor=pointer]:
+              - generic [ref=e106]: "14"
+              - generic [ref=e107]: Generics
+            - button "15 Utility & Advanced Types" [ref=e108] [cursor=pointer]:
+              - generic [ref=e109]: "15"
+              - generic [ref=e110]: Utility & Advanced Types
+          - generic [ref=e111]:
+            - generic [ref=e112]: Object-Oriented TypeScript
+            - button "16 Classes" [ref=e113] [cursor=pointer]:
+              - generic [ref=e114]: "16"
+              - generic [ref=e115]: Classes
+            - button "17 Inheritance & Abstract Classes" [ref=e116] [cursor=pointer]:
+              - generic [ref=e117]: "17"
+              - generic [ref=e118]: Inheritance & Abstract Classes
+            - button "18 Interfaces vs Abstract Classes & implements" [ref=e119] [cursor=pointer]:
+              - generic [ref=e120]: "18"
+              - generic [ref=e121]: Interfaces vs Abstract Classes & implements
+            - button "19 Static Members, Accessors & this" [ref=e122] [cursor=pointer]:
+              - generic [ref=e123]: "19"
+              - generic [ref=e124]: Static Members, Accessors & this
+            - 'button "20 Modules: import / export" [ref=e125] [cursor=pointer]':
+              - generic [ref=e126]: "20"
+              - generic [ref=e127]: "Modules: import / export"
+            - button "21 Decorators & PHP 8 Attributes" [ref=e128] [cursor=pointer]:
+              - generic [ref=e129]: "21"
+              - generic [ref=e130]: Decorators & PHP 8 Attributes
+          - generic [ref=e131]:
+            - generic [ref=e132]: Modern Runtime & Async
+            - button "22 Modern Syntax & Operators" [ref=e133] [cursor=pointer]:
+              - generic [ref=e134]: "22"
+              - generic [ref=e135]: Modern Syntax & Operators
+            - button "23 Array & Collection Methods" [ref=e136] [cursor=pointer]:
+              - generic [ref=e137]: "23"
+              - generic [ref=e138]: Array & Collection Methods
+            - button "24 Asynchronous TypeScript" [ref=e139] [cursor=pointer]:
+              - generic [ref=e140]: "24"
+              - generic [ref=e141]: Asynchronous TypeScript
+            - button "25 Error Handling & Exceptions" [ref=e142] [cursor=pointer]:
+              - generic [ref=e143]: "25"
+              - generic [ref=e144]: Error Handling & Exceptions
+          - generic [ref=e145]:
+            - generic [ref=e146]: Ecosystem & Interview
+            - button "26 tsconfig & Strict Mode" [ref=e147] [cursor=pointer]:
+              - generic [ref=e148]: "26"
+              - generic [ref=e149]: tsconfig & Strict Mode
+            - button "27 npm, @types & the Package Ecosystem" [ref=e150] [cursor=pointer]:
+              - generic [ref=e151]: "27"
+              - generic [ref=e152]: npm, @types & the Package Ecosystem
+            - button "28 Typing the Real World" [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]: "28"
+              - generic [ref=e155]: Typing the Real World
+            - button "29 Best Practices, Patterns & Pitfalls" [ref=e156] [cursor=pointer]:
+              - generic [ref=e157]: "29"
+              - generic [ref=e158]: Best Practices, Patterns & Pitfalls
+            - button "30 Mock Interview & PHP→TS Cheat Sheet" [ref=e159] [cursor=pointer]:
+              - generic [ref=e160]: "30"
+              - generic [ref=e161]: Mock Interview & PHP→TS Cheat Sheet
+      - main [ref=e162]:
+        - article [ref=e163]:
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - generic [ref=e166]: Foundations
+              - generic [ref=e167]: Section 1 of 30
+              - generic [ref=e168]: ~12 min
+            - heading "Why TypeScript & the Compile Step" [level=1] [ref=e169]
+            - paragraph [ref=e170]: What TypeScript actually is, why it exists, and how it relates to the strict typing you already use in modern PHP.
+            - button "✨ Ask AI about this lesson" [ref=e171] [cursor=pointer]
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - generic [ref=e174]: 📘
+              - heading "Concept" [level=2] [ref=e175]
+            - generic [ref=e176]:
+              - paragraph [ref=e177]:
+                - text: You already know more of this story than you think. Over the last decade PHP went from "types are optional comments" to
+                - strong [ref=e178]: scalar type hints
+                - text: ","
+                - strong [ref=e179]: return types
+                - text: ","
+                - strong [ref=e180]: union types
+                - text: ","
+                - strong [ref=e181]: enums
+                - text: ", and"
+                - code [ref=e182]: declare(strict_types=1)
+                - text: ". TypeScript is the same idea taken all the way: a"
+                - strong [ref=e183]: typed layer on top of JavaScript
+                - text: .
+              - heading "The one big mental shift" [level=3] [ref=e184]
+              - paragraph [ref=e185]:
+                - text: TypeScript is
+                - strong [ref=e186]: JavaScript + a static type checker + a compile step
+                - text: .
+              - list [ref=e187]:
+                - listitem [ref=e188]:
+                  - text: Every valid JavaScript file is already valid TypeScript. You are not learning a brand-new language — you are learning JavaScript
+                  - emphasis [ref=e189]: plus a type system
+                  - text: .
+                - listitem [ref=e190]:
+                  - text: The types are checked
+                  - strong [ref=e191]: before your code runs
+                  - text: (at compile time), then
+                  - strong [ref=e192]: erased
+                  - text: . The browser and Node.js never see your types — they run plain JS.
+              - paragraph [ref=e193]:
+                - text: In PHP,
+                - code [ref=e194]: declare(strict_types=1)
+                - text: still checks types
+                - strong [ref=e195]: at runtime
+                - text: — your code runs, hits a bad call, and
+                - emphasis [ref=e196]: then
+                - text: throws a
+                - code [ref=e197]: TypeError
+                - text: . TypeScript moves that check
+                - strong [ref=e198]: earlier
+                - text: ": a wrong type is a red squiggle in your editor and a failed build, long before a user ever hits it."
+              - code [ref=e201]: your .ts file ──[ tsc / vite ]──> plain .js ──> runs in browser / Node │ │ types checked here types are gone
+              - heading "Why teams adopt it" [level=3] [ref=e202]
+              - list [ref=e203]:
+                - listitem [ref=e204]:
+                  - strong [ref=e205]: Catch bugs at compile time
+                  - text: instead of in production.
+                - listitem [ref=e206]:
+                  - strong [ref=e207]: Autocomplete & refactoring that actually works
+                  - text: — the editor knows the shape of everything.
+                - listitem [ref=e208]:
+                  - strong [ref=e209]: Types are living documentation
+                  - text: — a function signature tells you exactly what goes in and what comes out.
+                - listitem [ref=e210]:
+                  - strong [ref=e211]: Structural typing
+                  - text: "(more on this later): if it has the right shape, it fits. PHP is"
+                  - emphasis [ref=e212]: nominal
+                  - text: — a class must explicitly
+                  - code [ref=e213]: implements
+                  - text: an interface. TypeScript mostly cares about shape, not name.
+              - blockquote [ref=e214]:
+                - paragraph [ref=e215]:
+                  - text: You don't run
+                  - code [ref=e216]: .ts
+                  - text: files directly the way you run
+                  - code [ref=e217]: .php
+                  - text: files. They compile to
+                  - code [ref=e218]: .js
+                  - text: first. That compile step is the price of admission — and it's where all the safety comes from.
+          - generic [ref=e219]:
+            - generic [ref=e220]:
+              - generic [ref=e221]: 🔀
+              - heading "PHP → TypeScript" [level=2] [ref=e222]
+              - generic [ref=e223]: What you know, beside what's new
+            - generic [ref=e224]:
+              - generic [ref=e225]:
+                - heading "A typed function" [level=4] [ref=e226]
+                - generic [ref=e227]:
+                  - generic [ref=e228]:
+                    - generic [ref=e229]: PHP
+                    - code [ref=e231]:
+                      - text: <?php declare(strict_types=1);
+                      - generic [ref=e232]:
+                        - text: function add(
+                        - generic [ref=e233]: int $a, int $b
+                        - text: "): int"
+                      - text: "{ return $a + $b; } echo add(2, 3); // 5"
+                  - generic [ref=e234]:
+                    - generic [ref=e235]: TypeScript
+                    - code [ref=e237]:
+                      - text: function add(
+                      - generic [ref=e238]: "a: number, b: number"
+                      - text: "): number { return a + b; } console.log(add(2, 3)); // 5"
+                - paragraph [ref=e239]:
+                  - strong [ref=e240]: "Difference:"
+                  - text: Almost identical. Types go after the name with a colon. There is one number type, not int/float/etc.
+                - button "✨ Ask AI about this" [ref=e241] [cursor=pointer]
+              - generic [ref=e242]:
+                - heading "Turning on strictness" [level=4] [ref=e243]
+                - generic [ref=e244]:
+                  - generic [ref=e245]:
+                    - generic [ref=e246]: PHP
+                    - code [ref=e248]: "<?php // Per-file, must be the first statement: declare(strict_types=1);"
+                  - generic [ref=e249]:
+                    - generic [ref=e250]: TypeScript
+                    - code [ref=e252]: "// tsconfig.json — project-wide: { \"compilerOptions\": { \"strict\": true } }"
+                - paragraph [ref=e253]:
+                  - strong [ref=e254]: "Difference:"
+                  - text: PHP opts in per file at runtime. TypeScript opts in once for the whole project and enforces it at compile time.
+                - button "✨ Ask AI about this" [ref=e255] [cursor=pointer]
+              - generic [ref=e256]:
+                - heading "When a type error is caught" [level=4] [ref=e257]
+                - generic [ref=e258]:
+                  - generic [ref=e259]:
+                    - generic [ref=e260]: PHP
+                    - code [ref=e262]:
+                      - text: <?php declare(strict_types=1);
+                      - generic [ref=e263]:
+                        - text: function greet(
+                        - generic [ref=e264]: string $name
+                        - text: "): string"
+                      - text: "{ return"
+                      - generic [ref=e265]: "\"Hi $name\""
+                      - text: "; } greet(42); // Runs, THEN throws TypeError at runtime"
+                  - generic [ref=e266]:
+                    - generic [ref=e267]: TypeScript
+                    - code [ref=e269]:
+                      - text: function greet(
+                      - generic [ref=e270]: "name: string"
+                      - text: "): string { return"
+                      - generic [ref=e271]: "`Hi ${name}`"
+                      - text: "; } greet(42); // Won't even compile — error shown in editor"
+                - paragraph [ref=e272]:
+                  - strong [ref=e273]: "Difference:"
+                  - text: PHP discovers the mistake while running. TypeScript discovers it before the code ever runs.
+                - button "✨ Ask AI about this" [ref=e274] [cursor=pointer]
+          - generic [ref=e275]:
+            - generic [ref=e276]:
+              - generic [ref=e277]: 🧪
+              - heading "Live Playground" [level=2] [ref=e278]
+              - generic [ref=e279]: Edit & run real TypeScript
+            - generic [ref=e280]:
+              - paragraph [ref=e281]: "This is real TypeScript. Run it, then try breaking it: change add(2, 3) to add('2', 3) and watch the editor flag a type error before you even run."
+              - code [ref=e285]:
+                - generic [ref=e286]:
+                  - textbox "Editor content"
+                  - textbox [ref=e287]
+                  - generic [ref=e289]:
+                    - generic [ref=e292]: "1"
+                    - generic [ref=e293]:
+                      - generic [ref=e294] [cursor=pointer]: 
+                      - generic [ref=e295]: "2"
+                    - generic [ref=e297]: "3"
+                    - generic [ref=e299]: "4"
+                    - generic [ref=e301]: "5"
+                    - generic [ref=e303]: "6"
+                    - generic [ref=e305]: "7"
+                    - generic [ref=e307]: "8"
+                    - generic [ref=e309]: "9"
+                    - generic [ref=e311]: "10"
+                    - generic [ref=e313]: "11"
+                    - generic [ref=e315]: "12"
+                    - generic [ref=e317]: "13"
+                    - generic [ref=e319]: "14"
+                  - generic [ref=e337]:
+                    - generic [ref=e339]: // Hover over things — the editor knows their types.
+                    - generic [ref=e341]: "function add(a: number, b: number): number {"
+                    - generic [ref=e343]: return a + b;
+                    - generic [ref=e345]: "}"
+                    - generic [ref=e348]: const sum = add(2, 3);
+                    - generic [ref=e350]: console.log("2 + 3 =", sum);
+                    - generic [ref=e353]: "// TypeScript infers types too — no annotation needed here:"
+                    - generic [ref=e355]: const message = "TypeScript is JavaScript with a safety net";
+                    - generic [ref=e357]: console.log(message.toUpperCase());
+                    - generic [ref=e360]: "// Try uncommenting the next line. The editor will complain BEFORE you run:"
+                    - generic [ref=e362]: // console.log(add("2", 3));
+              - generic [ref=e364]:
+                - button "▶ Run" [ref=e365] [cursor=pointer]
+                - button "Reset" [ref=e366] [cursor=pointer]
+                - button "✨ Ask AI" [ref=e367] [cursor=pointer]
+                - generic [ref=e368]: Edit the code, then Run. Type errors show inline as you type.
+          - generic [ref=e369]:
+            - generic [ref=e370]:
+              - generic [ref=e371]: 🎯
+              - heading "Key Points" [level=2] [ref=e372]
+            - list [ref=e373]:
+              - listitem [ref=e374]:
+                - text: →
+                - paragraph [ref=e376]: TypeScript = JavaScript + static types + a compile step. All JS is valid TS.
+              - listitem [ref=e377]:
+                - text: →
+                - paragraph [ref=e379]:
+                  - text: Types are checked at
+                  - strong [ref=e380]: compile time
+                  - text: ", then"
+                  - strong [ref=e381]: erased
+                  - text: — the runtime only ever sees plain JavaScript.
+              - listitem [ref=e382]:
+                - text: →
+                - paragraph [ref=e384]:
+                  - text: This is
+                  - code [ref=e385]: declare(strict_types=1)
+                  - text: "taken further: errors surface in your editor/build, not at runtime."
+              - listitem [ref=e386]:
+                - text: →
+                - paragraph [ref=e388]:
+                  - code [ref=e389]: "strict: true"
+                  - text: in
+                  - code [ref=e390]: tsconfig.json
+                  - text: is the project-wide switch worth turning on from day one.
+              - listitem [ref=e391]:
+                - text: →
+                - paragraph [ref=e393]:
+                  - text: TypeScript is mostly
+                  - strong [ref=e394]: structural
+                  - text: (shape-based), where PHP is
+                  - strong [ref=e395]: nominal
+                  - text: (name-based).
+          - generic [ref=e396]:
+            - generic [ref=e397]:
+              - generic [ref=e398]: 💼
+              - heading "Interview Prep" [level=2] [ref=e399]
+              - generic [ref=e400]: Click a question to reveal
+            - generic [ref=e401]:
+              - group [ref=e402]:
+                - generic "Q What is TypeScript, and how does it relate to JavaScript?" [ref=e403] [cursor=pointer]:
+                  - generic [ref=e404]: Q
+                  - text: What is TypeScript, and how does it relate to JavaScript?
+              - group [ref=e405]:
+                - generic "Q If types are erased at compile time, what value do they add?" [ref=e406] [cursor=pointer]:
+                  - generic [ref=e407]: Q
+                  - text: If types are erased at compile time, what value do they add?
+              - group [ref=e408]:
+                - generic "Q Coming from PHP, what's the biggest difference in how type errors are caught?" [ref=e409] [cursor=pointer]:
+                  - generic [ref=e410]: Q
+                  - text: Coming from PHP, what's the biggest difference in how type errors are caught?
+          - generic [ref=e411]:
+            - generic [ref=e412]:
+              - generic [ref=e413]: ✅
+              - heading "Quiz" [level=2] [ref=e414]
+            - generic [ref=e415]:
+              - generic [ref=e416]:
+                - paragraph [ref=e417]:
+                  - generic [ref=e418]: "1."
+                  - text: When does TypeScript check your types?
+                - generic [ref=e419]:
+                  - button "A At runtime, like PHP with strict_types" [ref=e420] [cursor=pointer]:
+                    - generic [ref=e421]: A
+                    - text: At runtime, like PHP with strict_types
+                  - button "B At compile time, before the code runs" [ref=e422] [cursor=pointer]:
+                    - generic [ref=e423]: B
+                    - text: At compile time, before the code runs
+                  - button "C Never — types are only comments" [ref=e424] [cursor=pointer]:
+                    - generic [ref=e425]: C
+                    - text: Never — types are only comments
+                  - button "D Only when you call a special validate() function" [ref=e426] [cursor=pointer]:
+                    - generic [ref=e427]: D
+                    - text: Only when you call a special validate() function
+              - generic [ref=e428]:
+                - paragraph [ref=e429]:
+                  - generic [ref=e430]: "2."
+                  - text: What does the JavaScript engine (browser/Node) receive?
+                - generic [ref=e431]:
+                  - button "A The .ts file with types intact" [ref=e432] [cursor=pointer]:
+                    - generic [ref=e433]: A
+                    - text: The .ts file with types intact
+                  - button "B Plain JavaScript with the types stripped out" [ref=e434] [cursor=pointer]:
+                    - generic [ref=e435]: B
+                    - text: Plain JavaScript with the types stripped out
+                  - button "C A binary compiled format" [ref=e436] [cursor=pointer]:
+                    - generic [ref=e437]: C
+                    - text: A binary compiled format
+                  - button "D Both the types and the JS at runtime" [ref=e438] [cursor=pointer]:
+                    - generic [ref=e439]: D
+                    - text: Both the types and the JS at runtime
+              - generic [ref=e440]:
+                - paragraph [ref=e441]:
+                  - generic [ref=e442]: "3."
+                  - text: Which statement about TypeScript and JavaScript is correct?
+                - generic [ref=e443]:
+                  - button "A They are unrelated languages" [ref=e444] [cursor=pointer]:
+                    - generic [ref=e445]: A
+                    - text: They are unrelated languages
+                  - button "B JavaScript is a superset of TypeScript" [ref=e446] [cursor=pointer]:
+                    - generic [ref=e447]: B
+                    - text: JavaScript is a superset of TypeScript
+                  - button "C TypeScript is a superset of JavaScript" [ref=e448] [cursor=pointer]:
+                    - generic [ref=e449]: C
+                    - text: TypeScript is a superset of JavaScript
+                  - button "D TypeScript replaces JavaScript entirely at runtime" [ref=e450] [cursor=pointer]:
+                    - generic [ref=e451]: D
+                    - text: TypeScript replaces JavaScript entirely at runtime
+              - button "Check answers" [disabled] [ref=e453]
+          - generic [ref=e454]:
+            - generic [ref=e455] [cursor=pointer]:
+              - checkbox "Mark this section complete" [ref=e456]
+              - text: Mark this section complete
+            - generic [ref=e457]:
+              - button "← Previous" [disabled] [ref=e458]
+              - button "Next →" [ref=e459] [cursor=pointer]
+    - button "Ask the AI tutor" [ref=e460] [cursor=pointer]:
+      - generic [ref=e461]: ✨
+      - text: Ask AI
+    - complementary "AI tutor" [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]: ✨
+            - text: AI Tutor
+          - generic [ref=e33]: "Lesson: Why TypeScript & the Compile Step"
+        - button "✕" [ref=e35] [cursor=pointer]
+      - generic [ref=e37]:
+        - paragraph [ref=e38]:
+          - text: Ask about anything in this lesson — or hit
+          - strong [ref=e39]: ✨ Ask AI
+          - text: on any code example to get it explained, PHP-style.
+        - generic [ref=e40]:
+          - button "Explain this lesson simply, with a PHP comparison." [ref=e41] [cursor=pointer]
+          - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e42] [cursor=pointer]'
+          - button "Give me a tiny real-world example." [ref=e43] [cursor=pointer]
+          - button "Quiz me with one tricky question on this topic." [ref=e44] [cursor=pointer]
+      - generic [ref=e45]:
+        - textbox "Ask a follow-up… (Enter to send)" [ref=e46]
+        - button "Send" [disabled] [ref=e47]
+      - generic [ref=e48]: Powered by Claude (Haiku 4.5)
+  - generic [ref=e462]:
+    - alert
+    - alert

@@ -1,0 +1,457 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]: TS
+          - generic [ref=e8]:
+            - generic [ref=e9]: TypeScript for PHP Veterans
+            - generic [ref=e10]: 30 interactive sections
+        - generic [ref=e13]: 0/30 done · 0%
+      - navigation [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: Foundations
+          - button "1 Why TypeScript & the Compile Step" [ref=e17] [cursor=pointer]:
+            - generic [ref=e18]: "1"
+            - generic [ref=e19]: Why TypeScript & the Compile Step
+          - button "2 Setup & Tooling" [ref=e318] [cursor=pointer]:
+            - generic [ref=e319]: "2"
+            - generic [ref=e320]: Setup & Tooling
+          - button "3 The JavaScript Underneath" [ref=e321] [cursor=pointer]:
+            - generic [ref=e322]: "3"
+            - generic [ref=e323]: The JavaScript Underneath
+          - button "4 Variables & Primitive Types" [ref=e324] [cursor=pointer]:
+            - generic [ref=e325]: "4"
+            - generic [ref=e326]: Variables & Primitive Types
+          - button "5 Type Annotations & Inference" [ref=e327] [cursor=pointer]:
+            - generic [ref=e328]: "5"
+            - generic [ref=e329]: Type Annotations & Inference
+          - button "6 Functions" [ref=e330] [cursor=pointer]:
+            - generic [ref=e331]: "6"
+            - generic [ref=e332]: Functions
+        - generic [ref=e333]:
+          - generic [ref=e334]: The Type System
+          - button "7 Arrays & Tuples" [ref=e335] [cursor=pointer]:
+            - generic [ref=e336]: "7"
+            - generic [ref=e337]: Arrays & Tuples
+          - button "8 Objects & Object Types" [ref=e338] [cursor=pointer]:
+            - generic [ref=e339]: "8"
+            - generic [ref=e340]: Objects & Object Types
+          - button "9 Interfaces" [ref=e341] [cursor=pointer]:
+            - generic [ref=e342]: "9"
+            - generic [ref=e343]: Interfaces
+          - button "10 Type Aliases, Unions & Literal Types" [ref=e344] [cursor=pointer]:
+            - generic [ref=e345]: "10"
+            - generic [ref=e346]: Type Aliases, Unions & Literal Types
+          - button "11 Intersections & Composition" [ref=e347] [cursor=pointer]:
+            - generic [ref=e348]: "11"
+            - generic [ref=e349]: Intersections & Composition
+          - button "12 Enums" [ref=e350] [cursor=pointer]:
+            - generic [ref=e351]: "12"
+            - generic [ref=e352]: Enums
+          - button "13 Narrowing & Type Guards" [ref=e353] [cursor=pointer]:
+            - generic [ref=e354]: "13"
+            - generic [ref=e355]: Narrowing & Type Guards
+          - button "14 Generics" [ref=e356] [cursor=pointer]:
+            - generic [ref=e357]: "14"
+            - generic [ref=e358]: Generics
+          - button "15 Utility & Advanced Types" [ref=e359] [cursor=pointer]:
+            - generic [ref=e360]: "15"
+            - generic [ref=e361]: Utility & Advanced Types
+        - generic [ref=e362]:
+          - generic [ref=e363]: Object-Oriented TypeScript
+          - button "16 Classes" [ref=e364] [cursor=pointer]:
+            - generic [ref=e365]: "16"
+            - generic [ref=e366]: Classes
+          - button "17 Inheritance & Abstract Classes" [ref=e367] [cursor=pointer]:
+            - generic [ref=e368]: "17"
+            - generic [ref=e369]: Inheritance & Abstract Classes
+          - button "18 Interfaces vs Abstract Classes & implements" [ref=e370] [cursor=pointer]:
+            - generic [ref=e371]: "18"
+            - generic [ref=e372]: Interfaces vs Abstract Classes & implements
+          - button "19 Static Members, Accessors & this" [ref=e373] [cursor=pointer]:
+            - generic [ref=e374]: "19"
+            - generic [ref=e375]: Static Members, Accessors & this
+          - 'button "20 Modules: import / export" [ref=e376] [cursor=pointer]':
+            - generic [ref=e377]: "20"
+            - generic [ref=e378]: "Modules: import / export"
+          - button "21 Decorators & PHP 8 Attributes" [ref=e379] [cursor=pointer]:
+            - generic [ref=e380]: "21"
+            - generic [ref=e381]: Decorators & PHP 8 Attributes
+        - generic [ref=e382]:
+          - generic [ref=e383]: Modern Runtime & Async
+          - button "22 Modern Syntax & Operators" [ref=e384] [cursor=pointer]:
+            - generic [ref=e385]: "22"
+            - generic [ref=e386]: Modern Syntax & Operators
+          - button "23 Array & Collection Methods" [ref=e387] [cursor=pointer]:
+            - generic [ref=e388]: "23"
+            - generic [ref=e389]: Array & Collection Methods
+          - button "24 Asynchronous TypeScript" [ref=e390] [cursor=pointer]:
+            - generic [ref=e391]: "24"
+            - generic [ref=e392]: Asynchronous TypeScript
+          - button "25 Error Handling & Exceptions" [ref=e393] [cursor=pointer]:
+            - generic [ref=e394]: "25"
+            - generic [ref=e395]: Error Handling & Exceptions
+        - generic [ref=e396]:
+          - generic [ref=e397]: Ecosystem & Interview
+          - button "26 tsconfig & Strict Mode" [ref=e398] [cursor=pointer]:
+            - generic [ref=e399]: "26"
+            - generic [ref=e400]: tsconfig & Strict Mode
+          - button "27 npm, @types & the Package Ecosystem" [ref=e401] [cursor=pointer]:
+            - generic [ref=e402]: "27"
+            - generic [ref=e403]: npm, @types & the Package Ecosystem
+          - button "28 Typing the Real World" [ref=e404] [cursor=pointer]:
+            - generic [ref=e405]: "28"
+            - generic [ref=e406]: Typing the Real World
+          - button "29 Best Practices, Patterns & Pitfalls" [ref=e407] [cursor=pointer]:
+            - generic [ref=e408]: "29"
+            - generic [ref=e409]: Best Practices, Patterns & Pitfalls
+          - button "30 Mock Interview & PHP→TS Cheat Sheet" [ref=e410] [cursor=pointer]:
+            - generic [ref=e411]: "30"
+            - generic [ref=e412]: Mock Interview & PHP→TS Cheat Sheet
+    - main [ref=e20]:
+      - article [ref=e413]:
+        - generic [ref=e414]:
+          - generic [ref=e415]:
+            - generic [ref=e416]: Modern Runtime & Async
+            - generic [ref=e417]: Section 24 of 30
+            - generic [ref=e418]: ~16 min
+          - heading "Asynchronous TypeScript" [level=1] [ref=e419]
+          - paragraph [ref=e420]: How a single-threaded, never-blocking event loop changes everything you assume about I/O — and why async/await makes it read almost like the synchronous PHP you already write.
+        - generic [ref=e421]:
+          - generic [ref=e422]:
+            - generic [ref=e423]: 📘
+            - heading "Concept" [level=2] [ref=e424]
+          - generic [ref=e425]:
+            - paragraph [ref=e426]:
+              - text: This is the section where your PHP instincts will fight you. The fix is not a new keyword — it's a new
+              - strong [ref=e427]: mental model
+              - text: of how the program runs.
+            - 'heading "The mindset shift: blocking vs. non-blocking" [level=3] [ref=e428]'
+            - paragraph [ref=e429]:
+              - text: In PHP, a script is born when a request arrives and dies when the response is sent. Everything in between is
+              - strong [ref=e430]: synchronous and blocking
+              - text: ": when you call"
+              - code [ref=e431]: $db->query(...)
+              - text: or
+              - code [ref=e432]: file_get_contents(...)
+              - text: ", that line"
+              - emphasis [ref=e433]: stops the world
+              - text: until the result comes back. The PHP process literally sits and waits. Because each request gets its own fresh process, that's fine — blocking one process doesn't block another.
+            - paragraph [ref=e434]:
+              - text: JavaScript is the opposite. A Node server (or a browser tab) is
+              - strong [ref=e435]: one long-lived process running a single thread
+              - text: . If a line blocked that thread,
+              - emphasis [ref=e436]: nothing else could happen
+              - text: — no other request, no clicks, no timers. So JS makes I/O
+              - strong [ref=e437]: non-blocking
+              - text: ": you start the work, hand the runtime a callback, and the thread is immediately free to do other things. When the result is ready, the"
+              - strong [ref=e438]: event loop
+              - text: picks up your callback and runs it.
+            - blockquote [ref=e439]:
+              - paragraph [ref=e440]: PHP = fresh process per request, blocks freely. JS = one process forever, must never block. That single constraint explains all of async JS.
+            - heading "Promises" [level=3] [ref=e441]
+            - paragraph [ref=e442]:
+              - text: A
+              - code [ref=e443]: Promise<T>
+              - text: is a placeholder for a value that isn't here
+              - emphasis [ref=e444]: yet
+              - text: — "I'll eventually give you a
+              - code [ref=e445]: T
+              - text: ", or fail with an error.\" It has three states:"
+              - emphasis [ref=e446]: pending
+              - text: ","
+              - emphasis [ref=e447]: fulfilled
+              - text: ","
+              - emphasis [ref=e448]: rejected
+              - text: .
+            - code [ref=e451]:
+              - text: "const p: Promise<number> = fetch(\"/count\").then("
+              - generic [ref=e452]: (r) =>
+              - text: r.json());
+            - heading "async / await" [level=3] [ref=e453]
+            - paragraph [ref=e454]:
+              - code [ref=e455]: await
+              - text: pauses
+              - strong [ref=e456]: your function
+              - text: (not the thread) until a promise settles, then gives you the unwrapped value. An
+              - code [ref=e457]: async
+              - text: function always returns a
+              - code [ref=e458]: Promise
+              - text: ". This is the magic: non-blocking code that"
+              - emphasis [ref=e459]: reads
+              - text: top-to-bottom like the blocking PHP you know.
+            - code [ref=e462]:
+              - text: async function loadUser(
+              - generic [ref=e463]: "id: number"
+              - text: "): Promise<User> { const res = await fetch("
+              - generic [ref=e464]: "`/users/${id}`"
+              - text: "); // thread is free while we wait return (await res.json()) as User; }"
+            - heading "Doing things in parallel & handling errors" [level=3] [ref=e465]
+            - list [ref=e466]:
+              - listitem [ref=e467]:
+                - code [ref=e468]: Promise.all([...])
+                - text: runs promises
+                - strong [ref=e469]: concurrently
+                - text: and resolves when all finish — far faster than awaiting each in turn.
+              - listitem [ref=e470]:
+                - text: Wrap
+                - code [ref=e471]: await
+                - text: in
+                - strong [ref=e472]:
+                  - code [ref=e473]: try/catch
+                - text: ; a rejected promise throws right there, just like an exception.
+        - generic [ref=e474]:
+          - generic [ref=e475]:
+            - generic [ref=e476]: 🔀
+            - heading "PHP → TypeScript" [level=2] [ref=e477]
+            - generic [ref=e478]: What you know, beside what's new
+          - generic [ref=e479]:
+            - generic [ref=e480]:
+              - heading "Blocking I/O vs. non-blocking await" [level=4] [ref=e481]
+              - generic [ref=e482]:
+                - generic [ref=e483]:
+                  - generic [ref=e484]: PHP
+                  - code [ref=e486]: "<?php // Blocks the process until the HTTP call returns: $json = file_get_contents(\"https://api.example.com/user/1\"); $user = json_decode($json, true); echo $user[\"name\"];"
+                - generic [ref=e487]:
+                  - generic [ref=e488]: TypeScript
+                  - code [ref=e490]: "// Frees the thread while waiting; resumes when the data arrives: const res = await fetch(\"https://api.example.com/user/1\"); const user = await res.json(); console.log(user.name);"
+              - paragraph [ref=e491]:
+                - strong [ref=e492]: "Difference:"
+                - text: PHP stops the whole process on that line. TS yields the thread so other work runs, then continues.
+            - generic [ref=e493]:
+              - heading "Process lifetime" [level=4] [ref=e494]
+              - generic [ref=e495]:
+                - generic [ref=e496]:
+                  - generic [ref=e497]: PHP
+                  - code [ref=e499]: <?php // One request = one fresh process. State dies at the end. session_start(); $_SESSION["hits"] = ($_SESSION["hits"] ?? 0) + 1; echo $_SESSION["hits"];
+                - generic [ref=e500]:
+                  - generic [ref=e501]: TypeScript
+                  - code [ref=e503]:
+                    - text: // One long-lived process serves every request. State persists in memory. let hits = 0; server.on("request",
+                    - generic [ref=e504]: (req, res) =>
+                    - text: "{ hits += 1; res.end(String(hits)); });"
+              - paragraph [ref=e505]:
+                - strong [ref=e506]: "Difference:"
+                - text: PHP forgets everything between requests; JS keeps the process (and your variables) alive.
+            - generic [ref=e507]:
+              - heading "Sequential vs. concurrent work" [level=4] [ref=e508]
+              - generic [ref=e509]:
+                - generic [ref=e510]:
+                  - generic [ref=e511]: PHP
+                  - code [ref=e513]: <?php // Two calls run one after the other — total time = sum of both. $a = file_get_contents("https://api.example.com/a"); // wait... $b = file_get_contents("https://api.example.com/b"); // ...then wait again echo $a . $b;
+                - generic [ref=e514]:
+                  - generic [ref=e515]: TypeScript
+                  - code [ref=e517]:
+                    - text: // Both start at once — total time ≈ the slower of the two. const [a, b] = await Promise.all([ fetch("https://api.example.com/a").then(
+                    - generic [ref=e518]: (r) =>
+                    - text: r.text()), fetch("https://api.example.com/b").then(
+                    - generic [ref=e519]: (r) =>
+                    - text: r.text()), ]); console.log(a + b);
+              - paragraph [ref=e520]:
+                - strong [ref=e521]: "Difference:"
+                - text: Plain PHP has no mainstream concurrency; Promise.all is everyday JS.
+            - generic [ref=e522]:
+              - heading "Error handling around I/O" [level=4] [ref=e523]
+              - generic [ref=e524]:
+                - generic [ref=e525]:
+                  - generic [ref=e526]: PHP
+                  - code [ref=e528]: "<?php try { $pdo = new PDO($dsn); $row = $pdo->query(\"SELECT 1\")->fetch(); } catch (PDOException $e) { error_log($e->getMessage()); }"
+                - generic [ref=e529]:
+                  - generic [ref=e530]: TypeScript
+                  - code [ref=e532]: "try { const res = await fetch(\"/health\"); const row = await res.json(); } catch (e) { console.error(e instanceof Error ? e.message : e); }"
+              - paragraph [ref=e533]:
+                - strong [ref=e534]: "Difference:"
+                - text: A rejected promise throws at the await, so the same try/catch you know still works.
+        - generic [ref=e535]:
+          - generic [ref=e536]:
+            - generic [ref=e537]: 🧪
+            - heading "Live Playground" [level=2] [ref=e538]
+            - generic [ref=e539]: Edit & run real TypeScript
+          - generic [ref=e540]:
+            - paragraph [ref=e541]: Watch the ordering and timing. Notice the two parallel delays finish in ~300ms total, not 500ms — that's the event loop letting them run concurrently.
+            - code [ref=e652]:
+              - generic [ref=e653]:
+                - textbox "Editor content"
+                - textbox [ref=e654]
+                - generic [ref=e656]:
+                  - generic [ref=e659]: "1"
+                  - generic [ref=e660]:
+                    - generic [ref=e661] [cursor=pointer]: 
+                    - generic [ref=e662]: "2"
+                  - generic [ref=e663]:
+                    - generic [ref=e664] [cursor=pointer]: 
+                    - generic [ref=e665]: "3"
+                  - generic [ref=e667]: "4"
+                  - generic [ref=e669]: "5"
+                  - generic [ref=e671]: "6"
+                  - generic [ref=e673]: "7"
+                  - generic [ref=e674]:
+                    - generic [ref=e675] [cursor=pointer]: 
+                    - generic [ref=e676]: "8"
+                  - generic [ref=e678]: "9"
+                  - generic [ref=e680]: "10"
+                  - generic [ref=e682]: "11"
+                  - generic [ref=e684]: "12"
+                  - generic [ref=e686]: "13"
+                  - generic [ref=e688]: "14"
+                  - generic [ref=e690]: "15"
+                - generic [ref=e719]:
+                  - generic [ref=e721]: "// A Promise-based delay: resolves after `ms` milliseconds."
+                  - generic [ref=e723]: "function delay(ms: number): Promise<number> {"
+                  - generic [ref=e725]: "return new Promise((resolve) => {"
+                  - generic [ref=e727]: setTimeout(() => resolve(ms), ms);
+                  - generic [ref=e729]: "});"
+                  - generic [ref=e731]: "}"
+                  - generic [ref=e734]: "async function main(): Promise<void> {"
+                  - generic [ref=e736]: const start = Date.now();
+                  - generic [ref=e738]: console.log("start");
+                  - generic [ref=e741]: "// Sequential await: the function pauses here (thread stays free)."
+                  - generic [ref=e743]: await delay(200);
+                  - generic [ref=e745]: console.log("after 200ms wait, elapsed ~", Date.now() - start, "ms");
+            - generic [ref=e545]:
+              - button "▶ Run" [ref=e546] [cursor=pointer]
+              - button "Reset" [ref=e547] [cursor=pointer]
+              - generic [ref=e548]: Edit the code, then Run. Type errors show inline as you type.
+            - generic [ref=e748]:
+              - generic [ref=e749]: Console output
+              - generic [ref=e750]: start
+              - generic [ref=e751]: this prints immediately, before the awaits complete
+        - generic [ref=e549]:
+          - generic [ref=e550]:
+            - generic [ref=e551]: 🎯
+            - heading "Key Points" [level=2] [ref=e552]
+          - list [ref=e553]:
+            - listitem [ref=e554]:
+              - text: →
+              - paragraph [ref=e556]:
+                - strong [ref=e557]: Blocking vs. non-blocking
+                - text: "is the core shift: PHP waits on a line; JS hands off and keeps the single thread free."
+            - listitem [ref=e558]:
+              - text: →
+              - paragraph [ref=e560]:
+                - text: JS runs
+                - strong [ref=e561]: one long-lived, single-threaded process
+                - text: with an
+                - strong [ref=e562]: event loop
+                - text: — unlike PHP's fresh-process-per-request model.
+            - listitem [ref=e563]:
+              - text: →
+              - paragraph [ref=e565]:
+                - text: A
+                - code [ref=e566]: Promise<T>
+                - text: is a future value (pending → fulfilled/rejected); an
+                - code [ref=e567]: async
+                - text: function always returns one.
+            - listitem [ref=e568]:
+              - text: →
+              - paragraph [ref=e570]:
+                - code [ref=e571]: await
+                - text: pauses
+                - emphasis [ref=e572]: your function
+                - text: ", not the thread, and unwraps the resolved value so code reads top-to-bottom."
+            - listitem [ref=e573]:
+              - text: →
+              - paragraph [ref=e575]:
+                - code [ref=e576]: Promise.all([...])
+                - text: runs work
+                - strong [ref=e577]: concurrently
+                - text: ; awaiting one-by-one is sequential and slower.
+            - listitem [ref=e578]:
+              - text: →
+              - paragraph [ref=e580]:
+                - text: Wrap
+                - code [ref=e581]: await
+                - text: in
+                - strong [ref=e582]:
+                  - code [ref=e583]: try/catch
+                - text: — a rejected promise throws exactly like an exception.
+        - generic [ref=e584]:
+          - generic [ref=e585]:
+            - generic [ref=e586]: 💼
+            - heading "Interview Prep" [level=2] [ref=e587]
+            - generic [ref=e588]: Click a question to reveal
+          - generic [ref=e589]:
+            - group [ref=e590]:
+              - generic "Q Coming from PHP, explain why JavaScript needs async at all." [ref=e591] [cursor=pointer]:
+                - generic [ref=e592]: Q
+                - text: Coming from PHP, explain why JavaScript needs async at all.
+            - group [ref=e593]:
+              - 'generic "Q What is a Promise, and how does `async`/`await` relate to it?" [ref=e594] [cursor=pointer]':
+                - generic [ref=e595]: Q
+                - text: "What is a Promise, and how does `async`/`await` relate to it?"
+            - group [ref=e596]:
+              - generic "Q How do you run several async operations in parallel, and why does it matter?" [ref=e597] [cursor=pointer]:
+                - generic [ref=e598]: Q
+                - text: How do you run several async operations in parallel, and why does it matter?
+            - group [ref=e599]:
+              - 'generic "Q How do you handle errors from `await`ed code?" [ref=e600] [cursor=pointer]':
+                - generic [ref=e601]: Q
+                - text: "How do you handle errors from `await`ed code?"
+        - generic [ref=e602]:
+          - generic [ref=e603]:
+            - generic [ref=e604]: ✅
+            - heading "Quiz" [level=2] [ref=e605]
+          - generic [ref=e606]:
+            - generic [ref=e607]:
+              - paragraph [ref=e608]:
+                - generic [ref=e609]: "1."
+                - text: "What does `await` actually pause?"
+              - generic [ref=e610]:
+                - button "A The entire single thread, like a blocking PHP call" [ref=e611] [cursor=pointer]:
+                  - generic [ref=e612]: A
+                  - text: The entire single thread, like a blocking PHP call
+                - button "B Only the current async function, leaving the thread free for other work" [ref=e613] [cursor=pointer]:
+                  - generic [ref=e614]: B
+                  - text: Only the current async function, leaving the thread free for other work
+                - button "C Nothing — it runs synchronously" [ref=e615] [cursor=pointer]:
+                  - generic [ref=e616]: C
+                  - text: Nothing — it runs synchronously
+                - button "D The operating system process until the timer fires" [ref=e617] [cursor=pointer]:
+                  - generic [ref=e618]: D
+                  - text: The operating system process until the timer fires
+            - generic [ref=e619]:
+              - paragraph [ref=e620]:
+                - generic [ref=e621]: "2."
+                - text: Two independent fetches each take ~300ms. Which approach finishes fastest?
+              - generic [ref=e622]:
+                - 'button "A `await fetchA(); await fetchB();` — about 600ms" [ref=e623] [cursor=pointer]':
+                  - generic [ref=e624]: A
+                  - text: "`await fetchA(); await fetchB();` — about 600ms"
+                - 'button "B `await Promise.all([fetchA(), fetchB()])` — about 300ms" [ref=e625] [cursor=pointer]':
+                  - generic [ref=e626]: B
+                  - text: "`await Promise.all([fetchA(), fetchB()])` — about 300ms"
+                - button "C Both take the same time on a single thread" [ref=e627] [cursor=pointer]:
+                  - generic [ref=e628]: C
+                  - text: Both take the same time on a single thread
+                - button "D Neither works without multiple threads" [ref=e629] [cursor=pointer]:
+                  - generic [ref=e630]: D
+                  - text: Neither works without multiple threads
+            - generic [ref=e631]:
+              - paragraph [ref=e632]:
+                - generic [ref=e633]: "3."
+                - text: What is the key runtime difference between a PHP script and a Node server?
+              - generic [ref=e634]:
+                - button "A PHP is faster because it is compiled ahead of time" [ref=e635] [cursor=pointer]:
+                  - generic [ref=e636]: A
+                  - text: PHP is faster because it is compiled ahead of time
+                - button "B Node spawns a fresh process per request, like PHP does" [ref=e637] [cursor=pointer]:
+                  - generic [ref=e638]: B
+                  - text: Node spawns a fresh process per request, like PHP does
+                - button "C PHP gets a fresh process per request; Node is one long-lived single-threaded process with an event loop" [ref=e639] [cursor=pointer]:
+                  - generic [ref=e640]: C
+                  - text: PHP gets a fresh process per request; Node is one long-lived single-threaded process with an event loop
+                - button "D Both block the thread on I/O by default" [ref=e641] [cursor=pointer]:
+                  - generic [ref=e642]: D
+                  - text: Both block the thread on I/O by default
+            - button "Check answers" [disabled] [ref=e644]
+        - generic [ref=e645]:
+          - generic [ref=e646] [cursor=pointer]:
+            - checkbox "Mark this section complete" [ref=e647]
+            - text: Mark this section complete
+          - generic [ref=e648]:
+            - button "← Previous" [ref=e649] [cursor=pointer]
+            - button "Next →" [ref=e650] [cursor=pointer]
+  - generic [ref=e313]:
+    - alert
+    - alert

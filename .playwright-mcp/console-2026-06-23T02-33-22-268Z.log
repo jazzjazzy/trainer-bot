@@ -1,0 +1,17 @@
+[     440ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://ogads-pa.clients6.google.com/$rpc/google.internal.onegoogle.asyncdata.v1.AsyncDataService/GetAsyncData:0
+[    4536ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://www.googleadservices.com/pagead/conversion/16521530460/?gad_source=1&adview_type=1&adview_query_id=CNymo6upnJUDFd_lFgUdUsk6Jg:0
+[    4754ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://www.googleadservices.com/pagead/conversion/16521530460/?gad_source=1&adview_type=1&adview_query_id=CNymo6upnJUDFd_lFgUdUsk6Jg:0
+[    4768ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://www.googletagmanager.com/gtm.js?id=GTM-16521530460&preconnect=1&type=8&qid=CNymo6upnJUDFd_lFgUdUsk6Jg:0
+[    4768ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://www.googletagmanager.com/gtag/js?id=AW-16521530460&preconnect=1&type=7&qid=CNymo6upnJUDFd_lFgUdUsk6Jg:0
+[    5078ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://ogads-pa.clients6.google.com/$rpc/google.internal.onegoogle.asyncdata.v1.AsyncDataService/GetAsyncData:0
+[    5378ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=oos&tv=2470&st=cr_env&sjk=dvA5avTIDLPR1e8PzLCFiAo:0
+[    6167ms] [ERROR] Refused to get unsafe header "X-Sg-Cs" @ https://www.google.com/search?q=gmail&oq=gmail&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTINCAEQABiDARixAxiABDINCAIQABiDARixAxiABDINCAMQABiDARixAxiABDINCAQQABiDARixAxiABDINCAUQABiDARixAxiABDINCAYQABiDARixAxiABDIGCAcQBRhA0gEIMTc4MGowajeoAgewAgHxBX5AcYyIgdTl&sourceid=chrome&ie=UTF-8&sei=dfA5aoWsO9bDvr0Pu-uSyAg:52
+[    6168ms] [ERROR] Refused to get unsafe header "X-Sorry-Redirect" @ https://www.google.com/search?q=gmail&oq=gmail&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTINCAEQABiDARixAxiABDINCAIQABiDARixAxiABDINCAMQABiDARixAxiABDINCAQQABiDARixAxiABDINCAUQABiDARixAxiABDINCAYQABiDARixAxiABDIGCAcQBRhA0gEIMTc4MGowajeoAgewAgHxBX5AcYyIgdTl&sourceid=chrome&ie=UTF-8&sei=dfA5aoWsO9bDvr0Pu-uSyAg:52
+[   15155ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://www.googleadservices.com/pagead/conversion.js:0
+[   15268ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://www.googleadservices.com/pagead/conversion.js:0
+[   15268ms] [INFO] This document requires 'TrustedHTML' assignment. The policy is report-only, so the violation has been logged but no further action has been taken. @ https://www.google.com/gmail/about/signup_complete.html:64
+[   15270ms] [INFO] This document requires 'TrustedScriptURL' assignment. The policy is report-only, so the violation has been logged but no further action has been taken. @ https://www.google.com/js/google.js:6
+[   15302ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://ssl.google-analytics.com/ga.js:0
+[   15771ms] [LOG] redirecting... @ https://www.google.com/gmail/about/signup_complete.html:101
+[   19696ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://www.googletagmanager.com/gtm.js?id=GTM-Q4J6:0
+[   19977ms] [ERROR] Failed to load resource: net::ERR_CERT_AUTHORITY_INVALID @ https://ssl.google-analytics.com/ga.js:0

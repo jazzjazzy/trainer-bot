@@ -1,0 +1,540 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - button "← All courses" [ref=e6] [cursor=pointer]
+        - generic [ref=e7]:
+          - generic [ref=e8]: TS
+          - generic [ref=e9]:
+            - generic [ref=e10]: TypeScript for PHP Veterans
+            - generic [ref=e11]: 30 sections
+        - generic [ref=e14]: 0/30 done · 0%
+      - navigation [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: Foundations
+          - button "1 Why TypeScript & the Compile Step" [ref=e18] [cursor=pointer]:
+            - generic [ref=e19]: "1"
+            - generic [ref=e20]: Why TypeScript & the Compile Step
+          - button "2 Setup & Tooling" [ref=e21] [cursor=pointer]:
+            - generic [ref=e22]: "2"
+            - generic [ref=e23]: Setup & Tooling
+          - button "3 The JavaScript Underneath" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]: "3"
+            - generic [ref=e26]: The JavaScript Underneath
+          - button "4 Variables & Primitive Types" [ref=e27] [cursor=pointer]:
+            - generic [ref=e28]: "4"
+            - generic [ref=e29]: Variables & Primitive Types
+          - button "5 Type Annotations & Inference" [ref=e30] [cursor=pointer]:
+            - generic [ref=e31]: "5"
+            - generic [ref=e32]: Type Annotations & Inference
+          - button "6 Functions" [ref=e33] [cursor=pointer]:
+            - generic [ref=e34]: "6"
+            - generic [ref=e35]: Functions
+        - generic [ref=e36]:
+          - generic [ref=e37]: The Type System
+          - button "7 Arrays & Tuples" [ref=e38] [cursor=pointer]:
+            - generic [ref=e39]: "7"
+            - generic [ref=e40]: Arrays & Tuples
+          - button "8 Objects & Object Types" [ref=e41] [cursor=pointer]:
+            - generic [ref=e42]: "8"
+            - generic [ref=e43]: Objects & Object Types
+          - button "9 Interfaces" [ref=e44] [cursor=pointer]:
+            - generic [ref=e45]: "9"
+            - generic [ref=e46]: Interfaces
+          - button "10 Type Aliases, Unions & Literal Types" [ref=e47] [cursor=pointer]:
+            - generic [ref=e48]: "10"
+            - generic [ref=e49]: Type Aliases, Unions & Literal Types
+          - button "11 Intersections & Composition" [ref=e50] [cursor=pointer]:
+            - generic [ref=e51]: "11"
+            - generic [ref=e52]: Intersections & Composition
+          - button "12 Enums" [ref=e53] [cursor=pointer]:
+            - generic [ref=e54]: "12"
+            - generic [ref=e55]: Enums
+          - button "13 Narrowing & Type Guards" [ref=e56] [cursor=pointer]:
+            - generic [ref=e57]: "13"
+            - generic [ref=e58]: Narrowing & Type Guards
+          - button "14 Generics" [ref=e59] [cursor=pointer]:
+            - generic [ref=e60]: "14"
+            - generic [ref=e61]: Generics
+          - button "15 Utility & Advanced Types" [ref=e62] [cursor=pointer]:
+            - generic [ref=e63]: "15"
+            - generic [ref=e64]: Utility & Advanced Types
+        - generic [ref=e65]:
+          - generic [ref=e66]: Object-Oriented TypeScript
+          - button "16 Classes" [ref=e67] [cursor=pointer]:
+            - generic [ref=e68]: "16"
+            - generic [ref=e69]: Classes
+          - button "17 Inheritance & Abstract Classes" [ref=e70] [cursor=pointer]:
+            - generic [ref=e71]: "17"
+            - generic [ref=e72]: Inheritance & Abstract Classes
+          - button "18 Interfaces vs Abstract Classes & implements" [ref=e73] [cursor=pointer]:
+            - generic [ref=e74]: "18"
+            - generic [ref=e75]: Interfaces vs Abstract Classes & implements
+          - button "19 Static Members, Accessors & this" [ref=e76] [cursor=pointer]:
+            - generic [ref=e77]: "19"
+            - generic [ref=e78]: Static Members, Accessors & this
+          - 'button "20 Modules: import / export" [ref=e79] [cursor=pointer]':
+            - generic [ref=e80]: "20"
+            - generic [ref=e81]: "Modules: import / export"
+          - button "21 Decorators & PHP 8 Attributes" [ref=e82] [cursor=pointer]:
+            - generic [ref=e83]: "21"
+            - generic [ref=e84]: Decorators & PHP 8 Attributes
+        - generic [ref=e85]:
+          - generic [ref=e86]: Modern Runtime & Async
+          - button "22 Modern Syntax & Operators" [ref=e87] [cursor=pointer]:
+            - generic [ref=e88]: "22"
+            - generic [ref=e89]: Modern Syntax & Operators
+          - button "23 Array & Collection Methods" [ref=e90] [cursor=pointer]:
+            - generic [ref=e91]: "23"
+            - generic [ref=e92]: Array & Collection Methods
+          - button "24 Asynchronous TypeScript" [ref=e93] [cursor=pointer]:
+            - generic [ref=e94]: "24"
+            - generic [ref=e95]: Asynchronous TypeScript
+          - button "25 Error Handling & Exceptions" [ref=e96] [cursor=pointer]:
+            - generic [ref=e97]: "25"
+            - generic [ref=e98]: Error Handling & Exceptions
+        - generic [ref=e99]:
+          - generic [ref=e100]: Ecosystem & Interview
+          - button "26 tsconfig & Strict Mode" [ref=e101] [cursor=pointer]:
+            - generic [ref=e102]: "26"
+            - generic [ref=e103]: tsconfig & Strict Mode
+          - button "27 npm, @types & the Package Ecosystem" [ref=e104] [cursor=pointer]:
+            - generic [ref=e105]: "27"
+            - generic [ref=e106]: npm, @types & the Package Ecosystem
+          - button "28 Typing the Real World" [ref=e107] [cursor=pointer]:
+            - generic [ref=e108]: "28"
+            - generic [ref=e109]: Typing the Real World
+          - button "29 Best Practices, Patterns & Pitfalls" [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]: "29"
+            - generic [ref=e112]: Best Practices, Patterns & Pitfalls
+          - button "30 Mock Interview & PHP→TS Cheat Sheet" [ref=e113] [cursor=pointer]:
+            - generic [ref=e114]: "30"
+            - generic [ref=e115]: Mock Interview & PHP→TS Cheat Sheet
+    - main [ref=e116]:
+      - article [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - generic [ref=e120]: Foundations
+            - generic [ref=e121]: Section 6 of 30
+            - generic [ref=e122]: ~14 min
+          - heading "Functions" [level=1] [ref=e123]
+          - paragraph [ref=e124]: How to type parameters and return values, plus the small but important ways TS handles optional, default, rest, and callback functions differently from PHP.
+          - button "✨ Ask AI about this lesson" [ref=e125] [cursor=pointer]
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - generic [ref=e128]: 📘
+            - heading "Concept" [level=2] [ref=e129]
+          - generic [ref=e130]:
+            - paragraph [ref=e131]: "Functions are where PHP and TypeScript feel most alike — and where a handful of quiet differences will bite you if you don't notice them. The syntax is nearly the same: types go after the name with a colon."
+            - heading "Parameter and return types" [level=3] [ref=e132]
+            - code [ref=e135]:
+              - text: function add(
+              - generic [ref=e136]: "a: number, b: number"
+              - text: "): number { return a + b; }"
+            - paragraph [ref=e137]:
+              - text: TypeScript will usually
+              - strong [ref=e138]: infer
+              - text: the return type, so the
+              - code [ref=e139]: ": number"
+              - text: "after the parentheses is optional — but writing it is a good habit: it documents intent and catches the day you accidentally return the wrong thing."
+            - heading "Optional and default parameters" [level=3] [ref=e140]
+            - paragraph [ref=e141]:
+              - text: In PHP you signal "this can be skipped" by giving a default value. TypeScript has
+              - strong [ref=e142]: two
+              - text: "separate tools:"
+            - list [ref=e143]:
+              - listitem [ref=e144]:
+                - code [ref=e145]: "name?: string"
+                - text: — the argument is
+                - strong [ref=e146]: optional
+                - text: ; if omitted its value is
+                - code [ref=e147]: undefined
+                - text: .
+              - listitem [ref=e148]:
+                - code [ref=e149]: "name: string = \"Guest\""
+                - text: — the argument has a
+                - strong [ref=e150]: default
+                - text: ; if omitted it becomes
+                - code [ref=e151]: "\"Guest\""
+                - text: .
+            - paragraph [ref=e152]:
+              - text: A parameter with a default is automatically optional, so you rarely combine
+              - code [ref=e153]: "?"
+              - text: and
+              - code [ref=e154]: =
+              - text: ". Note the order rule (same as PHP): optional/defaulted params come"
+              - strong [ref=e155]: after
+              - text: required ones.
+            - heading "Rest parameters" [level=3] [ref=e156]
+            - paragraph [ref=e157]:
+              - text: PHP's
+              - code [ref=e158]: ...$args
+              - text: becomes
+              - code [ref=e159]: "...args: number[]"
+              - text: "— a typed array that collects the extra arguments:"
+            - code [ref=e162]:
+              - text: function sum(
+              - generic [ref=e163]: "...nums: number[]"
+              - text: "): number { return nums.reduce("
+              - generic [ref=e164]: (total, n) =>
+              - text: "total + n, 0); }"
+            - heading "Function type expressions (callbacks)" [level=3] [ref=e165]
+            - paragraph [ref=e166]:
+              - text: You can describe the
+              - strong [ref=e167]: shape of a function
+              - text: "as a type — essential when you pass callbacks around (and you will, constantly, in JS):"
+            - code [ref=e170]:
+              - text: type Transformer =
+              - generic [ref=e171]:
+                - text: (
+                - generic [ref=e172]: "input: string"
+                - text: ) =>
+              - text: "string; const shout: Transformer ="
+              - generic [ref=e173]: (s) =>
+              - text: s.toUpperCase();
+            - paragraph [ref=e174]:
+              - text: That
+              - code [ref=e175]: "(input: string) => string"
+              - text: is a
+              - emphasis [ref=e176]: function type expression
+              - text: . PHP's nearest equivalent is the
+              - code [ref=e177]: callable
+              - text: type or
+              - code [ref=e178]: Closure
+              - text: ", but those can't describe the parameter and return types — TypeScript can."
+            - heading "Arrow functions vs closures" [level=3] [ref=e179]
+            - paragraph [ref=e180]:
+              - text: In PHP a classic closure must
+              - strong [ref=e181]: explicitly import
+              - text: outer variables with
+              - code [ref=e182]: use ($x)
+              - text: . Arrow functions
+              - code [ref=e183]: fn() => ...
+              - text: capture automatically.
+              - strong [ref=e184]: All
+              - text: TypeScript arrow functions capture surrounding scope automatically — there is no
+              - code [ref=e185]: use
+              - text: . They're also the idiomatic way to write short callbacks.
+            - heading "void returns" [level=3] [ref=e186]
+            - paragraph [ref=e187]:
+              - text: A function that returns nothing has the return type
+              - code [ref=e188]: void
+              - text: (PHP has
+              - code [ref=e189]: ": void"
+              - text: "too). It's the same idea: \"I'm called for a side effect, not a value.\""
+            - blockquote [ref=e190]:
+              - paragraph [ref=e191]:
+                - strong [ref=e192]: Overloads
+                - text: "(briefly): when one function legitimately accepts several different argument shapes, you can declare multiple signatures above a single implementation. It's rare in app code — reach for unions first — but you'll see it in libraries."
+        - generic [ref=e193]:
+          - generic [ref=e194]:
+            - generic [ref=e195]: 🔀
+            - heading "PHP → TypeScript" [level=2] [ref=e196]
+            - generic [ref=e197]: What you know, beside what's new
+          - generic [ref=e198]:
+            - generic [ref=e199]:
+              - heading "Default parameter values" [level=4] [ref=e200]
+              - generic [ref=e201]:
+                - generic [ref=e202]:
+                  - generic [ref=e203]: PHP
+                  - code [ref=e205]:
+                    - text: <?php declare(strict_types=1);
+                    - generic [ref=e206]:
+                      - text: function greet(
+                      - generic [ref=e207]: string $name, string $greeting = "Hello"
+                      - text: "): string"
+                    - text: "{ return"
+                    - generic [ref=e208]: "\"$greeting, $name\""
+                    - text: "; } echo greet(\"Sam\"); // Hello, Sam echo greet(\"Sam\", \"Hi\"); // Hi, Sam"
+                - generic [ref=e209]:
+                  - generic [ref=e210]: TypeScript
+                  - code [ref=e212]:
+                    - text: function greet(
+                    - generic [ref=e213]: "name: string, greeting: string = \"Hello\""
+                    - text: "): string { return"
+                    - generic [ref=e214]: "`${greeting}, ${name}`"
+                    - text: "; } console.log(greet(\"Sam\")); // Hello, Sam console.log(greet(\"Sam\", \"Hi\")); // Hi, Sam"
+              - paragraph [ref=e215]:
+                - strong [ref=e216]: "Difference:"
+                - text: Nearly identical. A defaulted param is automatically optional in TS; its type is inferred from the default.
+              - button "✨ Ask AI about this" [ref=e217] [cursor=pointer]
+            - generic [ref=e218]:
+              - heading "Optional (nullable) parameter" [level=4] [ref=e219]
+              - generic [ref=e220]:
+                - generic [ref=e221]:
+                  - generic [ref=e222]: PHP
+                  - code [ref=e224]:
+                    - text: <?php declare(strict_types=1); // ?string means "string or null"
+                    - generic [ref=e225]:
+                      - text: function label(
+                      - generic [ref=e226]: "?string $suffix"
+                      - text: "): string"
+                    - text: "{ return \"Item\" . ($suffix ?? \"\"); }"
+                - generic [ref=e227]:
+                  - generic [ref=e228]: TypeScript
+                  - code [ref=e230]:
+                    - text: "// suffix?: means the arg may be omitted (then it is undefined) function label("
+                    - generic [ref=e231]: "suffix?: string"
+                    - text: "): string { return \"Item\" + (suffix ?? \"\"); }"
+              - paragraph [ref=e232]:
+                - strong [ref=e233]: "Difference:"
+                - text: "PHP's ?string = string|null. TS's suffix? = string|undefined (omittable). Different default 'empty' value: null vs undefined."
+              - button "✨ Ask AI about this" [ref=e234] [cursor=pointer]
+            - generic [ref=e235]:
+              - heading "Variadic / rest parameters" [level=4] [ref=e236]
+              - generic [ref=e237]:
+                - generic [ref=e238]:
+                  - generic [ref=e239]: PHP
+                  - code [ref=e241]:
+                    - text: <?php declare(strict_types=1);
+                    - generic [ref=e242]:
+                      - text: function sum(
+                      - generic [ref=e243]: int ...$nums
+                      - text: "): int"
+                    - text: "{ return array_sum($nums); } echo sum(1, 2, 3); // 6"
+                - generic [ref=e244]:
+                  - generic [ref=e245]: TypeScript
+                  - code [ref=e247]:
+                    - text: function sum(
+                    - generic [ref=e248]: "...nums: number[]"
+                    - text: "): number { return nums.reduce("
+                    - generic [ref=e249]: (total, n) =>
+                    - text: "total + n, 0); } console.log(sum(1, 2, 3)); // 6"
+              - paragraph [ref=e250]:
+                - strong [ref=e251]: "Difference:"
+                - text: Same ... syntax. In TS the rest param is typed as an array (number[]) and must be the last parameter.
+              - button "✨ Ask AI about this" [ref=e252] [cursor=pointer]
+            - generic [ref=e253]:
+              - heading "Closures capturing scope" [level=4] [ref=e254]
+              - generic [ref=e255]:
+                - generic [ref=e256]:
+                  - generic [ref=e257]: PHP
+                  - code [ref=e259]:
+                    - text: "<?php $factor = 3; // Classic closure: must import $factor with use() $triple ="
+                    - generic [ref=e260]:
+                      - text: function (
+                      - generic [ref=e261]: int $n
+                      - text: ) use (
+                      - generic [ref=e262]: $factor
+                      - text: "): int"
+                    - text: "{ return $n * $factor; }; // Arrow fn captures automatically (PHP 7.4+) $triple2 ="
+                    - generic [ref=e263]:
+                      - text: fn (
+                      - generic [ref=e264]: int $n
+                      - text: "): int =>"
+                    - text: $n * $factor; echo $triple(5); // 15
+                - generic [ref=e265]:
+                  - generic [ref=e266]: TypeScript
+                  - code [ref=e268]:
+                    - text: "const factor = 3; // Arrow function captures 'factor' automatically — no 'use' const triple = (n: number):"
+                    - generic [ref=e269]: number =>
+                    - text: n * factor; console.log(triple(5)); // 15
+              - paragraph [ref=e270]:
+                - strong [ref=e271]: "Difference:"
+                - text: Every TS arrow/closure captures the surrounding scope automatically. There is no 'use' clause to maintain.
+              - button "✨ Ask AI about this" [ref=e272] [cursor=pointer]
+            - generic [ref=e273]:
+              - heading "Function type / callback parameter" [level=4] [ref=e274]
+              - generic [ref=e275]:
+                - generic [ref=e276]:
+                  - generic [ref=e277]: PHP
+                  - code [ref=e279]:
+                    - text: <?php declare(strict_types=1); // callable can't describe the in/out types
+                    - generic [ref=e280]:
+                      - text: function applyTwice(
+                      - generic [ref=e281]: int $x, callable $fn
+                      - text: "): int"
+                    - text: "{ return $fn($fn($x)); } echo applyTwice(2, fn ($n) => $n + 10); // 22"
+                - generic [ref=e282]:
+                  - generic [ref=e283]: TypeScript
+                  - code [ref=e285]:
+                    - text: "// The callback's shape is fully typed: (n: number) => number function applyTwice("
+                    - generic [ref=e286]: "x: number, fn: (n: number) => number"
+                    - text: "): number { return fn(fn(x)); } console.log(applyTwice(2,"
+                    - generic [ref=e287]: (n) =>
+                    - text: n + 10)); // 22
+              - paragraph [ref=e288]:
+                - strong [ref=e289]: "Difference:"
+                - text: TS describes the callback's parameter and return types precisely; PHP's 'callable' is opaque.
+              - button "✨ Ask AI about this" [ref=e290] [cursor=pointer]
+        - generic [ref=e291]:
+          - generic [ref=e292]:
+            - generic [ref=e293]: 🧪
+            - heading "Live Playground" [level=2] [ref=e294]
+            - generic [ref=e295]: Edit & run real TypeScript
+          - generic [ref=e296]:
+            - paragraph [ref=e297]: One function using an optional param, a default param, AND a rest param — plus a typed callback passed as an arrow function. Run it, then try changing a type to see the editor complain.
+            - generic [ref=e300]: Loading...
+            - generic [ref=e301]:
+              - button "▶ Run" [ref=e302] [cursor=pointer]
+              - button "Reset" [ref=e303] [cursor=pointer]
+              - button "✨ Ask AI" [ref=e304] [cursor=pointer]
+              - generic [ref=e305]: Edit the code, then Run. Type errors show inline as you type.
+        - generic [ref=e306]:
+          - generic [ref=e307]:
+            - generic [ref=e308]: 🎯
+            - heading "Key Points" [level=2] [ref=e309]
+          - list [ref=e310]:
+            - listitem [ref=e311]:
+              - text: →
+              - paragraph [ref=e313]:
+                - text: "Types go after the name:"
+                - code [ref=e314]: "function f(a: number): string"
+                - text: . Return types are usually inferred but worth writing.
+            - listitem [ref=e315]:
+              - text: →
+              - paragraph [ref=e317]:
+                - code [ref=e318]: "name?: T"
+                - text: makes a param
+                - strong [ref=e319]: optional
+                - text: (becomes
+                - code [ref=e320]: undefined
+                - text: );
+                - code [ref=e321]: "name: T = default"
+                - text: gives it a
+                - strong [ref=e322]: default
+                - text: . Both must come after required params.
+            - listitem [ref=e323]:
+              - text: →
+              - paragraph [ref=e325]:
+                - text: Rest params use PHP-style
+                - code [ref=e326]: ...
+                - text: "but are typed as an array:"
+                - code [ref=e327]: "...args: number[]"
+                - text: ", and must be last."
+            - listitem [ref=e328]:
+              - text: →
+              - paragraph [ref=e330]:
+                - text: Function types like
+                - code [ref=e331]: "(n: number) => number"
+                - text: describe callbacks precisely — far richer than PHP's
+                - code [ref=e332]: callable
+                - text: .
+            - listitem [ref=e333]:
+              - text: →
+              - paragraph [ref=e335]:
+                - text: Arrow functions capture outer scope
+                - strong [ref=e336]: automatically
+                - text: — there is no
+                - code [ref=e337]: use ($x)
+                - text: clause to maintain.
+            - listitem [ref=e338]:
+              - text: →
+              - paragraph [ref=e340]:
+                - code [ref=e341]: void
+                - text: is the return type for side-effect-only functions. Overloads exist for multi-signature functions but are rarely needed in app code.
+        - generic [ref=e342]:
+          - generic [ref=e343]:
+            - generic [ref=e344]: 💼
+            - heading "Interview Prep" [level=2] [ref=e345]
+            - generic [ref=e346]: Click a question to reveal
+          - generic [ref=e347]:
+            - group [ref=e348]:
+              - generic "Q What's the difference between an optional parameter and a parameter with a default value in TypeScript?" [ref=e349] [cursor=pointer]:
+                - generic [ref=e350]: Q
+                - text: What's the difference between an optional parameter and a parameter with a default value in TypeScript?
+            - group [ref=e351]:
+              - 'generic "Q How do you type a callback parameter, and why is that better than PHP''s `callable`?" [ref=e352] [cursor=pointer]':
+                - generic [ref=e353]: Q
+                - text: "How do you type a callback parameter, and why is that better than PHP's `callable`?"
+            - group [ref=e354]:
+              - generic "Q Coming from PHP closures, what changes about capturing variables in TypeScript?" [ref=e355] [cursor=pointer]:
+                - generic [ref=e356]: Q
+                - text: Coming from PHP closures, what changes about capturing variables in TypeScript?
+            - group [ref=e357]:
+              - 'generic "Q What does a `void` return type mean, and when would you use it?" [ref=e358] [cursor=pointer]':
+                - generic [ref=e359]: Q
+                - text: "What does a `void` return type mean, and when would you use it?"
+            - group [ref=e360]:
+              - generic "Q What are function overloads and when would you reach for them?" [ref=e361] [cursor=pointer]:
+                - generic [ref=e362]: Q
+                - text: What are function overloads and when would you reach for them?
+        - generic [ref=e363]:
+          - generic [ref=e364]:
+            - generic [ref=e365]: ✅
+            - heading "Quiz" [level=2] [ref=e366]
+          - generic [ref=e367]:
+            - generic [ref=e368]:
+              - paragraph [ref=e369]:
+                - generic [ref=e370]: "1."
+                - text: "Given `function f(a: number, b?: number) {}`, what is the type of `b` inside the function when `f(5)` is called?"
+              - generic [ref=e371]:
+                - button "A number" [ref=e372] [cursor=pointer]:
+                  - generic [ref=e373]: A
+                  - text: number
+                - button "B number | undefined (it is undefined)" [ref=e374] [cursor=pointer]:
+                  - generic [ref=e375]: B
+                  - text: number | undefined (it is undefined)
+                - button "C null" [ref=e376] [cursor=pointer]:
+                  - generic [ref=e377]: C
+                  - text: "null"
+                - button "D It's a compile error to call f(5)" [ref=e378] [cursor=pointer]:
+                  - generic [ref=e379]: D
+                  - text: It's a compile error to call f(5)
+            - generic [ref=e380]:
+              - paragraph [ref=e381]:
+                - generic [ref=e382]: "2."
+                - text: Which is the correct, idiomatic way to type a callback that takes a string and returns a boolean?
+              - generic [ref=e383]:
+                - 'button "A fn: callable" [ref=e384] [cursor=pointer]':
+                  - generic [ref=e385]: A
+                  - text: "fn: callable"
+                - 'button "B fn: Closure<string, boolean>" [ref=e386] [cursor=pointer]':
+                  - generic [ref=e387]: B
+                  - text: "fn: Closure<string, boolean>"
+                - 'button "C fn: (s: string) => boolean" [ref=e388] [cursor=pointer]':
+                  - generic [ref=e389]: C
+                  - text: "fn: (s: string) => boolean"
+                - 'button "D fn: function(string): boolean" [ref=e390] [cursor=pointer]':
+                  - generic [ref=e391]: D
+                  - text: "fn: function(string): boolean"
+            - generic [ref=e392]:
+              - paragraph [ref=e393]:
+                - generic [ref=e394]: "3."
+                - text: How does an arrow function in TypeScript capture a variable from the surrounding scope?
+              - generic [ref=e395]:
+                - 'button "A You must list it with a `use (...)` clause" [ref=e396] [cursor=pointer]':
+                  - generic [ref=e397]: A
+                  - text: "You must list it with a `use (...)` clause"
+                - button "B Automatically — no explicit import is needed" [ref=e398] [cursor=pointer]:
+                  - generic [ref=e399]: B
+                  - text: Automatically — no explicit import is needed
+                - 'button "C Only if it is declared with `var`" [ref=e400] [cursor=pointer]':
+                  - generic [ref=e401]: C
+                  - text: "Only if it is declared with `var`"
+                - button "D You must pass it explicitly as a parameter" [ref=e402] [cursor=pointer]:
+                  - generic [ref=e403]: D
+                  - text: You must pass it explicitly as a parameter
+            - button "Check answers" [disabled] [ref=e405]
+        - generic [ref=e406]:
+          - generic [ref=e407] [cursor=pointer]:
+            - checkbox "Mark this section complete" [ref=e408]
+            - text: Mark this section complete
+          - generic [ref=e409]:
+            - button "← Previous" [ref=e410] [cursor=pointer]
+            - button "Next →" [ref=e411] [cursor=pointer]
+  - button "Ask the AI tutor" [ref=e412] [cursor=pointer]:
+    - generic [ref=e413]: ✨
+    - text: Ask AI
+  - complementary "AI tutor" [ref=e414]:
+    - generic [ref=e415]:
+      - generic [ref=e416]:
+        - generic [ref=e417]:
+          - generic [ref=e418]: ✨
+          - text: AI Tutor
+        - generic [ref=e419]: "Lesson: Functions"
+      - button "✕" [ref=e421] [cursor=pointer]
+    - generic [ref=e423]:
+      - paragraph [ref=e424]:
+        - text: Ask about anything in this lesson — or hit
+        - strong [ref=e425]: ✨ Ask AI
+        - text: on any code example to get it explained.
+      - generic [ref=e426]:
+        - button "Explain this lesson simply, with a PHP comparison." [ref=e427] [cursor=pointer]
+        - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e428] [cursor=pointer]'
+        - button "Give me a tiny real-world example." [ref=e429] [cursor=pointer]
+        - button "Quiz me with one tricky question on this topic." [ref=e430] [cursor=pointer]
+    - generic [ref=e431]:
+      - textbox "Ask a follow-up… (Enter to send)" [ref=e432]
+      - button "Send" [disabled] [ref=e433]
+    - generic [ref=e434]: Powered by Claude (Haiku 4.5)

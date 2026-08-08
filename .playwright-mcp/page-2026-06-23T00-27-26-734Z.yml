@@ -1,0 +1,605 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e44]:
+      - complementary [ref=e45]:
+        - generic [ref=e46]:
+          - button "← All courses" [ref=e47] [cursor=pointer]
+          - generic [ref=e48]:
+            - generic [ref=e49]: PHP
+            - generic [ref=e50]:
+              - generic [ref=e51]: "PHP 5.5 → 8.2: The Upgrade"
+              - generic [ref=e52]: 30 sections
+          - generic [ref=e55]: 0/30 done · 0%
+        - navigation [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]: Getting Current
+            - button "1 Why Upgrade & the 5.5 → 8.2 Timeline" [ref=e59] [cursor=pointer]:
+              - generic [ref=e60]: "1"
+              - generic [ref=e61]: Why Upgrade & the 5.5 → 8.2 Timeline
+            - 'button "2 The Migration Mindset: Upgrading Safely 5.5 → 8.2" [ref=e62] [cursor=pointer]':
+              - generic [ref=e63]: "2"
+              - generic [ref=e64]: "The Migration Mindset: Upgrading Safely 5.5 → 8.2"
+          - generic [ref=e65]:
+            - generic [ref=e66]: "PHP 7.0: Types & the Engine"
+            - 'button "3 Scalar Type Declarations: From Docblocks to Enforced Types" [ref=e67] [cursor=pointer]':
+              - generic [ref=e68]: "3"
+              - generic [ref=e69]: "Scalar Type Declarations: From Docblocks to Enforced Types"
+            - 'button "4 Return Type Declarations: From @return to Enforced Contracts" [ref=e70] [cursor=pointer]':
+              - generic [ref=e71]: "4"
+              - generic [ref=e72]: "Return Type Declarations: From @return to Enforced Contracts"
+            - 'button "5 strict_types: Coercive vs Strict Typing" [ref=e73] [cursor=pointer]':
+              - generic [ref=e74]: "5"
+              - generic [ref=e75]: "strict_types: Coercive vs Strict Typing"
+            - 'button "6 Null Coalescing: ?? Kills the isset() Ternary" [ref=e76] [cursor=pointer]':
+              - generic [ref=e77]: "6"
+              - generic [ref=e78]: "Null Coalescing: ?? Kills the isset() Ternary"
+            - 'button "7 The Spaceship Operator: Sorting Without the Boilerplate" [ref=e79] [cursor=pointer]':
+              - generic [ref=e80]: "7"
+              - generic [ref=e81]: "The Spaceship Operator: Sorting Without the Boilerplate"
+            - 'button "8 Throwable & Catchable Errors: Goodbye Unrecoverable Fatals" [ref=e82] [cursor=pointer]':
+              - generic [ref=e83]: "8"
+              - generic [ref=e84]: "Throwable & Catchable Errors: Goodbye Unrecoverable Fatals"
+            - 'button "9 The PHP 7.0 Grab Bag: Small Wins That Add Up" [ref=e85] [cursor=pointer]':
+              - generic [ref=e86]: "9"
+              - generic [ref=e87]: "The PHP 7.0 Grab Bag: Small Wins That Add Up"
+          - generic [ref=e88]:
+            - generic [ref=e89]: "PHP 7.1–7.4: Refinements"
+            - 'button "10 Nullable Types & void: Saying What You Mean" [ref=e90] [cursor=pointer]':
+              - generic [ref=e91]: "10"
+              - generic [ref=e92]: "Nullable Types & void: Saying What You Mean"
+            - 'button "11 PHP 7.1 Quality-of-Life: iterable, Multi-Catch & [] Destructuring" [ref=e93] [cursor=pointer]':
+              - generic [ref=e94]: "11"
+              - generic [ref=e95]: "PHP 7.1 Quality-of-Life: iterable, Multi-Catch & [] Destructuring"
+            - 'button "12 PHP 7.2: The `object` Type & Trailing Commas" [ref=e96] [cursor=pointer]':
+              - generic [ref=e97]: "12"
+              - generic [ref=e98]: "PHP 7.2: The `object` Type & Trailing Commas"
+            - 'button "13 PHP 7.3 Quality-of-Life: Heredocs, Trailing Commas & Array Keys" [ref=e99] [cursor=pointer]':
+              - generic [ref=e100]: "13"
+              - generic [ref=e101]: "PHP 7.3 Quality-of-Life: Heredocs, Trailing Commas & Array Keys"
+            - 'button "14 Typed Properties: Real Types on Your Objects" [ref=e102] [cursor=pointer]':
+              - generic [ref=e103]: "14"
+              - generic [ref=e104]: "Typed Properties: Real Types on Your Objects"
+            - 'button "15 Arrow Functions: Closures Without the `use` Boilerplate" [ref=e105] [cursor=pointer]':
+              - generic [ref=e106]: "15"
+              - generic [ref=e107]: "Arrow Functions: Closures Without the `use` Boilerplate"
+            - button "16 ??=, Array Spread & Numeric Separators" [ref=e108] [cursor=pointer]:
+              - generic [ref=e109]: "16"
+              - generic [ref=e110]: "??=, Array Spread & Numeric Separators"
+            - 'button "17 PHP 7.4: Covariant Returns, Contravariant Params & the Performance Toolbox" [ref=e111] [cursor=pointer]':
+              - generic [ref=e112]: "17"
+              - generic [ref=e113]: "PHP 7.4: Covariant Returns, Contravariant Params & the Performance Toolbox"
+          - generic [ref=e114]:
+            - generic [ref=e115]: "PHP 8.0: The Big Leap"
+            - 'button "18 Named Arguments: Calling by Name, Not by Position" [ref=e116] [cursor=pointer]':
+              - generic [ref=e117]: "18"
+              - generic [ref=e118]: "Named Arguments: Calling by Name, Not by Position"
+            - 'button "19 Constructor Property Promotion: Kill the Boilerplate" [ref=e119] [cursor=pointer]':
+              - generic [ref=e120]: "19"
+              - generic [ref=e121]: "Constructor Property Promotion: Kill the Boilerplate"
+            - 'button "20 Union Types: Saying \"int or string\" for Real" [ref=e122] [cursor=pointer]':
+              - generic [ref=e123]: "20"
+              - generic [ref=e124]: "Union Types: Saying \"int or string\" for Real"
+            - 'button "21 match: the switch That Returns a Value" [ref=e125] [cursor=pointer]':
+              - generic [ref=e126]: "21"
+              - generic [ref=e127]: "match: the switch That Returns a Value"
+            - 'button "22 The Nullsafe Operator: Chaining Without the Null Dance" [ref=e128] [cursor=pointer]':
+              - generic [ref=e129]: "22"
+              - generic [ref=e130]: "The Nullsafe Operator: Chaining Without the Null Dance"
+            - 'button "23 Attributes: Real Metadata Instead of Magic Comments" [ref=e131] [cursor=pointer]':
+              - generic [ref=e132]: "23"
+              - generic [ref=e133]: "Attributes: Real Metadata Instead of Magic Comments"
+            - 'button "24 The PHP 8.0 Grab-Bag: Small Wins That Add Up" [ref=e134] [cursor=pointer]':
+              - generic [ref=e135]: "24"
+              - generic [ref=e136]: "The PHP 8.0 Grab-Bag: Small Wins That Add Up"
+            - 'button "25 PHP 8.0 Breaking Changes: What Will Bite You" [ref=e137] [cursor=pointer]':
+              - generic [ref=e138]: "25"
+              - generic [ref=e139]: "PHP 8.0 Breaking Changes: What Will Bite You"
+          - generic [ref=e140]:
+            - generic [ref=e141]: "PHP 8.1–8.2: Modern PHP"
+            - 'button "26 Enums: First-Class Enumerations Replace Class Constants" [ref=e142] [cursor=pointer]':
+              - generic [ref=e143]: "26"
+              - generic [ref=e144]: "Enums: First-Class Enumerations Replace Class Constants"
+            - 'button "27 Readonly Properties & Classes: Real Immutability" [ref=e145] [cursor=pointer]':
+              - generic [ref=e146]: "27"
+              - generic [ref=e147]: "Readonly Properties & Classes: Real Immutability"
+            - 'button "28 First-Class Callables, `never`, and a Look at Fibers" [ref=e148] [cursor=pointer]':
+              - generic [ref=e149]: "28"
+              - generic [ref=e150]: "First-Class Callables, `never`, and a Look at Fibers"
+            - 'button "29 The 8.1 Grab Bag: Intersection Types, `new` in Initializers & Final Constants" [ref=e151] [cursor=pointer]':
+              - generic [ref=e152]: "29"
+              - generic [ref=e153]: "The 8.1 Grab Bag: Intersection Types, `new` in Initializers & Final Constants"
+            - button "30 PHP 8.2 & the 5.5 → 8.2 Cheat Sheet" [ref=e154] [cursor=pointer]:
+              - generic [ref=e155]: "30"
+              - generic [ref=e156]: PHP 8.2 & the 5.5 → 8.2 Cheat Sheet
+      - main [ref=e157]:
+        - article [ref=e158]:
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - generic [ref=e161]: "PHP 8.1–8.2: Modern PHP"
+              - generic [ref=e162]: Section 26 of 30
+              - generic [ref=e163]: ~14 min
+            - 'heading "Enums: First-Class Enumerations Replace Class Constants" [level=1] [ref=e164]'
+            - paragraph [ref=e165]: PHP 8.1 enums give you a real, type-safe set of named values — with cases(), from()/tryFrom(), methods, constants, and interfaces — retiring the hand-rolled class-constant pattern from 5.5.
+            - button "✨ Ask AI about this lesson" [ref=e166] [cursor=pointer]
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - generic [ref=e169]: 📘
+              - heading "Concept" [level=2] [ref=e170]
+            - generic [ref=e171]:
+              - paragraph [ref=e172]:
+                - text: "For years the \"enum\" in PHP was a convention, not a language feature: a class full of"
+                - code [ref=e458]: const
+                - text: s plus a pile of validation. PHP 8.1 made enums
+                - strong [ref=e174]: first-class types
+                - text: ", so a \"status\" is no longer a loose"
+                - code [ref=e459]: string
+                - text: that
+                - emphasis [ref=e176]: might
+                - text: be valid — it's a value the engine guarantees is one of your declared cases.
+              - 'heading "The 5.5 way: a class of constants" [level=3] [ref=e177]'
+              - code [ref=e461]:
+                - generic [ref=e462]: class Suit
+                - text: "{ const HEARTS = 'H'; const SPADES = 'S'; // ...and a static array + a validate() method you must remember to call }"
+              - paragraph [ref=e182]:
+                - text: Nothing stops
+                - code [ref=e463]: Suit::HEARTS . 'oops'
+                - text: from flowing through your code. You can't type-hint "a suit", you can't list the cases without a hand-maintained array, and converting a stored
+                - code [ref=e464]: "'H'"
+                - text: back to a constant means writing a lookup.
+              - heading "Pure enums (PHP 8.1)" [level=3] [ref=e185]
+              - code [ref=e466]:
+                - generic [ref=e467]: enum Suit
+                - text: "{ case Hearts; case Spades; }"
+              - paragraph [ref=e190]:
+                - text: Each case is a
+                - strong [ref=e191]: singleton object
+                - text: of type
+                - code [ref=e468]: Suit
+                - text: . You can type-hint
+                - code [ref=e469]: function play(Suit $s)
+                - text: and compare with
+                - code [ref=e470]: ===
+                - text: .
+                - code [ref=e471]: Suit::cases()
+                - text: returns every case in declaration order — no manual array.
+              - heading "Backed enums (PHP 8.1)" [level=3] [ref=e196]
+              - paragraph [ref=e197]:
+                - text: When a case must map to a scalar (a DB column, a JSON value), give the enum a backing type —
+                - code [ref=e472]: ": string"
+                - text: or
+                - code [ref=e473]: ": int"
+                - text: "— and a value per case:"
+              - code [ref=e475]:
+                - generic [ref=e476]: "enum Suit: string"
+                - text: "{ case Hearts = 'H'; case Spades = 'S'; }"
+              - paragraph [ref=e204]:
+                - text: Now
+                - code [ref=e477]: Suit::Hearts->value === 'H'
+                - text: ". Two converters come built in:"
+              - list [ref=e206]:
+                - listitem [ref=e207]:
+                  - code [ref=e478]: Suit::from('H')
+                  - text: returns the case, or throws
+                  - code [ref=e479]: \ValueError
+                  - text: if unknown.
+                - listitem [ref=e210]:
+                  - code [ref=e480]: Suit::tryFrom('H')
+                  - text: returns the case or
+                  - code [ref=e481]: "null"
+                  - text: — your safe parse.
+              - heading "Methods, constants, and interfaces" [level=3] [ref=e213]
+              - paragraph [ref=e214]:
+                - text: Enums are classes underneath, so they can hold
+                - strong [ref=e215]: methods
+                - text: and
+                - strong [ref=e216]: constants
+                - text: ", and"
+                - code [ref=e482]: $this
+                - text: "refers to the current case:"
+              - code [ref=e484]:
+                - generic [ref=e485]: "enum Suit: string"
+                - text: "{ case Hearts = 'H'; case Spades = 'S'; const Wild = self::Hearts; public"
+                - generic [ref=e486]:
+                  - text: function color(
+                  - text: "): string"
+                - text: "{ return match ($this) { Suit::Hearts => 'Red', Suit::Spades => 'Black', }; } }"
+              - paragraph [ref=e223]:
+                - text: They can also
+                - strong [ref=e224]: implement an interface
+                - text: ", so"
+                - code [ref=e487]: Suit
+                - text: can satisfy a contract like
+                - code [ref=e488]: HasLabel
+                - text: and be used polymorphically.
+              - heading "What enums can't do" [level=3] [ref=e227]
+              - paragraph [ref=e228]:
+                - text: They have no instance state and no constructor you call — cases are fixed singletons.
+                - code [ref=e489]: new Suit()
+                - text: is an error, and you can't add mutable properties. If you need per-instance data, you want a regular (often
+                - code [ref=e490]: readonly
+                - text: ) class instead.
+          - generic [ref=e231]:
+            - generic [ref=e232]:
+              - generic [ref=e233]: 🔀
+              - heading "PHP 5.5 → Modern PHP" [level=2] [ref=e234]
+              - generic [ref=e235]: What you know, beside what's new
+            - generic [ref=e236]:
+              - generic [ref=e237]:
+                - heading "Declaring the set of values" [level=4] [ref=e238]
+                - generic [ref=e239]:
+                  - generic [ref=e240]:
+                    - generic [ref=e241]: PHP 5.5
+                    - code [ref=e243]:
+                      - text: <?php // PHP 5.5 — a class of constants, no type to hint
+                      - generic [ref=e244]: class Status
+                      - text: "{ const Draft = 'draft'; const Published = 'published'; const Archived = 'archived'; } // \"A status\" is just a string anywhere it's used:"
+                      - generic [ref=e245]:
+                        - text: function publish(
+                        - generic [ref=e246]: $status
+                        - text: )
+                      - text: "{ // $status could be ANY string }"
+                  - generic [ref=e247]:
+                    - generic [ref=e248]: Modern PHP
+                    - code [ref=e250]:
+                      - text: <?php // PHP 8.1 — a real type with a fixed set of cases
+                      - generic [ref=e251]: "enum Status: string"
+                      - text: "{ case Draft = 'draft'; case Published = 'published'; case Archived = 'archived'; } // The signature now guarantees a valid Status:"
+                      - generic [ref=e252]:
+                        - text: function publish(
+                        - generic [ref=e253]: Status $status
+                        - text: "): void"
+                      - text: "{ // $status is always one of the three cases }"
+                - paragraph [ref=e254]:
+                  - strong [ref=e255]: "Difference:"
+                  - text: Enums arrived in PHP 8.1; unlike class constants they create a genuine type you can type-hint and that the engine guarantees.
+                - button "✨ Ask AI about this" [ref=e256] [cursor=pointer]
+              - generic [ref=e257]:
+                - heading "Listing all the values" [level=4] [ref=e258]
+                - generic [ref=e259]:
+                  - generic [ref=e260]:
+                    - generic [ref=e261]: PHP 5.5
+                    - code [ref=e263]:
+                      - text: <?php // PHP 5.5 — keep a parallel array by hand
+                      - generic [ref=e264]: class Status
+                      - text: "{ const Draft = 'draft'; const Published = 'published'; const Archived = 'archived'; public static"
+                      - generic [ref=e265]:
+                        - text: function all(
+                        - text: )
+                      - text: "{ // easy to forget to update when a const is added return array(self::Draft, self::Published, self::Archived); } }"
+                  - generic [ref=e266]:
+                    - generic [ref=e267]: Modern PHP
+                    - code [ref=e269]: "<?php // PHP 8.1 — cases() is generated for you, in order foreach (Status::cases() as $case) { echo $case->name, ' = ', $case->value, \"\\n\"; }"
+                - paragraph [ref=e270]:
+                  - strong [ref=e271]: "Difference:"
+                  - text: Status::cases() (PHP 8.1) returns every case in declaration order, so there is no hand-maintained array to drift out of sync.
+                - button "✨ Ask AI about this" [ref=e272] [cursor=pointer]
+              - generic [ref=e273]:
+                - heading "Validating / parsing an incoming value" [level=4] [ref=e274]
+                - generic [ref=e275]:
+                  - generic [ref=e276]:
+                    - generic [ref=e277]: PHP 5.5
+                    - code [ref=e279]:
+                      - text: <?php // PHP 5.5 — validate by hand against the known list
+                      - generic [ref=e280]:
+                        - text: function toStatus(
+                        - generic [ref=e281]: $raw
+                        - text: )
+                      - text: "{ $valid = array('draft', 'published', 'archived'); if (!in_array($raw, $valid, true)) { throw new InvalidArgumentException("
+                      - generic [ref=e282]: "\"Bad status: $raw\""
+                      - text: "); } return $raw; // still just a string }"
+                  - generic [ref=e283]:
+                    - generic [ref=e284]: Modern PHP
+                    - code [ref=e286]: "<?php // PHP 8.1 — built-in converters on a backed enum $status = Status::from('published'); // throws \\ValueError if unknown $maybe = Status::tryFrom($_GET['s']); // Status|null, no exception if ($maybe === null) { // handle the bad input }"
+                - paragraph [ref=e287]:
+                  - strong [ref=e288]: "Difference:"
+                  - text: Backed enums (PHP 8.1) give from() — which throws \ValueError on an unknown value — and tryFrom(), which returns null instead.
+                - button "✨ Ask AI about this" [ref=e289] [cursor=pointer]
+              - generic [ref=e290]:
+                - heading "Attaching behaviour to a value" [level=4] [ref=e291]
+                - generic [ref=e292]:
+                  - generic [ref=e293]:
+                    - generic [ref=e294]: PHP 5.5
+                    - code [ref=e296]:
+                      - text: <?php // PHP 5.5 — behaviour lives in a separate switch/helper
+                      - generic [ref=e297]: class Status
+                      - text: "{ const Draft = 'draft'; const Published = 'published'; const Archived = 'archived'; }"
+                      - generic [ref=e298]:
+                        - text: function isVisible(
+                        - generic [ref=e299]: $status
+                        - text: )
+                      - text: "{ switch ($status) { case Status::Published: return true; default: return false; } }"
+                  - generic [ref=e300]:
+                    - generic [ref=e301]: Modern PHP
+                    - code [ref=e303]:
+                      - text: <?php // PHP 8.1 — methods live on the enum, $this is the case
+                      - generic [ref=e304]: "enum Status: string"
+                      - text: "{ case Draft = 'draft'; case Published = 'published'; case Archived = 'archived'; public"
+                      - generic [ref=e305]:
+                        - text: function isVisible(
+                        - text: "): bool"
+                      - text: "{ return $this === Status::Published; } } $visible = Status::Published->isVisible(); // true"
+                - paragraph [ref=e306]:
+                  - strong [ref=e307]: "Difference:"
+                  - text: Enums are classes under the hood (PHP 8.1), so methods and constants live with the cases and $this is the current case.
+                - button "✨ Ask AI about this" [ref=e308] [cursor=pointer]
+              - generic [ref=e309]:
+                - heading "Satisfying a contract" [level=4] [ref=e310]
+                - generic [ref=e311]:
+                  - generic [ref=e312]:
+                    - generic [ref=e313]: PHP 5.5
+                    - code [ref=e315]:
+                      - text: <?php // PHP 5.5 — constants can't implement an interface; // you'd wrap them in objects or pass strings around
+                      - generic [ref=e316]: interface HasLabel
+                      - text: "{ public"
+                      - generic [ref=e317]:
+                        - text: function label(
+                        - text: )
+                      - text: "; } // Status (a bag of consts) cannot satisfy this."
+                  - generic [ref=e318]:
+                    - generic [ref=e319]: Modern PHP
+                    - code [ref=e321]:
+                      - text: <?php // PHP 8.1 — an enum can implement an interface
+                      - generic [ref=e322]: interface HasLabel
+                      - text: "{ public"
+                      - generic [ref=e323]:
+                        - text: function label(
+                        - text: "): string"
+                      - text: "; }"
+                      - generic [ref=e324]: "enum Status: string implements HasLabel"
+                      - text: "{ case Draft = 'draft'; case Published = 'published'; public"
+                      - generic [ref=e325]:
+                        - text: function label(
+                        - text: "): string"
+                      - text: "{ return ucfirst($this->value); } }"
+                - paragraph [ref=e326]:
+                  - strong [ref=e327]: "Difference:"
+                  - text: Enums (PHP 8.1) can implement interfaces, so a case can be passed anywhere the interface is expected — impossible with class constants.
+                - button "✨ Ask AI about this" [ref=e328] [cursor=pointer]
+          - generic [ref=e329]:
+            - generic [ref=e330]:
+              - generic [ref=e331]: 🧪
+              - heading "Live Playground" [level=2] [ref=e332]
+              - generic [ref=e333]: Edit & run real TypeScript
+            - generic [ref=e334]:
+              - paragraph [ref=e335]: A backed enum with a method, cases(), and tryFrom(). Predict the output, then reveal it.
+              - code [ref=e492]:
+                - generic [ref=e493]:
+                  - textbox "Editor content"
+                  - textbox [ref=e494]
+                  - generic [ref=e496]:
+                    - generic [ref=e499]: "1"
+                    - generic [ref=e501]: "2"
+                    - generic [ref=e503]: "3"
+                    - generic [ref=e504]:
+                      - generic [ref=e505] [cursor=pointer]: 
+                      - generic [ref=e506]: "4"
+                    - generic [ref=e508]: "5"
+                    - generic [ref=e510]: "6"
+                    - generic [ref=e512]: "7"
+                    - generic [ref=e514]: "8"
+                    - generic [ref=e516]: "9"
+                    - generic [ref=e517]:
+                      - generic [ref=e518] [cursor=pointer]: 
+                      - generic [ref=e519]: "10"
+                    - generic [ref=e520]:
+                      - generic [ref=e521] [cursor=pointer]: 
+                      - generic [ref=e522]: "11"
+                    - generic [ref=e524]: "12"
+                    - generic [ref=e526]: "13"
+                    - generic [ref=e528]: "14"
+                    - generic [ref=e530]: "15"
+                  - generic [ref=e565]:
+                    - generic [ref=e567]: <?php
+                    - generic [ref=e569]: declare(strict_types=1);
+                    - generic [ref=e572]: "enum Suit: string {"
+                    - generic [ref=e574]: case Hearts = 'H';
+                    - generic [ref=e576]: case Diamonds = 'D';
+                    - generic [ref=e578]: case Spades = 'S';
+                    - generic [ref=e580]: case Clubs = 'C';
+                    - generic [ref=e583]: "public function color(): string {"
+                    - generic [ref=e585]: "return match ($this) {"
+                    - generic [ref=e587]: Suit::Hearts, Suit::Diamonds => 'Red',
+                    - generic [ref=e589]: Suit::Spades, Suit::Clubs => 'Black',
+                    - generic [ref=e591]: "};"
+                    - generic [ref=e593]: "}"
+              - generic [ref=e339]:
+                - button "▶ Show output" [active] [ref=e340] [cursor=pointer]
+                - button "Reset" [ref=e341] [cursor=pointer]
+                - button "✨ Ask AI" [ref=e342] [cursor=pointer]
+                - generic [ref=e343]: Read it, predict the result, then reveal the output.
+              - generic [ref=e595]:
+                - generic [ref=e596]: Expected output
+                - generic [ref=e597]: Hearts(H)=Red
+                - generic [ref=e598]: Diamonds(D)=Red
+                - generic [ref=e599]: Spades(S)=Black
+                - generic [ref=e600]: Clubs(C)=Black
+                - generic [ref=e601]: from('S') -> Spades
+                - generic [ref=e602]: "NULL"
+                - generic [ref=e603]: bool(true)
+          - generic [ref=e344]:
+            - generic [ref=e345]:
+              - generic [ref=e346]: 🎯
+              - heading "Key Points" [level=2] [ref=e347]
+            - list [ref=e348]:
+              - listitem [ref=e349]:
+                - text: →
+                - paragraph [ref=e351]:
+                  - text: Enums (PHP 8.1) replace the 5.5
+                  - code [ref=e604]: class
+                  - text: +
+                  - code [ref=e605]: const
+                  - text: + validate() pattern with a real, engine-guaranteed type you can type-hint.
+              - listitem [ref=e354]:
+                - text: →
+                - paragraph [ref=e356]:
+                  - strong [ref=e357]: Pure enums
+                  - text: have only
+                  - code [ref=e606]: case
+                  - text: names;
+                  - strong [ref=e359]: backed enums
+                  - text: add
+                  - code [ref=e607]: ": string"
+                  - text: /
+                  - code [ref=e608]: ": int"
+                  - text: and a value per case, read via
+                  - code [ref=e609]: "->value"
+                  - text: .
+              - listitem [ref=e363]:
+                - text: →
+                - paragraph [ref=e365]:
+                  - code [ref=e610]: Cases::cases()
+                  - text: returns all cases in order;
+                  - code [ref=e611]: from()
+                  - text: throws
+                  - code [ref=e612]: \ValueError
+                  - text: on an unknown value,
+                  - code [ref=e613]: tryFrom()
+                  - text: returns
+                  - code [ref=e614]: "null"
+                  - text: .
+              - listitem [ref=e371]:
+                - text: →
+                - paragraph [ref=e373]:
+                  - text: Each case is a
+                  - strong [ref=e374]: singleton object
+                  - text: of the enum type — compare with
+                  - code [ref=e615]: ===
+                  - text: ", never re-instantiate ("
+                  - code [ref=e616]: new
+                  - text: is an error).
+              - listitem [ref=e377]:
+                - text: →
+                - paragraph [ref=e379]:
+                  - text: "Enums are classes underneath: they can carry"
+                  - strong [ref=e380]: methods
+                  - text: (where
+                  - code [ref=e617]: $this
+                  - text: is the case),
+                  - strong [ref=e382]: constants
+                  - text: ", and"
+                  - strong [ref=e383]: implement interfaces
+                  - text: .
+              - listitem [ref=e384]:
+                - text: →
+                - paragraph [ref=e386]:
+                  - text: No instance state — if cases need per-object mutable data, reach for a regular (often
+                  - code [ref=e618]: readonly
+                  - text: ) class instead.
+          - generic [ref=e388]:
+            - generic [ref=e389]:
+              - generic [ref=e390]: 💼
+              - heading "Interview Prep" [level=2] [ref=e391]
+              - generic [ref=e392]: Click a question to reveal
+            - generic [ref=e393]:
+              - group [ref=e394]:
+                - generic "Q How did you represent an enumeration in PHP 5.5, and what does 8.1 fix?" [ref=e395] [cursor=pointer]:
+                  - generic [ref=e396]: Q
+                  - text: How did you represent an enumeration in PHP 5.5, and what does 8.1 fix?
+              - group [ref=e397]:
+                - generic "Q What's the difference between a pure enum and a backed enum?" [ref=e398] [cursor=pointer]:
+                  - generic [ref=e399]: Q
+                  - text: What's the difference between a pure enum and a backed enum?
+              - group [ref=e400]:
+                - 'generic "Q When would you use `from()` versus `tryFrom()`?" [ref=e401] [cursor=pointer]':
+                  - generic [ref=e402]: Q
+                  - text: "When would you use `from()` versus `tryFrom()`?"
+              - group [ref=e403]:
+                - generic "Q Can a PHP enum hold methods, constants, or implement an interface?" [ref=e404] [cursor=pointer]:
+                  - generic [ref=e405]: Q
+                  - text: Can a PHP enum hold methods, constants, or implement an interface?
+              - group [ref=e406]:
+                - generic "Q Are two references to the same enum case equal, and how should you compare them?" [ref=e407] [cursor=pointer]:
+                  - generic [ref=e408]: Q
+                  - text: Are two references to the same enum case equal, and how should you compare them?
+          - generic [ref=e409]:
+            - generic [ref=e410]:
+              - generic [ref=e411]: ✅
+              - heading "Quiz" [level=2] [ref=e412]
+            - generic [ref=e413]:
+              - generic [ref=e414]:
+                - paragraph [ref=e415]:
+                  - generic [ref=e416]: "1."
+                  - text: "In a backed enum, what does `tryFrom()` do when given a value that matches no case?"
+                - generic [ref=e417]:
+                  - button "A Throws a \\ValueError" [ref=e418] [cursor=pointer]:
+                    - generic [ref=e419]: A
+                    - text: Throws a \ValueError
+                  - button "B Returns null" [ref=e420] [cursor=pointer]:
+                    - generic [ref=e421]: B
+                    - text: Returns null
+                  - button "C Returns the first case" [ref=e422] [cursor=pointer]:
+                    - generic [ref=e423]: C
+                    - text: Returns the first case
+                  - button "D Emits a notice and returns the raw value" [ref=e424] [cursor=pointer]:
+                    - generic [ref=e425]: D
+                    - text: Emits a notice and returns the raw value
+              - generic [ref=e426]:
+                - paragraph [ref=e427]:
+                  - generic [ref=e428]: "2."
+                  - text: Which is true about pure enums versus backed enums in PHP 8.1?
+                - generic [ref=e429]:
+                  - button "A Both have a ->value property" [ref=e430] [cursor=pointer]:
+                    - generic [ref=e431]: A
+                    - text: Both have a ->value property
+                  - button "B Only backed enums have ->value, from(), and tryFrom()" [ref=e432] [cursor=pointer]:
+                    - generic [ref=e433]: B
+                    - text: Only backed enums have ->value, from(), and tryFrom()
+                  - button "C Only pure enums can have methods" [ref=e434] [cursor=pointer]:
+                    - generic [ref=e435]: C
+                    - text: Only pure enums can have methods
+                  - button "D Backed enums cannot implement interfaces" [ref=e436] [cursor=pointer]:
+                    - generic [ref=e437]: D
+                    - text: Backed enums cannot implement interfaces
+              - generic [ref=e438]:
+                - paragraph [ref=e439]:
+                  - generic [ref=e440]: "3."
+                  - text: "How should you compare an enum case to a known case, e.g. `$suit` to `Suit::Hearts`?"
+                - generic [ref=e441]:
+                  - 'button "A With `==` only, never `===`" [ref=e442] [cursor=pointer]':
+                    - generic [ref=e443]: A
+                    - text: "With `==` only, never `===`"
+                  - 'button "B By comparing `$suit->value` to a string literal" [ref=e444] [cursor=pointer]':
+                    - generic [ref=e445]: B
+                    - text: "By comparing `$suit->value` to a string literal"
+                  - 'button "C With `===`, because each case is a singleton instance" [ref=e446] [cursor=pointer]':
+                    - generic [ref=e447]: C
+                    - text: "With `===`, because each case is a singleton instance"
+                  - 'button "D With `instanceof Suit`" [ref=e448] [cursor=pointer]':
+                    - generic [ref=e449]: D
+                    - text: "With `instanceof Suit`"
+              - button "Check answers" [disabled] [ref=e451]
+          - generic [ref=e452]:
+            - generic [ref=e453] [cursor=pointer]:
+              - checkbox "Mark this section complete" [ref=e454]
+              - text: Mark this section complete
+            - generic [ref=e455]:
+              - button "← Previous" [ref=e456] [cursor=pointer]
+              - button "Next →" [ref=e457] [cursor=pointer]
+    - button "Ask the AI tutor" [ref=e619] [cursor=pointer]:
+      - generic [ref=e620]: ✨
+      - text: Ask AI
+    - complementary "AI tutor" [ref=e621]:
+      - generic [ref=e622]:
+        - generic [ref=e623]:
+          - generic [ref=e624]:
+            - generic [ref=e625]: ✨
+            - text: AI Tutor
+          - generic [ref=e626]: "Lesson: Enums: First-Class Enumerations Replace Class Constants"
+        - button "✕" [ref=e628] [cursor=pointer]
+      - generic [ref=e630]:
+        - paragraph [ref=e631]:
+          - text: Ask about anything in this lesson — or hit
+          - strong [ref=e632]: ✨ Ask AI
+          - text: on any code example to get it explained.
+        - generic [ref=e633]:
+          - button "Explain this lesson simply, with a PHP comparison." [ref=e634] [cursor=pointer]
+          - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e635] [cursor=pointer]'
+          - button "Give me a tiny real-world example." [ref=e636] [cursor=pointer]
+          - button "Quiz me with one tricky question on this topic." [ref=e637] [cursor=pointer]
+      - generic [ref=e638]:
+        - textbox "Ask a follow-up… (Enter to send)" [ref=e639]
+        - button "Send" [disabled] [ref=e640]
+      - generic [ref=e641]: Powered by Claude (Haiku 4.5)
+  - generic [ref=e642]:
+    - alert
+    - alert

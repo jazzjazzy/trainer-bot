@@ -1,0 +1,677 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]: TS
+          - generic [ref=e8]:
+            - generic [ref=e9]: TypeScript for PHP Veterans
+            - generic [ref=e10]: 30 interactive sections
+        - generic [ref=e13]: 0/30 done · 0%
+      - navigation [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: Foundations
+          - button "1 Why TypeScript & the Compile Step" [ref=e17] [cursor=pointer]:
+            - generic [ref=e18]: "1"
+            - generic [ref=e19]: Why TypeScript & the Compile Step
+          - button "2 Setup & Tooling" [ref=e318] [cursor=pointer]:
+            - generic [ref=e319]: "2"
+            - generic [ref=e320]: Setup & Tooling
+          - button "3 The JavaScript Underneath" [ref=e321] [cursor=pointer]:
+            - generic [ref=e322]: "3"
+            - generic [ref=e323]: The JavaScript Underneath
+          - button "4 Variables & Primitive Types" [ref=e324] [cursor=pointer]:
+            - generic [ref=e325]: "4"
+            - generic [ref=e326]: Variables & Primitive Types
+          - button "5 Type Annotations & Inference" [ref=e327] [cursor=pointer]:
+            - generic [ref=e328]: "5"
+            - generic [ref=e329]: Type Annotations & Inference
+          - button "6 Functions" [ref=e330] [cursor=pointer]:
+            - generic [ref=e331]: "6"
+            - generic [ref=e332]: Functions
+        - generic [ref=e333]:
+          - generic [ref=e334]: The Type System
+          - button "7 Arrays & Tuples" [ref=e335] [cursor=pointer]:
+            - generic [ref=e336]: "7"
+            - generic [ref=e337]: Arrays & Tuples
+          - button "8 Objects & Object Types" [ref=e338] [cursor=pointer]:
+            - generic [ref=e339]: "8"
+            - generic [ref=e340]: Objects & Object Types
+          - button "9 Interfaces" [ref=e341] [cursor=pointer]:
+            - generic [ref=e342]: "9"
+            - generic [ref=e343]: Interfaces
+          - button "10 Type Aliases, Unions & Literal Types" [ref=e344] [cursor=pointer]:
+            - generic [ref=e345]: "10"
+            - generic [ref=e346]: Type Aliases, Unions & Literal Types
+          - button "11 Intersections & Composition" [ref=e347] [cursor=pointer]:
+            - generic [ref=e348]: "11"
+            - generic [ref=e349]: Intersections & Composition
+          - button "12 Enums" [ref=e350] [cursor=pointer]:
+            - generic [ref=e351]: "12"
+            - generic [ref=e352]: Enums
+          - button "13 Narrowing & Type Guards" [ref=e353] [cursor=pointer]:
+            - generic [ref=e354]: "13"
+            - generic [ref=e355]: Narrowing & Type Guards
+          - button "14 Generics" [ref=e356] [cursor=pointer]:
+            - generic [ref=e357]: "14"
+            - generic [ref=e358]: Generics
+          - button "15 Utility & Advanced Types" [ref=e359] [cursor=pointer]:
+            - generic [ref=e360]: "15"
+            - generic [ref=e361]: Utility & Advanced Types
+        - generic [ref=e362]:
+          - generic [ref=e363]: Object-Oriented TypeScript
+          - button "16 Classes" [ref=e364] [cursor=pointer]:
+            - generic [ref=e365]: "16"
+            - generic [ref=e366]: Classes
+          - button "17 Inheritance & Abstract Classes" [ref=e367] [cursor=pointer]:
+            - generic [ref=e368]: "17"
+            - generic [ref=e369]: Inheritance & Abstract Classes
+          - button "18 Interfaces vs Abstract Classes & implements" [ref=e370] [cursor=pointer]:
+            - generic [ref=e371]: "18"
+            - generic [ref=e372]: Interfaces vs Abstract Classes & implements
+          - button "19 Static Members, Accessors & this" [ref=e373] [cursor=pointer]:
+            - generic [ref=e374]: "19"
+            - generic [ref=e375]: Static Members, Accessors & this
+          - 'button "20 Modules: import / export" [ref=e376] [cursor=pointer]':
+            - generic [ref=e377]: "20"
+            - generic [ref=e378]: "Modules: import / export"
+          - button "21 Decorators & PHP 8 Attributes" [ref=e379] [cursor=pointer]:
+            - generic [ref=e380]: "21"
+            - generic [ref=e381]: Decorators & PHP 8 Attributes
+        - generic [ref=e382]:
+          - generic [ref=e383]: Modern Runtime & Async
+          - button "22 Modern Syntax & Operators" [ref=e384] [cursor=pointer]:
+            - generic [ref=e385]: "22"
+            - generic [ref=e386]: Modern Syntax & Operators
+          - button "23 Array & Collection Methods" [ref=e387] [cursor=pointer]:
+            - generic [ref=e388]: "23"
+            - generic [ref=e389]: Array & Collection Methods
+          - button "24 Asynchronous TypeScript" [ref=e390] [cursor=pointer]:
+            - generic [ref=e391]: "24"
+            - generic [ref=e392]: Asynchronous TypeScript
+          - button "25 Error Handling & Exceptions" [ref=e393] [cursor=pointer]:
+            - generic [ref=e394]: "25"
+            - generic [ref=e395]: Error Handling & Exceptions
+        - generic [ref=e396]:
+          - generic [ref=e397]: Ecosystem & Interview
+          - button "26 tsconfig & Strict Mode" [ref=e398] [cursor=pointer]:
+            - generic [ref=e399]: "26"
+            - generic [ref=e400]: tsconfig & Strict Mode
+          - button "27 npm, @types & the Package Ecosystem" [ref=e401] [cursor=pointer]:
+            - generic [ref=e402]: "27"
+            - generic [ref=e403]: npm, @types & the Package Ecosystem
+          - button "28 Typing the Real World" [ref=e404] [cursor=pointer]:
+            - generic [ref=e405]: "28"
+            - generic [ref=e406]: Typing the Real World
+          - button "29 Best Practices, Patterns & Pitfalls" [ref=e407] [cursor=pointer]:
+            - generic [ref=e408]: "29"
+            - generic [ref=e409]: Best Practices, Patterns & Pitfalls
+          - button "30 Mock Interview & PHP→TS Cheat Sheet" [ref=e410] [cursor=pointer]:
+            - generic [ref=e411]: "30"
+            - generic [ref=e412]: Mock Interview & PHP→TS Cheat Sheet
+    - main [ref=e20]:
+      - article [ref=e760]:
+        - generic [ref=e761]:
+          - generic [ref=e762]:
+            - generic [ref=e763]: Ecosystem & Interview
+            - generic [ref=e764]: Section 30 of 30
+            - generic [ref=e765]: ~30 min
+          - heading "Mock Interview & PHP→TS Cheat Sheet" [level=1] [ref=e766]
+          - paragraph [ref=e767]: "The capstone: a dense PHP→TS translation cheat sheet, a typical interview coding warm-up, and the framing a 20-year PHP veteran should bring into the room."
+        - generic [ref=e768]:
+          - generic [ref=e769]:
+            - generic [ref=e770]: 📘
+            - heading "Concept" [level=2] [ref=e771]
+          - generic [ref=e772]:
+            - paragraph [ref=e773]:
+              - text: "This is the capstone. Everything from the previous 29 sections, compressed into a reference you can scan the night before an interview. Keep one idea front of mind:"
+              - strong [ref=e774]: you are not a beginner.
+              - text: You have 20 years of typed, object-oriented, production-grade experience. TypeScript is a new dialect, not a new craft.
+            - heading "Syntax mapping" [level=3] [ref=e775]
+            - table [ref=e776]:
+              - rowgroup [ref=e777]:
+                - row "Concept PHP TypeScript" [ref=e778]:
+                  - columnheader "Concept" [ref=e779]
+                  - columnheader "PHP" [ref=e780]
+                  - columnheader "TypeScript" [ref=e781]
+              - rowgroup [ref=e782]:
+                - 'row "Typed variable int $n = 5; const n: number = 5;" [ref=e783]':
+                  - cell "Typed variable" [ref=e784]
+                  - cell "int $n = 5;" [ref=e785]:
+                    - code [ref=e786]: int $n = 5;
+                  - 'cell "const n: number = 5;" [ref=e787]':
+                    - code [ref=e788]: "const n: number = 5;"
+                - 'row "Typed function function f(int $a): int function f(a: number): number" [ref=e789]':
+                  - cell "Typed function" [ref=e790]
+                  - 'cell "function f(int $a): int" [ref=e791]':
+                    - code [ref=e792]: "function f(int $a): int"
+                  - 'cell "function f(a: number): number" [ref=e793]':
+                    - code [ref=e794]: "function f(a: number): number"
+                - 'row "Nullable ?string `string" [ref=e795]':
+                  - cell "Nullable" [ref=e796]
+                  - cell "?string" [ref=e797]:
+                    - code [ref=e798]: "?string"
+                  - 'cell "`string" [ref=e799]'
+                - 'row "Union `int string`" [ref=e800]':
+                  - cell "Union" [ref=e801]
+                  - 'cell "`int" [ref=e802]'
+                  - 'cell "string`" [ref=e803]'
+                - 'row "String interp \"Hi $name\" `Hi ${name}` (backticks)" [ref=e804]':
+                  - cell "String interp" [ref=e805]
+                  - cell "\"Hi $name\"" [ref=e806]:
+                    - code [ref=e807]: "\"Hi $name\""
+                  - 'cell "`Hi ${name}` (backticks)" [ref=e808]':
+                    - code [ref=e809]: "`Hi ${name}`"
+                    - text: (backticks)
+                - row "Array of T /** @var int[] */ number[] or Array<number>" [ref=e810]:
+                  - cell "Array of T" [ref=e811]
+                  - cell /** @var int[] */ [ref=e812]:
+                    - code [ref=e813]: /** @var int[] */
+                  - cell "number[] or Array<number>" [ref=e814]:
+                    - code [ref=e815]: number[]
+                    - text: or
+                    - code [ref=e816]: Array<number>
+                - row "Map / dict ['a' => 1] Record<string, number>" [ref=e817]:
+                  - cell "Map / dict" [ref=e818]
+                  - cell "['a' => 1]" [ref=e819]:
+                    - code [ref=e820]: "['a' => 1]"
+                  - cell "Record<string, number>" [ref=e821]:
+                    - code [ref=e822]: Record<string, number>
+                - row "Constant const FOO = 1; const FOO = 1 as const;" [ref=e823]:
+                  - cell "Constant" [ref=e824]
+                  - cell "const FOO = 1;" [ref=e825]:
+                    - code [ref=e826]: const FOO = 1;
+                  - cell "const FOO = 1 as const;" [ref=e827]:
+                    - code [ref=e828]: const FOO = 1 as const;
+            - heading "Type system" [level=3] [ref=e829]
+            - table [ref=e830]:
+              - rowgroup [ref=e831]:
+                - row "PHP TypeScript Note" [ref=e832]:
+                  - columnheader "PHP" [ref=e833]
+                  - columnheader "TypeScript" [ref=e834]
+                  - columnheader "Note" [ref=e835]
+              - rowgroup [ref=e836]:
+                - row "Nominal typing Structural typing Shape matches, not the name" [ref=e837]:
+                  - cell "Nominal typing" [ref=e838]
+                  - cell "Structural typing" [ref=e839]
+                  - cell "Shape matches, not the name" [ref=e840]
+                - row "mixed unknown (safe) / any (unsafe) Prefer unknown" [ref=e841]:
+                  - cell "mixed" [ref=e842]:
+                    - code [ref=e843]: mixed
+                  - cell "unknown (safe) / any (unsafe)" [ref=e844]:
+                    - code [ref=e845]: unknown
+                    - text: (safe) /
+                    - code [ref=e846]: any
+                    - text: (unsafe)
+                  - cell "Prefer unknown" [ref=e847]:
+                    - text: Prefer
+                    - code [ref=e848]: unknown
+                - row "void void Same idea" [ref=e849]:
+                  - cell "void" [ref=e850]:
+                    - code [ref=e851]: void
+                  - cell "void" [ref=e852]:
+                    - code [ref=e853]: void
+                  - cell "Same idea" [ref=e854]
+                - row "never (8.1) never Unreachable / exhaustive" [ref=e855]:
+                  - cell "never (8.1)" [ref=e856]:
+                    - code [ref=e857]: never
+                    - text: (8.1)
+                  - cell "never" [ref=e858]:
+                    - code [ref=e859]: never
+                  - cell "Unreachable / exhaustive" [ref=e860]
+                - row "Enum (8.1) enum or union of literals Unions are usually better" [ref=e861]:
+                  - cell "Enum (8.1)" [ref=e862]
+                  - cell "enum or union of literals" [ref=e863]:
+                    - code [ref=e864]: enum
+                    - text: or union of literals
+                  - cell "Unions are usually better" [ref=e865]
+                - row "Generics (docblock only) First-class <T> Real, checked generics" [ref=e866]:
+                  - cell "Generics (docblock only)" [ref=e867]
+                  - cell "First-class <T>" [ref=e868]:
+                    - text: First-class
+                    - code [ref=e869]: <T>
+                  - cell "Real, checked generics" [ref=e870]
+            - heading "Tooling" [level=3] [ref=e871]
+            - table [ref=e872]:
+              - rowgroup [ref=e873]:
+                - row "PHP TypeScript" [ref=e874]:
+                  - columnheader "PHP" [ref=e875]
+                  - columnheader "TypeScript" [ref=e876]
+              - rowgroup [ref=e877]:
+                - row "Composer npm / pnpm / yarn" [ref=e878]:
+                  - cell "Composer" [ref=e879]
+                  - cell "npm / pnpm / yarn" [ref=e880]
+                - row "composer.json package.json" [ref=e881]:
+                  - cell "composer.json" [ref=e882]:
+                    - code [ref=e883]: composer.json
+                  - cell "package.json" [ref=e884]:
+                    - code [ref=e885]: package.json
+                - row "PSR-4 autoload ES modules (import/export)" [ref=e886]:
+                  - cell "PSR-4 autoload" [ref=e887]
+                  - cell "ES modules (import/export)" [ref=e888]:
+                    - text: ES modules (
+                    - code [ref=e889]: import
+                    - text: /
+                    - code [ref=e890]: export
+                    - text: )
+                - row "PHPStan / Psalm tsc --strict (built in)" [ref=e891]:
+                  - cell "PHPStan / Psalm" [ref=e892]
+                  - cell "tsc --strict (built in)" [ref=e893]:
+                    - code [ref=e894]: tsc --strict
+                    - text: (built in)
+                - row "PHP-CS-Fixer Prettier + ESLint" [ref=e895]:
+                  - cell "PHP-CS-Fixer" [ref=e896]
+                  - cell "Prettier + ESLint" [ref=e897]
+                - row "PHPUnit Vitest / Jest" [ref=e898]:
+                  - cell "PHPUnit" [ref=e899]
+                  - cell "Vitest / Jest" [ref=e900]
+            - heading "OOP" [level=3] [ref=e901]
+            - table [ref=e902]:
+              - rowgroup [ref=e903]:
+                - row "PHP TypeScript Note" [ref=e904]:
+                  - columnheader "PHP" [ref=e905]
+                  - columnheader "TypeScript" [ref=e906]
+                  - columnheader "Note" [ref=e907]
+              - rowgroup [ref=e908]:
+                - row "class, extends Same keywords Single inheritance" [ref=e909]:
+                  - cell "class, extends" [ref=e910]:
+                    - code [ref=e911]: class
+                    - text: ","
+                    - code [ref=e912]: extends
+                  - cell "Same keywords" [ref=e913]
+                  - cell "Single inheritance" [ref=e914]
+                - row "interface, implements Same, but structural No explicit implements needed to fit a shape" [ref=e915]:
+                  - cell "interface, implements" [ref=e916]:
+                    - code [ref=e917]: interface
+                    - text: ","
+                    - code [ref=e918]: implements
+                  - cell "Same, but structural" [ref=e919]
+                  - cell "No explicit implements needed to fit a shape" [ref=e920]:
+                    - text: No explicit
+                    - code [ref=e921]: implements
+                    - text: needed to fit a shape
+                - row "abstract abstract Same" [ref=e922]:
+                  - cell "abstract" [ref=e923]:
+                    - code [ref=e924]: abstract
+                  - cell "abstract" [ref=e925]:
+                    - code [ref=e926]: abstract
+                  - cell "Same" [ref=e927]
+                - 'row "private/protected/public Same modifiers + #field # is true runtime-private" [ref=e928]':
+                  - cell "private/protected/public" [ref=e929]:
+                    - code [ref=e930]: private
+                    - text: /
+                    - code [ref=e931]: protected
+                    - text: /
+                    - code [ref=e932]: public
+                  - 'cell "Same modifiers + #field" [ref=e933]':
+                    - text: Same modifiers +
+                    - code [ref=e934]: "#field"
+                  - cell "# is true runtime-private" [ref=e935]:
+                    - code [ref=e936]: "#"
+                    - text: is true runtime-private
+                - row "Traits Mixins (no native keyword) Composition via functions" [ref=e937]:
+                  - cell "Traits" [ref=e938]
+                  - cell "Mixins (no native keyword)" [ref=e939]
+                  - cell "Composition via functions" [ref=e940]
+            - heading "Top gotchas" [level=3] [ref=e941]
+            - table [ref=e942]:
+              - rowgroup [ref=e943]:
+                - row "Gotcha What bites you" [ref=e944]:
+                  - columnheader "Gotcha" [ref=e945]
+                  - columnheader "What bites you" [ref=e946]
+              - rowgroup [ref=e947]:
+                - row "Types are erased No runtime type checks — validate external data yourself" [ref=e948]:
+                  - cell "Types are erased" [ref=e949]
+                  - cell "No runtime type checks — validate external data yourself" [ref=e950]
+                - row "== vs === Always use ===; == coerces like PHP's loose ==" [ref=e951]:
+                  - cell "== vs ===" [ref=e952]:
+                    - code [ref=e953]: ==
+                    - text: vs
+                    - code [ref=e954]: ===
+                  - cell "Always use ===; == coerces like PHP's loose ==" [ref=e955]:
+                    - text: Always use
+                    - code [ref=e956]: ===
+                    - text: ;
+                    - code [ref=e957]: ==
+                    - text: coerces like PHP's loose
+                    - code [ref=e958]: ==
+                - row "null vs undefined Two empty values, not one" [ref=e959]:
+                  - cell "null vs undefined" [ref=e960]:
+                    - code [ref=e961]: "null"
+                    - text: vs
+                    - code [ref=e962]: undefined
+                  - cell "Two empty values, not one" [ref=e963]
+                - row "Structural typing Extra properties can slip through" [ref=e964]:
+                  - cell "Structural typing" [ref=e965]
+                  - cell "Extra properties can slip through" [ref=e966]
+                - row "this binding Arrow functions capture this; regular ones don't" [ref=e967]:
+                  - cell "this binding" [ref=e968]:
+                    - code [ref=e969]: this
+                    - text: binding
+                  - cell "Arrow functions capture this; regular ones don't" [ref=e970]:
+                    - text: Arrow functions capture
+                    - code [ref=e971]: this
+                    - text: ; regular ones don't
+            - heading "Framing the transition" [level=3] [ref=e972]
+            - paragraph [ref=e973]:
+              - text: "Lead with what transfers: typed contracts, OOP, dependency injection, testing discipline. Then show you grasp the"
+              - strong [ref=e974]: two real differences
+              - text: — compile-time erasure (so you still validate at the edges) and structural typing. That story signals seniority, not retraining.
+        - generic [ref=e975]:
+          - generic [ref=e976]:
+            - generic [ref=e977]: 🔀
+            - heading "PHP → TypeScript" [level=2] [ref=e978]
+            - generic [ref=e979]: What you know, beside what's new
+          - generic [ref=e980]:
+            - generic [ref=e981]:
+              - heading "Null-safe property access" [level=4] [ref=e982]
+              - generic [ref=e983]:
+                - generic [ref=e984]:
+                  - generic [ref=e985]: PHP
+                  - code [ref=e987]: <?php $city = $user?->address?->city ?? 'Unknown';
+                - generic [ref=e988]:
+                  - generic [ref=e989]: TypeScript
+                  - code [ref=e991]: const city = user?.address?.city ?? "Unknown";
+              - paragraph [ref=e992]:
+                - strong [ref=e993]: "Difference:"
+                - text: "Optional chaining and nullish coalescing are nearly identical — but `??` in TS only triggers on null/undefined, never on 0 or ''."
+            - generic [ref=e994]:
+              - heading "Mapping over a collection" [level=4] [ref=e995]
+              - generic [ref=e996]:
+                - generic [ref=e997]:
+                  - generic [ref=e998]: PHP
+                  - code [ref=e1000]: <?php $names = array_map(fn($u) => $u->name, $users);
+                - generic [ref=e1001]:
+                  - generic [ref=e1002]: TypeScript
+                  - code [ref=e1004]:
+                    - text: const names = users.map(
+                    - generic [ref=e1005]: (u) =>
+                    - text: u.name);
+              - paragraph [ref=e1006]:
+                - strong [ref=e1007]: "Difference:"
+                - text: "TS `.map` is a method on the array, and the result type is inferred as `string[]` — no docblock needed."
+            - generic [ref=e1008]:
+              - heading "Shape contracts" [level=4] [ref=e1009]
+              - generic [ref=e1010]:
+                - generic [ref=e1011]:
+                  - generic [ref=e1012]: PHP
+                  - code [ref=e1014]:
+                    - text: <?php
+                    - generic [ref=e1015]: interface HasId
+                    - text: "{ public"
+                    - generic [ref=e1016]:
+                      - text: function getId(
+                      - text: "): int"
+                    - text: "; }"
+                    - generic [ref=e1017]: class User implements HasId
+                    - text: "{ public"
+                    - generic [ref=e1018]:
+                      - text: function getId(
+                      - text: "): int"
+                    - text: "{ return $this->id; } }"
+                - generic [ref=e1019]:
+                  - generic [ref=e1020]: TypeScript
+                  - code [ref=e1022]: "interface HasId { id: number } // No \"implements\" required — any object with an // id: number structurally satisfies HasId: const user: HasId = { id: 1 };"
+              - paragraph [ref=e1023]:
+                - strong [ref=e1024]: "Difference:"
+                - text: "PHP is nominal (must declare `implements`). TS is structural — the right shape just fits."
+            - generic [ref=e1025]:
+              - heading "Exhaustive switch" [level=4] [ref=e1026]
+              - generic [ref=e1027]:
+                - generic [ref=e1028]:
+                  - generic [ref=e1029]: PHP
+                  - code [ref=e1031]:
+                    - text: <?php
+                    - generic [ref=e1032]: "enum Status: string"
+                    - text: "{ case Open = 'open'; case Done = 'done'; } $label = match($status) { Status::Open => 'Open', Status::Done => 'Done', };"
+                - generic [ref=e1033]:
+                  - generic [ref=e1034]: TypeScript
+                  - code [ref=e1036]:
+                    - text: type Status = "open" | "done"; function label(
+                    - generic [ref=e1037]: "s: Status"
+                    - text: "): string { switch (s) { case \"open\": return \"Open\"; case \"done\": return \"Done\"; default: { const _x: never = s; return _x; } } }"
+              - paragraph [ref=e1038]:
+                - strong [ref=e1039]: "Difference:"
+                - text: "Assigning the leftover case to `never` makes TS fail the build if you add a status and forget to handle it."
+            - generic [ref=e1040]:
+              - heading "Validating external data" [level=4] [ref=e1041]
+              - generic [ref=e1042]:
+                - generic [ref=e1043]:
+                  - generic [ref=e1044]: PHP
+                  - code [ref=e1046]: <?php $data = json_decode($body, true); $age = (int) ($data['age'] ?? 0);
+                - generic [ref=e1047]:
+                  - generic [ref=e1048]: TypeScript
+                  - code [ref=e1050]:
+                    - text: "const data: unknown = JSON.parse(body); function isUser("
+                    - generic [ref=e1051]: "d: unknown"
+                    - text: "): d is { age: number } { return typeof d === \"object\" && d !== null && \"age\" in d && typeof (d as any).age === \"number\"; } const age = isUser(data) ? data.age : 0;"
+              - paragraph [ref=e1052]:
+                - strong [ref=e1053]: "Difference:"
+                - text: "TS types are erased at runtime, so parsed JSON is `unknown` — narrow it with a type guard before trusting it."
+        - generic [ref=e1054]:
+          - generic [ref=e1055]:
+            - generic [ref=e1056]: 🧪
+            - heading "Live Playground" [level=2] [ref=e1057]
+            - generic [ref=e1058]: Edit & run real TypeScript
+          - generic [ref=e1059]:
+            - paragraph [ref=e1060]: "A typical interview warm-up: implement a generic groupBy. The interviewer wants to see you reach for generics and a constrained key type, not `any`. Run it."
+            - generic [ref=e1063]: Loading...
+            - generic [ref=e1064]:
+              - button "▶ Run" [ref=e1065] [cursor=pointer]
+              - button "Reset" [ref=e1066] [cursor=pointer]
+              - generic [ref=e1067]: Edit the code, then Run. Type errors show inline as you type.
+        - generic [ref=e1068]:
+          - generic [ref=e1069]:
+            - generic [ref=e1070]: 🎯
+            - heading "Key Points" [level=2] [ref=e1071]
+          - list [ref=e1072]:
+            - listitem [ref=e1073]:
+              - text: →
+              - paragraph [ref=e1075]:
+                - text: You're a senior engineer learning a dialect —
+                - strong [ref=e1076]: lead with what transfers
+                - text: ": typed contracts, OOP, DI, tests."
+            - listitem [ref=e1077]:
+              - text: →
+              - paragraph [ref=e1079]:
+                - text: "The two differences that matter most:"
+                - strong [ref=e1080]: types are erased
+                - text: (validate at the edges) and
+                - strong [ref=e1081]: typing is structural
+                - text: (shape, not name).
+            - listitem [ref=e1082]:
+              - text: →
+              - paragraph [ref=e1084]:
+                - text: Prefer
+                - code [ref=e1085]: unknown
+                - text: over
+                - code [ref=e1086]: any
+                - text: ","
+                - code [ref=e1087]: ===
+                - text: over
+                - code [ref=e1088]: ==
+                - text: ", and"
+                - strong [ref=e1089]: literal unions
+                - text: over enums.
+            - listitem [ref=e1090]:
+              - text: →
+              - paragraph [ref=e1092]:
+                - text: Reach for
+                - strong [ref=e1093]: generics
+                - text: on collection helpers (
+                - code [ref=e1094]: groupBy
+                - text: ","
+                - code [ref=e1095]: map
+                - text: ) — interviewers look for it.
+            - listitem [ref=e1096]:
+              - text: →
+              - paragraph [ref=e1098]:
+                - text: "Tooling maps cleanly: Composer→npm, PHPUnit→Vitest, PHPStan→"
+                - code [ref=e1099]: tsc --strict
+                - text: ", PHP-CS-Fixer→Prettier/ESLint."
+            - listitem [ref=e1100]:
+              - text: →
+              - paragraph [ref=e1102]:
+                - text: Handle
+                - code [ref=e1103]: "null"
+                - strong [ref=e1104]: and
+                - code [ref=e1105]: undefined
+                - text: ", and use"
+                - code [ref=e1106]: "??"
+                - text: /
+                - code [ref=e1107]: "?."
+                - text: to do it concisely.
+        - generic [ref=e1108]:
+          - generic [ref=e1109]:
+            - generic [ref=e1110]: 💼
+            - heading "Interview Prep" [level=2] [ref=e1111]
+            - generic [ref=e1112]: Click a question to reveal
+          - generic [ref=e1113]:
+            - group [ref=e1114]:
+              - 'generic "Q Sell me on your transition: why should we hire a PHP developer for a TypeScript role?" [ref=e1115] [cursor=pointer]':
+                - generic [ref=e1116]: Q
+                - text: "Sell me on your transition: why should we hire a PHP developer for a TypeScript role?"
+            - group [ref=e1117]:
+              - generic "Q What's the single biggest conceptual difference between PHP's type system and TypeScript's?" [ref=e1118] [cursor=pointer]:
+                - generic [ref=e1119]: Q
+                - text: What's the single biggest conceptual difference between PHP's type system and TypeScript's?
+            - group [ref=e1120]:
+              - generic "Q Types are erased at compile time. What does that mean for production code?" [ref=e1121] [cursor=pointer]:
+                - generic [ref=e1122]: Q
+                - text: Types are erased at compile time. What does that mean for production code?
+            - group [ref=e1123]:
+              - 'generic "Q When would you use `unknown` instead of `any`?" [ref=e1124] [cursor=pointer]':
+                - generic [ref=e1125]: Q
+                - text: "When would you use `unknown` instead of `any`?"
+            - group [ref=e1126]:
+              - generic "Q How do enums in PHP compare to TypeScript, and which would you reach for?" [ref=e1127] [cursor=pointer]:
+                - generic [ref=e1128]: Q
+                - text: How do enums in PHP compare to TypeScript, and which would you reach for?
+            - group [ref=e1129]:
+              - generic "Q Walk me through making a switch statement exhaustive." [ref=e1130] [cursor=pointer]:
+                - generic [ref=e1131]: Q
+                - text: Walk me through making a switch statement exhaustive.
+            - group [ref=e1132]:
+              - generic "Q Explain generics with a concrete example." [ref=e1133] [cursor=pointer]:
+                - generic [ref=e1134]: Q
+                - text: Explain generics with a concrete example.
+            - group [ref=e1135]:
+              - 'generic "Q What''s the difference between `interface` and `type` in TypeScript?" [ref=e1136] [cursor=pointer]':
+                - generic [ref=e1137]: Q
+                - text: "What's the difference between `interface` and `type` in TypeScript?"
+            - group [ref=e1138]:
+              - 'generic "Q How do `null` and `undefined` differ, and how do you handle them?" [ref=e1139] [cursor=pointer]':
+                - generic [ref=e1140]: Q
+                - text: "How do `null` and `undefined` differ, and how do you handle them?"
+            - group [ref=e1141]:
+              - 'generic "Q What is `as const` and when do you use it?" [ref=e1142] [cursor=pointer]':
+                - generic [ref=e1143]: Q
+                - text: "What is `as const` and when do you use it?"
+            - group [ref=e1144]:
+              - generic "Q How does asynchronous code in TypeScript compare to PHP?" [ref=e1145] [cursor=pointer]:
+                - generic [ref=e1146]: Q
+                - text: How does asynchronous code in TypeScript compare to PHP?
+            - group [ref=e1147]:
+              - generic "Q How do you handle errors in TypeScript versus PHP?" [ref=e1148] [cursor=pointer]:
+                - generic [ref=e1149]: Q
+                - text: How do you handle errors in TypeScript versus PHP?
+            - group [ref=e1150]:
+              - generic "Q What is structural typing's downside, and how do you mitigate it?" [ref=e1151] [cursor=pointer]:
+                - generic [ref=e1152]: Q
+                - text: What is structural typing's downside, and how do you mitigate it?
+            - group [ref=e1153]:
+              - generic "Q How does the TypeScript module system compare to PHP autoloading?" [ref=e1154] [cursor=pointer]:
+                - generic [ref=e1155]: Q
+                - text: How does the TypeScript module system compare to PHP autoloading?
+            - group [ref=e1156]:
+              - 'generic "Q If `tsc` passes, is your code correct?" [ref=e1157] [cursor=pointer]':
+                - generic [ref=e1158]: Q
+                - text: "If `tsc` passes, is your code correct?"
+            - group [ref=e1159]:
+              - generic "Q What tooling would you set up on a new TypeScript project?" [ref=e1160] [cursor=pointer]:
+                - generic [ref=e1161]: Q
+                - text: What tooling would you set up on a new TypeScript project?
+        - generic [ref=e1162]:
+          - generic [ref=e1163]:
+            - generic [ref=e1164]: ✅
+            - heading "Quiz" [level=2] [ref=e1165]
+          - generic [ref=e1166]:
+            - generic [ref=e1167]:
+              - paragraph [ref=e1168]:
+                - generic [ref=e1169]: "1."
+                - text: An interviewer asks for the safest type to hold a value parsed from an untrusted API. What do you pick?
+              - generic [ref=e1170]:
+                - button "A any" [ref=e1171] [cursor=pointer]:
+                  - generic [ref=e1172]: A
+                  - text: any
+                - button "B unknown" [ref=e1173] [cursor=pointer]:
+                  - generic [ref=e1174]: B
+                  - text: unknown
+                - button "C object" [ref=e1175] [cursor=pointer]:
+                  - generic [ref=e1176]: C
+                  - text: object
+                - button "D mixed" [ref=e1177] [cursor=pointer]:
+                  - generic [ref=e1178]: D
+                  - text: mixed
+            - generic [ref=e1179]:
+              - paragraph [ref=e1180]:
+                - generic [ref=e1181]: "2."
+                - text: Why do TypeScript types provide no runtime guarantees about an API response?
+              - generic [ref=e1182]:
+                - button "A Because the API is always trusted" [ref=e1183] [cursor=pointer]:
+                  - generic [ref=e1184]: A
+                  - text: Because the API is always trusted
+                - button "B Because types are erased at compile time and don't exist at runtime" [ref=e1185] [cursor=pointer]:
+                  - generic [ref=e1186]: B
+                  - text: Because types are erased at compile time and don't exist at runtime
+                - button "C Because TypeScript validates every response automatically" [ref=e1187] [cursor=pointer]:
+                  - generic [ref=e1188]: C
+                  - text: Because TypeScript validates every response automatically
+                - button "D Because JSON.parse returns the declared type" [ref=e1189] [cursor=pointer]:
+                  - generic [ref=e1190]: D
+                  - text: Because JSON.parse returns the declared type
+            - generic [ref=e1191]:
+              - paragraph [ref=e1192]:
+                - generic [ref=e1193]: "3."
+                - text: What is the main practical difference between PHP interfaces and TypeScript interfaces?
+              - generic [ref=e1194]:
+                - button "A TypeScript interfaces are checked at runtime" [ref=e1195] [cursor=pointer]:
+                  - generic [ref=e1196]: A
+                  - text: TypeScript interfaces are checked at runtime
+                - button "B PHP interfaces support generics but TypeScript ones don't" [ref=e1197] [cursor=pointer]:
+                  - generic [ref=e1198]: B
+                  - text: PHP interfaces support generics but TypeScript ones don't
+                - 'button "C PHP is nominal (must declare `implements`); TypeScript is structural (shape matches automatically)" [ref=e1199] [cursor=pointer]':
+                  - generic [ref=e1200]: C
+                  - text: "PHP is nominal (must declare `implements`); TypeScript is structural (shape matches automatically)"
+                - button "D There is no difference" [ref=e1201] [cursor=pointer]:
+                  - generic [ref=e1202]: D
+                  - text: There is no difference
+            - generic [ref=e1203]:
+              - paragraph [ref=e1204]:
+                - generic [ref=e1205]: "4."
+                - text: "In the generic signature `groupBy<T, K extends string | number>`, what does `K extends string | number` do?"
+              - generic [ref=e1206]:
+                - button "A Forces every item to be a string or number" [ref=e1207] [cursor=pointer]:
+                  - generic [ref=e1208]: A
+                  - text: Forces every item to be a string or number
+                - button "B Constrains the key type to values usable as object keys" [ref=e1209] [cursor=pointer]:
+                  - generic [ref=e1210]: B
+                  - text: Constrains the key type to values usable as object keys
+                - button "C Makes the function return only strings and numbers" [ref=e1211] [cursor=pointer]:
+                  - generic [ref=e1212]: C
+                  - text: Makes the function return only strings and numbers
+                - button "D Prevents the use of generics entirely" [ref=e1213] [cursor=pointer]:
+                  - generic [ref=e1214]: D
+                  - text: Prevents the use of generics entirely
+            - button "Check answers" [disabled] [ref=e1216]
+        - generic [ref=e1217]:
+          - generic [ref=e1218] [cursor=pointer]:
+            - checkbox "Mark this section complete" [ref=e1219]
+            - text: Mark this section complete
+          - generic [ref=e1220]:
+            - button "← Previous" [ref=e1221] [cursor=pointer]
+            - button "Next →" [disabled] [ref=e1222]
+  - generic [ref=e313]:
+    - alert
+    - alert

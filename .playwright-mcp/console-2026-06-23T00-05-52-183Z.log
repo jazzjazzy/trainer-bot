@@ -1,0 +1,6 @@
+[     470ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=a5671618:21550
+[   92548ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=a5671618:21550
+[   97638ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=a5671618:21550
+[  103333ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5175/src/ai/AIContext.tsx?t=1782173255494:0
+[  103334ms] [ERROR] [hmr] Failed to reload /src/ai/AIContext.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5175/@vite/client:175
+[  109115ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=a5671618:21550

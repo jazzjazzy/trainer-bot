@@ -1,0 +1,793 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e44]:
+      - complementary [ref=e45]:
+        - generic [ref=e46]:
+          - button "← All courses" [ref=e47] [cursor=pointer]
+          - generic [ref=e48]:
+            - generic [ref=e49]: PHP
+            - generic [ref=e50]:
+              - generic [ref=e51]: "PHP 5.5 → 8.2: The Upgrade"
+              - generic [ref=e52]: 30 sections
+          - generic [ref=e55]: 0/30 done · 0%
+        - navigation [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]: Getting Current
+            - button "1 Why Upgrade & the 5.5 → 8.2 Timeline" [ref=e59] [cursor=pointer]:
+              - generic [ref=e60]: "1"
+              - generic [ref=e61]: Why Upgrade & the 5.5 → 8.2 Timeline
+            - 'button "2 The Migration Mindset: Upgrading Safely 5.5 → 8.2" [ref=e62] [cursor=pointer]':
+              - generic [ref=e63]: "2"
+              - generic [ref=e64]: "The Migration Mindset: Upgrading Safely 5.5 → 8.2"
+          - generic [ref=e65]:
+            - generic [ref=e66]: "PHP 7.0: Types & the Engine"
+            - 'button "3 Scalar Type Declarations: From Docblocks to Enforced Types" [ref=e67] [cursor=pointer]':
+              - generic [ref=e68]: "3"
+              - generic [ref=e69]: "Scalar Type Declarations: From Docblocks to Enforced Types"
+            - 'button "4 Return Type Declarations: From @return to Enforced Contracts" [ref=e70] [cursor=pointer]':
+              - generic [ref=e71]: "4"
+              - generic [ref=e72]: "Return Type Declarations: From @return to Enforced Contracts"
+            - 'button "5 strict_types: Coercive vs Strict Typing" [ref=e73] [cursor=pointer]':
+              - generic [ref=e74]: "5"
+              - generic [ref=e75]: "strict_types: Coercive vs Strict Typing"
+            - 'button "6 Null Coalescing: ?? Kills the isset() Ternary" [ref=e76] [cursor=pointer]':
+              - generic [ref=e77]: "6"
+              - generic [ref=e78]: "Null Coalescing: ?? Kills the isset() Ternary"
+            - 'button "7 The Spaceship Operator: Sorting Without the Boilerplate" [ref=e79] [cursor=pointer]':
+              - generic [ref=e80]: "7"
+              - generic [ref=e81]: "The Spaceship Operator: Sorting Without the Boilerplate"
+            - 'button "8 Throwable & Catchable Errors: Goodbye Unrecoverable Fatals" [ref=e82] [cursor=pointer]':
+              - generic [ref=e83]: "8"
+              - generic [ref=e84]: "Throwable & Catchable Errors: Goodbye Unrecoverable Fatals"
+            - 'button "9 The PHP 7.0 Grab Bag: Small Wins That Add Up" [ref=e85] [cursor=pointer]':
+              - generic [ref=e86]: "9"
+              - generic [ref=e87]: "The PHP 7.0 Grab Bag: Small Wins That Add Up"
+          - generic [ref=e88]:
+            - generic [ref=e89]: "PHP 7.1–7.4: Refinements"
+            - 'button "10 Nullable Types & void: Saying What You Mean" [ref=e90] [cursor=pointer]':
+              - generic [ref=e91]: "10"
+              - generic [ref=e92]: "Nullable Types & void: Saying What You Mean"
+            - 'button "11 PHP 7.1 Quality-of-Life: iterable, Multi-Catch & [] Destructuring" [ref=e93] [cursor=pointer]':
+              - generic [ref=e94]: "11"
+              - generic [ref=e95]: "PHP 7.1 Quality-of-Life: iterable, Multi-Catch & [] Destructuring"
+            - 'button "12 PHP 7.2: The `object` Type & Trailing Commas" [ref=e96] [cursor=pointer]':
+              - generic [ref=e97]: "12"
+              - generic [ref=e98]: "PHP 7.2: The `object` Type & Trailing Commas"
+            - 'button "13 PHP 7.3 Quality-of-Life: Heredocs, Trailing Commas & Array Keys" [ref=e99] [cursor=pointer]':
+              - generic [ref=e100]: "13"
+              - generic [ref=e101]: "PHP 7.3 Quality-of-Life: Heredocs, Trailing Commas & Array Keys"
+            - 'button "14 Typed Properties: Real Types on Your Objects" [ref=e102] [cursor=pointer]':
+              - generic [ref=e103]: "14"
+              - generic [ref=e104]: "Typed Properties: Real Types on Your Objects"
+            - 'button "15 Arrow Functions: Closures Without the `use` Boilerplate" [ref=e105] [cursor=pointer]':
+              - generic [ref=e106]: "15"
+              - generic [ref=e107]: "Arrow Functions: Closures Without the `use` Boilerplate"
+            - button "16 ??=, Array Spread & Numeric Separators" [ref=e108] [cursor=pointer]:
+              - generic [ref=e109]: "16"
+              - generic [ref=e110]: "??=, Array Spread & Numeric Separators"
+            - 'button "17 PHP 7.4: Covariant Returns, Contravariant Params & the Performance Toolbox" [ref=e111] [cursor=pointer]':
+              - generic [ref=e112]: "17"
+              - generic [ref=e113]: "PHP 7.4: Covariant Returns, Contravariant Params & the Performance Toolbox"
+          - generic [ref=e114]:
+            - generic [ref=e115]: "PHP 8.0: The Big Leap"
+            - 'button "18 Named Arguments: Calling by Name, Not by Position" [ref=e116] [cursor=pointer]':
+              - generic [ref=e117]: "18"
+              - generic [ref=e118]: "Named Arguments: Calling by Name, Not by Position"
+            - 'button "19 Constructor Property Promotion: Kill the Boilerplate" [ref=e119] [cursor=pointer]':
+              - generic [ref=e120]: "19"
+              - generic [ref=e121]: "Constructor Property Promotion: Kill the Boilerplate"
+            - 'button "20 Union Types: Saying \"int or string\" for Real" [ref=e122] [cursor=pointer]':
+              - generic [ref=e123]: "20"
+              - generic [ref=e124]: "Union Types: Saying \"int or string\" for Real"
+            - 'button "21 match: the switch That Returns a Value" [ref=e125] [cursor=pointer]':
+              - generic [ref=e126]: "21"
+              - generic [ref=e127]: "match: the switch That Returns a Value"
+            - 'button "22 The Nullsafe Operator: Chaining Without the Null Dance" [ref=e128] [cursor=pointer]':
+              - generic [ref=e129]: "22"
+              - generic [ref=e130]: "The Nullsafe Operator: Chaining Without the Null Dance"
+            - 'button "23 Attributes: Real Metadata Instead of Magic Comments" [ref=e131] [cursor=pointer]':
+              - generic [ref=e132]: "23"
+              - generic [ref=e133]: "Attributes: Real Metadata Instead of Magic Comments"
+            - 'button "24 The PHP 8.0 Grab-Bag: Small Wins That Add Up" [ref=e134] [cursor=pointer]':
+              - generic [ref=e135]: "24"
+              - generic [ref=e136]: "The PHP 8.0 Grab-Bag: Small Wins That Add Up"
+            - 'button "25 PHP 8.0 Breaking Changes: What Will Bite You" [ref=e137] [cursor=pointer]':
+              - generic [ref=e138]: "25"
+              - generic [ref=e139]: "PHP 8.0 Breaking Changes: What Will Bite You"
+          - generic [ref=e140]:
+            - generic [ref=e141]: "PHP 8.1–8.2: Modern PHP"
+            - 'button "26 Enums: First-Class Enumerations Replace Class Constants" [ref=e142] [cursor=pointer]':
+              - generic [ref=e143]: "26"
+              - generic [ref=e144]: "Enums: First-Class Enumerations Replace Class Constants"
+            - 'button "27 Readonly Properties & Classes: Real Immutability" [ref=e145] [cursor=pointer]':
+              - generic [ref=e146]: "27"
+              - generic [ref=e147]: "Readonly Properties & Classes: Real Immutability"
+            - 'button "28 First-Class Callables, `never`, and a Look at Fibers" [ref=e148] [cursor=pointer]':
+              - generic [ref=e149]: "28"
+              - generic [ref=e150]: "First-Class Callables, `never`, and a Look at Fibers"
+            - 'button "29 The 8.1 Grab Bag: Intersection Types, `new` in Initializers & Final Constants" [ref=e151] [cursor=pointer]':
+              - generic [ref=e152]: "29"
+              - generic [ref=e153]: "The 8.1 Grab Bag: Intersection Types, `new` in Initializers & Final Constants"
+            - button "30 PHP 8.2 & the 5.5 → 8.2 Cheat Sheet" [ref=e154] [cursor=pointer]:
+              - generic [ref=e155]: "30"
+              - generic [ref=e156]: PHP 8.2 & the 5.5 → 8.2 Cheat Sheet
+      - main [ref=e157]:
+        - article [ref=e643]:
+          - generic [ref=e644]:
+            - generic [ref=e645]:
+              - generic [ref=e646]: "PHP 8.1–8.2: Modern PHP"
+              - generic [ref=e647]: Section 30 of 30
+              - generic [ref=e648]: ~25 min
+            - heading "PHP 8.2 & the 5.5 → 8.2 Cheat Sheet" [level=1] [ref=e649]
+            - paragraph [ref=e650]: "The last 8.2 features (readonly classes, DNF types, standalone null/false/true, trait constants, #[\\SensitiveParameter]) plus a complete old-vs-modern reference and upgrade checklist for the whole 5.5 → 8.2 journey."
+            - button "✨ Ask AI about this lesson" [ref=e651] [cursor=pointer]
+          - generic [ref=e652]:
+            - generic [ref=e653]:
+              - generic [ref=e654]: 📘
+              - heading "Concept" [level=2] [ref=e655]
+            - generic [ref=e656]:
+              - paragraph [ref=e657]:
+                - text: This is the capstone. First the final batch of PHP
+                - strong [ref=e658]: "8.2"
+                - text: features, then a single
+                - strong [ref=e659]: cheat sheet
+                - text: mapping every 5.5 idiom you know to its modern spelling, the breaking changes to watch, and a checklist for the upgrade itself.
+              - heading "What 8.2 added" [level=3] [ref=e660]
+              - list [ref=e661]:
+                - listitem [ref=e662]:
+                  - strong [ref=e663]:
+                    - code [ref=e664]: readonly
+                    - text: classes
+                  - text: — mark the whole class
+                  - code [ref=e665]: readonly
+                  - text: and every property is implicitly readonly. No more repeating the keyword per property.
+              - code [ref=e668]:
+                - text: final readonly
+                - generic [ref=e669]: class Money
+                - text: "{ public"
+                - generic [ref=e670]:
+                  - text: function __construct(
+                  - generic [ref=e671]: public int $amount, public string $currency,
+                  - text: )
+                - text: "{} }"
+              - list [ref=e672]:
+                - listitem [ref=e673]:
+                  - strong [ref=e674]: DNF (disjunctive normal form) types
+                  - text: "— combine intersections and unions:"
+                  - code [ref=e675]: (Countable&Traversable)|null
+                  - text: . Each
+                  - code [ref=e676]: "&"
+                  - text: "-group must be parenthesised."
+                - listitem [ref=e677]:
+                  - strong [ref=e678]:
+                    - text: Standalone
+                    - code [ref=e679]: "null"
+                    - text: ","
+                    - code [ref=e680]: "false"
+                    - text: ","
+                    - code [ref=e681]: "true"
+                  - text: types — previously only usable inside a union (
+                  - code [ref=e682]: string|false
+                  - text: ); now legal on their own as a return/param type.
+                - listitem [ref=e683]:
+                  - strong [ref=e684]: Dynamic properties are DEPRECATED
+                  - text: —
+                  - code [ref=e685]: $obj->whatever = 1
+                  - text: on an undeclared property warns in 8.2 and will throw in 9.0. Either
+                  - strong [ref=e686]: declare the property
+                  - text: ", or opt in per class with"
+                  - strong [ref=e687]:
+                    - code [ref=e688]: "#[\\AllowDynamicProperties]"
+                  - text: . (
+                  - code [ref=e689]: stdClass
+                  - text: and
+                  - code [ref=e690]: __set
+                  - text: are unaffected.)
+                - listitem [ref=e691]:
+                  - strong [ref=e692]: Constants in traits
+                  - text: — a trait may now declare
+                  - code [ref=e693]: const
+                  - text: ; the using class inherits it.
+                - listitem [ref=e694]:
+                  - strong [ref=e695]:
+                    - code [ref=e696]: "#[\\SensitiveParameter]"
+                  - text: — mark a parameter (e.g. a password) so its value is
+                  - strong [ref=e697]: redacted from stack traces
+                  - text: instead of leaking into logs.
+              - code [ref=e700]:
+                - generic [ref=e701]:
+                  - text: function login(
+                  - generic [ref=e702]: "string $user, #[\\SensitiveParameter] string $password"
+                  - text: "): void"
+                - text: "{ /* ... */ }"
+              - heading "5.5 → 8.2 cheat sheet — old idiom → modern idiom" [level=3] [ref=e703]
+              - paragraph [ref=e704]:
+                - strong [ref=e705]: Types & null
+              - table [ref=e706]:
+                - rowgroup [ref=e707]:
+                  - row "PHP 5.5 Modern Since" [ref=e708]:
+                    - columnheader "PHP 5.5" [ref=e709]
+                    - columnheader "Modern" [ref=e710]
+                    - columnheader "Since" [ref=e711]
+                - rowgroup [ref=e712]:
+                  - 'row "@param int $x docblock function f(int $x): int 7.0" [ref=e713]':
+                    - cell "@param int $x docblock" [ref=e714]:
+                      - code [ref=e715]: "@param int $x"
+                      - text: docblock
+                    - 'cell "function f(int $x): int" [ref=e716]':
+                      - code [ref=e717]: "function f(int $x): int"
+                    - cell "7.0" [ref=e718]
+                  - 'row "no nullable hint ?string $x / `string null`" [ref=e719]':
+                    - cell "no nullable hint" [ref=e720]
+                    - 'cell "?string $x / `string" [ref=e721]':
+                      - code [ref=e722]: "?string $x"
+                      - text: "/ `string"
+                    - 'cell "null`" [ref=e723]'
+                  - row "private $x; private int $x; (typed property) 7.4" [ref=e724]:
+                    - cell "private $x;" [ref=e725]:
+                      - code [ref=e726]: private $x;
+                    - cell "private int $x; (typed property)" [ref=e727]:
+                      - code [ref=e728]: private int $x;
+                      - text: (typed property)
+                    - cell "7.4" [ref=e729]
+                  - row "mixed via no hint mixed type 8.0" [ref=e730]:
+                    - cell "mixed via no hint" [ref=e731]:
+                      - code [ref=e732]: mixed
+                      - text: via no hint
+                    - cell "mixed type" [ref=e733]:
+                      - code [ref=e734]: mixed
+                      - text: type
+                    - cell "8.0" [ref=e735]
+                  - 'row "union by docblock `int string` union type" [ref=e736]':
+                    - cell "union by docblock" [ref=e737]
+                    - 'cell "`int" [ref=e738]'
+                    - 'cell "string` union type" [ref=e739]'
+                  - 'row "intersection by docblock A&B / `(A&B) null` (DNF)" [ref=e740]':
+                    - cell "intersection by docblock" [ref=e741]
+                    - 'cell "A&B / `(A&B)" [ref=e742]':
+                      - code [ref=e743]: A&B
+                      - text: "/ `(A&B)"
+                    - 'cell "null` (DNF)" [ref=e744]'
+              - paragraph [ref=e745]:
+                - strong [ref=e746]: OOP
+              - table [ref=e747]:
+                - rowgroup [ref=e748]:
+                  - row "PHP 5.5 Modern Since" [ref=e749]:
+                    - columnheader "PHP 5.5" [ref=e750]
+                    - columnheader "Modern" [ref=e751]
+                    - columnheader "Since" [ref=e752]
+                - rowgroup [ref=e753]:
+                  - row "declare + assign in ctor constructor promotion 8.0" [ref=e754]:
+                    - cell "declare + assign in ctor" [ref=e755]
+                    - cell "constructor promotion" [ref=e756]
+                    - cell "8.0" [ref=e757]
+                  - row "no immutability readonly property / readonly class 8.1 / 8.2" [ref=e758]:
+                    - cell "no immutability" [ref=e759]
+                    - cell "readonly property / readonly class" [ref=e760]:
+                      - code [ref=e761]: readonly
+                      - text: property /
+                      - code [ref=e762]: readonly class
+                    - cell "8.1 / 8.2" [ref=e763]
+                  - row "class constants as enums enum / backed enum 8.1" [ref=e764]:
+                    - cell "class constants as enums" [ref=e765]
+                    - cell "enum / backed enum" [ref=e766]:
+                      - code [ref=e767]: enum
+                      - text: / backed
+                      - code [ref=e768]: enum
+                    - cell "8.1" [ref=e769]
+                  - 'row "metadata via docblock native attributes #[Attr] 8.0" [ref=e770]':
+                    - cell "metadata via docblock" [ref=e771]
+                    - 'cell "native attributes #[Attr]" [ref=e772]':
+                      - text: native
+                      - strong [ref=e773]: attributes
+                      - code [ref=e774]: "#[Attr]"
+                    - cell "8.0" [ref=e775]
+              - paragraph [ref=e776]:
+                - strong [ref=e777]: Operators & control flow
+              - table [ref=e778]:
+                - rowgroup [ref=e779]:
+                  - row "PHP 5.5 Modern Since" [ref=e780]:
+                    - columnheader "PHP 5.5" [ref=e781]
+                    - columnheader "Modern" [ref=e782]
+                    - columnheader "Since" [ref=e783]
+                - rowgroup [ref=e784]:
+                  - row "isset($a)?$a:$b $a ?? $b 7.0" [ref=e785]:
+                    - cell "isset($a)?$a:$b" [ref=e786]:
+                      - code [ref=e787]: isset($a)?$a:$b
+                    - cell "$a ?? $b" [ref=e788]:
+                      - code [ref=e789]: $a ?? $b
+                    - cell "7.0" [ref=e790]
+                  - row "$a = $a ?? $b $a ??= $b 7.4" [ref=e791]:
+                    - cell "$a = $a ?? $b" [ref=e792]:
+                      - code [ref=e793]: $a = $a ?? $b
+                    - cell "$a ??= $b" [ref=e794]:
+                      - code [ref=e795]: $a ??= $b
+                    - cell "7.4" [ref=e796]
+                  - row "if/elseif ladder match (...) (strict, returns value) 8.0" [ref=e797]:
+                    - cell "if/elseif ladder" [ref=e798]:
+                      - code [ref=e799]: if/elseif
+                      - text: ladder
+                    - cell "match (...) (strict, returns value)" [ref=e800]:
+                      - code [ref=e801]: match (...)
+                      - text: (strict, returns value)
+                    - cell "8.0" [ref=e802]
+                  - row "$x && $x->m() guard $x?->m() (nullsafe) 8.0" [ref=e803]:
+                    - cell "$x && $x->m() guard" [ref=e804]:
+                      - code [ref=e805]: $x && $x->m()
+                      - text: guard
+                    - cell "$x?->m() (nullsafe)" [ref=e806]:
+                      - code [ref=e807]: $x?->m()
+                      - text: (nullsafe)
+                    - cell "8.0" [ref=e808]
+                  - row "'strlen' callable string strlen(...) first-class callable 8.1" [ref=e809]:
+                    - cell "'strlen' callable string" [ref=e810]:
+                      - code [ref=e811]: "'strlen'"
+                      - text: callable string
+                    - cell "strlen(...) first-class callable" [ref=e812]:
+                      - code [ref=e813]: strlen(...)
+                      - text: first-class callable
+                    - cell "8.1" [ref=e814]
+              - paragraph [ref=e815]:
+                - strong [ref=e816]: Strings & arrays
+              - table [ref=e817]:
+                - rowgroup [ref=e818]:
+                  - row "PHP 5.5 Modern Since" [ref=e819]:
+                    - columnheader "PHP 5.5" [ref=e820]
+                    - columnheader "Modern" [ref=e821]
+                    - columnheader "Since" [ref=e822]
+                - rowgroup [ref=e823]:
+                  - row "strpos($h,$n)!==false str_contains($h,$n) 8.0" [ref=e824]:
+                    - cell "strpos($h,$n)!==false" [ref=e825]:
+                      - code [ref=e826]: strpos($h,$n)!==false
+                    - cell "str_contains($h,$n)" [ref=e827]:
+                      - code [ref=e828]: str_contains($h,$n)
+                    - cell "8.0" [ref=e829]
+                  - row "manual prefix/suffix check str_starts_with / str_ends_with 8.0" [ref=e830]:
+                    - cell "manual prefix/suffix check" [ref=e831]
+                    - cell "str_starts_with / str_ends_with" [ref=e832]:
+                      - code [ref=e833]: str_starts_with
+                      - text: /
+                      - code [ref=e834]: str_ends_with
+                    - cell "8.0" [ref=e835]
+                  - row "array('a'=>1) ['a'=>1] short syntax 5.4" [ref=e836]:
+                    - cell "array('a'=>1)" [ref=e837]:
+                      - code [ref=e838]: array('a'=>1)
+                    - cell "['a'=>1] short syntax" [ref=e839]:
+                      - code [ref=e840]: "['a'=>1]"
+                      - text: short syntax
+                    - cell "5.4" [ref=e841]
+                  - row "call_user_func_array spread ...$args unpacking 5.6" [ref=e842]:
+                    - cell "call_user_func_array spread" [ref=e843]:
+                      - code [ref=e844]: call_user_func_array
+                      - text: spread
+                    - cell "...$args unpacking" [ref=e845]:
+                      - code [ref=e846]: ...$args
+                      - text: unpacking
+                    - cell "5.6" [ref=e847]
+              - heading "Breaking changes to watch" [level=3] [ref=e848]
+              - table [ref=e849]:
+                - rowgroup [ref=e850]:
+                  - row "Change Version Impact" [ref=e851]:
+                    - columnheader "Change" [ref=e852]
+                    - columnheader "Version" [ref=e853]
+                    - columnheader "Impact" [ref=e854]
+                - rowgroup [ref=e855]:
+                  - row "Stricter type juggling; many warnings → TypeError 7.0/8.0 Sloppy coercions now throw" [ref=e856]:
+                    - cell "Stricter type juggling; many warnings → TypeError" [ref=e857]:
+                      - text: Stricter type juggling; many warnings →
+                      - code [ref=e858]: TypeError
+                    - cell "7.0/8.0" [ref=e859]
+                    - cell "Sloppy coercions now throw" [ref=e860]
+                  - row "\"0\" == \"0.0\" string-number rules changed 8.0 0 == \"foo\" is now false" [ref=e861]:
+                    - cell "\"0\" == \"0.0\" string-number rules changed" [ref=e862]:
+                      - code [ref=e863]: "\"0\" == \"0.0\""
+                      - text: string-number rules changed
+                    - cell "8.0" [ref=e864]
+                    - cell "0 == \"foo\" is now false" [ref=e865]:
+                      - code [ref=e866]: 0 == "foo"
+                      - text: is now
+                      - code [ref=e867]: "false"
+                  - row "Most internal warnings promoted to Error 8.0 Undefined-method etc. throw" [ref=e868]:
+                    - cell "Most internal warnings promoted to Error" [ref=e869]:
+                      - text: Most internal warnings promoted to
+                      - code [ref=e870]: Error
+                    - cell "8.0" [ref=e871]
+                    - cell "Undefined-method etc. throw" [ref=e872]
+                  - row "Dynamic properties deprecated 8.2 Declare props or add attribute" [ref=e873]:
+                    - cell "Dynamic properties deprecated" [ref=e874]
+                    - cell "8.2" [ref=e875]
+                    - cell "Declare props or add attribute" [ref=e876]
+                  - 'row "utf8_encode/decode deprecated, ${} interpolation deprecated 8.2 Migrate string syntax" [ref=e877]':
+                    - 'cell "utf8_encode/decode deprecated, ${} interpolation deprecated" [ref=e878]':
+                      - code [ref=e879]: utf8_encode
+                      - text: /
+                      - code [ref=e880]: decode
+                      - text: deprecated,
+                      - code [ref=e881]: "${}"
+                      - text: interpolation deprecated
+                    - cell "8.2" [ref=e882]
+                    - cell "Migrate string syntax" [ref=e883]
+              - heading "Upgrade checklist" [level=3] [ref=e884]
+              - list [ref=e885]:
+                - listitem [ref=e886]:
+                  - text: Get on PHP 7.4 first,
+                  - strong [ref=e887]: one major at a time
+                  - text: (5.5→7.x→8.x).
+                - listitem [ref=e888]:
+                  - text: Add
+                  - strong [ref=e889]:
+                    - code [ref=e890]: declare(strict_types=1)
+                  - text: to new files; fix the
+                  - code [ref=e891]: TypeError
+                  - text: s.
+                - listitem [ref=e892]:
+                  - text: Run
+                  - strong [ref=e893]: PHPCompatibility
+                  - text: (PHP_CodeSniffer ruleset) and
+                  - strong [ref=e894]: Rector
+                  - text: to find/auto-fix dated patterns.
+                - listitem [ref=e895]:
+                  - text: Lean on your test suite and
+                  - code [ref=e896]: error_reporting(E_ALL)
+                  - text: to surface promoted errors.
+                - listitem [ref=e897]: Declare dynamic properties before 8.2; adopt enums/readonly where they sharpen intent.
+          - generic [ref=e898]:
+            - generic [ref=e899]:
+              - generic [ref=e900]: 🔀
+              - heading "PHP 5.5 → Modern PHP" [level=2] [ref=e901]
+              - generic [ref=e902]: What you know, beside what's new
+            - generic [ref=e903]:
+              - generic [ref=e904]:
+                - heading "An immutable value object" [level=4] [ref=e905]
+                - generic [ref=e906]:
+                  - generic [ref=e907]:
+                    - generic [ref=e908]: PHP 5.5
+                    - code [ref=e910]:
+                      - text: <?php // PHP 5.5 — privates + getters, nothing actually stops mutation internally
+                      - generic [ref=e911]: class Money
+                      - text: "{ private $amount; private $currency; public"
+                      - generic [ref=e912]:
+                        - text: function __construct(
+                        - generic [ref=e913]: $amount, $currency
+                        - text: )
+                      - text: "{ $this->amount = $amount; $this->currency = $currency; } public"
+                      - generic [ref=e914]:
+                        - text: function getAmount(
+                        - text: )
+                      - text: "{ return $this->amount; } public"
+                      - generic [ref=e915]:
+                        - text: function getCurrency(
+                        - text: )
+                      - text: "{ return $this->currency; } }"
+                  - generic [ref=e916]:
+                    - generic [ref=e917]: Modern PHP
+                    - code [ref=e919]:
+                      - text: "<?php declare(strict_types=1); // PHP 8.2 — readonly class: promoted, typed, deeply immutable final readonly"
+                      - generic [ref=e920]: class Money
+                      - text: "{ public"
+                      - generic [ref=e921]:
+                        - text: function __construct(
+                        - generic [ref=e922]: public int $amount, public string $currency,
+                        - text: )
+                      - text: "{} }"
+                - paragraph [ref=e923]:
+                  - strong [ref=e924]: "Difference:"
+                  - text: readonly classes (8.2) make every promoted property (8.0) immutable after construction; assigning again throws Error.
+                - button "✨ Ask AI about this" [ref=e925] [cursor=pointer]
+              - generic [ref=e926]:
+                - heading "A nullable intersection type" [level=4] [ref=e927]
+                - generic [ref=e928]:
+                  - generic [ref=e929]:
+                    - generic [ref=e930]: PHP 5.5
+                    - code [ref=e932]:
+                      - text: <?php // PHP 5.5 — express the contract only in a docblock
+                      - generic [ref=e933]: /** * @param Countable&Traversable|null $items */
+                      - generic [ref=e934]:
+                        - text: function size(
+                        - generic [ref=e935]: $items
+                        - text: )
+                      - text: "{ return $items === null ? 0 : count($items); }"
+                  - generic [ref=e936]:
+                    - generic [ref=e937]: Modern PHP
+                    - code [ref=e939]:
+                      - text: <?php declare(strict_types=1); // PHP 8.2 — DNF type enforced by the engine
+                      - generic [ref=e940]:
+                        - text: function size(
+                        - generic [ref=e941]:
+                          - text: (
+                          - generic [ref=e942]: \Countable&\Traversable
+                          - text: )|null $items
+                        - text: "): int"
+                      - text: "{ return $items === null ? 0 : count($items); }"
+                - paragraph [ref=e943]:
+                  - strong [ref=e944]: "Difference:"
+                  - text: "DNF types (8.2) let you mix intersection and union: each &-group is parenthesised, here OR-ed with null."
+                - button "✨ Ask AI about this" [ref=e945] [cursor=pointer]
+              - generic [ref=e946]:
+                - heading "Constants shared by a trait" [level=4] [ref=e947]
+                - generic [ref=e948]:
+                  - generic [ref=e949]:
+                    - generic [ref=e950]: PHP 5.5
+                    - code [ref=e952]:
+                      - text: <?php // PHP 5.5 — traits can't hold constants, so you duplicate them per class
+                      - generic [ref=e953]: trait HasStatus
+                      - text: "{ public"
+                      - generic [ref=e954]:
+                        - text: function isActive(
+                        - text: )
+                      - text: "{ return $this->status === 1; // magic number, repeated everywhere } }"
+                  - generic [ref=e955]:
+                    - generic [ref=e956]: Modern PHP
+                    - code [ref=e958]:
+                      - text: <?php declare(strict_types=1); // PHP 8.2 — the trait owns the constant
+                      - generic [ref=e959]: trait HasStatus
+                      - text: "{ const ACTIVE = 1; public"
+                      - generic [ref=e960]:
+                        - text: function isActive(
+                        - text: "): bool"
+                      - text: "{ return $this->status === self::ACTIVE; } }"
+                - paragraph [ref=e961]:
+                  - strong [ref=e962]: "Difference:"
+                  - text: Constants in traits (8.2) keep the constant with the behaviour that uses it, instead of redeclaring it in every consumer.
+                - button "✨ Ask AI about this" [ref=e963] [cursor=pointer]
+              - generic [ref=e964]:
+                - heading "Keeping secrets out of stack traces" [level=4] [ref=e965]
+                - generic [ref=e966]:
+                  - generic [ref=e967]:
+                    - generic [ref=e968]: PHP 5.5
+                    - code [ref=e970]:
+                      - text: <?php // PHP 5.5 — the raw password sits in every stack trace this frame appears in
+                      - generic [ref=e971]:
+                        - text: function login(
+                        - generic [ref=e972]: $user, $password
+                        - text: )
+                      - text: "{ // if this throws, $password shows up in the trace / logs return authenticate($user, $password); }"
+                  - generic [ref=e973]:
+                    - generic [ref=e974]: Modern PHP
+                    - code [ref=e976]:
+                      - text: <?php declare(strict_types=1); // PHP 8.2 — value redacted in stack traces
+                      - generic [ref=e977]:
+                        - text: function login(
+                        - generic [ref=e978]: "string $user, #[\\SensitiveParameter] string $password"
+                        - text: "): bool"
+                      - text: "{ return authenticate($user, $password); }"
+                - paragraph [ref=e979]:
+                  - strong [ref=e980]: "Difference:"
+                  - text: "#[\\SensitiveParameter] (8.2) replaces the argument with 'Object(SensitiveParameterValue)' in stack traces, so secrets don't leak into logs."
+                - button "✨ Ask AI about this" [ref=e981] [cursor=pointer]
+          - generic [ref=e982]:
+            - generic [ref=e983]:
+              - generic [ref=e984]: 🧪
+              - heading "Live Playground" [level=2] [ref=e985]
+              - generic [ref=e986]: Edit & run real TypeScript
+            - generic [ref=e987]:
+              - paragraph [ref=e988]: "A small modern-PHP showcase: a backed enum, a readonly class, match, and named arguments together. Predict the output, then reveal it."
+              - generic [ref=e991]: Loading...
+              - generic [ref=e992]:
+                - button "▶ Show output" [ref=e993] [cursor=pointer]
+                - button "Reset" [ref=e994] [cursor=pointer]
+                - button "✨ Ask AI" [ref=e995] [cursor=pointer]
+                - generic [ref=e996]: Read it, predict the result, then reveal the output.
+          - generic [ref=e997]:
+            - generic [ref=e998]:
+              - generic [ref=e999]: 🎯
+              - heading "Key Points" [level=2] [ref=e1000]
+            - list [ref=e1001]:
+              - listitem [ref=e1002]:
+                - text: →
+                - paragraph [ref=e1004]:
+                  - strong [ref=e1005]: "8.2"
+                  - text: adds
+                  - code [ref=e1006]: readonly
+                  - text: classes, DNF types
+                  - code [ref=e1007]: (A&B)|null
+                  - text: ", standalone"
+                  - code [ref=e1008]: "null"
+                  - text: /
+                  - code [ref=e1009]: "false"
+                  - text: /
+                  - code [ref=e1010]: "true"
+                  - text: ", trait constants, and"
+                  - code [ref=e1011]: "#[\\SensitiveParameter]"
+                  - text: .
+              - listitem [ref=e1012]:
+                - text: →
+                - paragraph [ref=e1014]:
+                  - text: Dynamic properties are
+                  - strong [ref=e1015]: deprecated in 8.2
+                  - text: — declare the property or opt in with
+                  - code [ref=e1016]: "#[\\AllowDynamicProperties]"
+                  - text: .
+              - listitem [ref=e1017]:
+                - text: →
+                - paragraph [ref=e1019]:
+                  - text: "The 5.5 → 8.2 arc: real types (7.0/7.4),"
+                  - code [ref=e1020]: "??"
+                  - text: /
+                  - code [ref=e1021]: match
+                  - text: /named args/promotion (7.0/8.0), enums + readonly (8.1), readonly classes (8.2).
+              - listitem [ref=e1022]:
+                - text: →
+                - paragraph [ref=e1024]:
+                  - text: "Biggest breaking changes: stricter type errors and warnings-promoted-to-"
+                  - code [ref=e1025]: Error
+                  - text: (7.0/8.0), and changed string-to-number comparison (8.0).
+              - listitem [ref=e1026]:
+                - text: →
+                - paragraph [ref=e1028]:
+                  - text: Upgrade one major version at a time; use
+                  - strong [ref=e1029]: PHPCompatibility
+                  - text: and
+                  - strong [ref=e1030]: Rector
+                  - text: plus your tests to find and fix dated patterns.
+          - generic [ref=e1031]:
+            - generic [ref=e1032]:
+              - generic [ref=e1033]: 💼
+              - heading "Interview Prep" [level=2] [ref=e1034]
+              - generic [ref=e1035]: Click a question to reveal
+            - generic [ref=e1036]:
+              - group [ref=e1037]:
+                - 'generic "Q What''s the difference between a `readonly` property and a `readonly` class?" [ref=e1038] [cursor=pointer]':
+                  - generic [ref=e1039]: Q
+                  - text: "What's the difference between a `readonly` property and a `readonly` class?"
+              - group [ref=e1040]:
+                - generic "Q What is a DNF type and why was it added in 8.2?" [ref=e1041] [cursor=pointer]:
+                  - generic [ref=e1042]: Q
+                  - text: What is a DNF type and why was it added in 8.2?
+              - group [ref=e1043]:
+                - generic "Q Dynamic properties are deprecated in 8.2 — what are your options?" [ref=e1044] [cursor=pointer]:
+                  - generic [ref=e1045]: Q
+                  - text: Dynamic properties are deprecated in 8.2 — what are your options?
+              - group [ref=e1046]:
+                - 'generic "Q Before 8.2, how did you express a standalone `false` return type, and what changed?" [ref=e1047] [cursor=pointer]':
+                  - generic [ref=e1048]: Q
+                  - text: "Before 8.2, how did you express a standalone `false` return type, and what changed?"
+              - group [ref=e1049]:
+                - 'generic "Q What does `#[\\SensitiveParameter]` do, and why is it more than cosmetic?" [ref=e1050] [cursor=pointer]':
+                  - generic [ref=e1051]: Q
+                  - text: "What does `#[\\SensitiveParameter]` do, and why is it more than cosmetic?"
+              - group [ref=e1052]:
+                - generic "Q Walk me through the type-system milestones from 5.5 to 8.2." [ref=e1053] [cursor=pointer]:
+                  - generic [ref=e1054]: Q
+                  - text: Walk me through the type-system milestones from 5.5 to 8.2.
+              - group [ref=e1055]:
+                - generic "Q What's the upgrade path and tooling you'd use going from 5.5 to 8.2?" [ref=e1056] [cursor=pointer]:
+                  - generic [ref=e1057]: Q
+                  - text: What's the upgrade path and tooling you'd use going from 5.5 to 8.2?
+              - group [ref=e1058]:
+                - generic "Q What changed about string-to-number comparison in 8.0, and why does it matter for old code?" [ref=e1059] [cursor=pointer]:
+                  - generic [ref=e1060]: Q
+                  - text: What changed about string-to-number comparison in 8.0, and why does it matter for old code?
+              - group [ref=e1061]:
+                - 'generic "Q When would you reach for `match` instead of `switch`?" [ref=e1062] [cursor=pointer]':
+                  - generic [ref=e1063]: Q
+                  - text: "When would you reach for `match` instead of `switch`?"
+              - group [ref=e1064]:
+                - generic "Q How do enums in 8.1 improve on the 5.5 'class constants' pattern?" [ref=e1065] [cursor=pointer]:
+                  - generic [ref=e1066]: Q
+                  - text: How do enums in 8.1 improve on the 5.5 'class constants' pattern?
+              - group [ref=e1067]:
+                - generic "Q What does constructor property promotion buy you, and any caveats?" [ref=e1068] [cursor=pointer]:
+                  - generic [ref=e1069]: Q
+                  - text: What does constructor property promotion buy you, and any caveats?
+              - group [ref=e1070]:
+                - generic "Q Name the modern string/array helpers that replace common 5.5 idioms." [ref=e1071] [cursor=pointer]:
+                  - generic [ref=e1072]: Q
+                  - text: Name the modern string/array helpers that replace common 5.5 idioms.
+              - group [ref=e1073]:
+                - 'generic "Q What''s the difference between the nullsafe operator and `??`?" [ref=e1074] [cursor=pointer]':
+                  - generic [ref=e1075]: Q
+                  - text: "What's the difference between the nullsafe operator and `??`?"
+              - group [ref=e1076]:
+                - generic "Q Why can't dynamic properties just keep working — what's the rationale for deprecating them?" [ref=e1077] [cursor=pointer]:
+                  - generic [ref=e1078]: Q
+                  - text: Why can't dynamic properties just keep working — what's the rationale for deprecating them?
+          - generic [ref=e1079]:
+            - generic [ref=e1080]:
+              - generic [ref=e1081]: ✅
+              - heading "Quiz" [level=2] [ref=e1082]
+            - generic [ref=e1083]:
+              - generic [ref=e1084]:
+                - paragraph [ref=e1085]:
+                  - generic [ref=e1086]: "1."
+                  - text: "In PHP 8.2, what does marking a class `readonly` do?"
+                - generic [ref=e1087]:
+                  - button "A Prevents the class from being extended" [ref=e1088] [cursor=pointer]:
+                    - generic [ref=e1089]: A
+                    - text: Prevents the class from being extended
+                  - button "B Makes every declared property implicitly readonly" [ref=e1090] [cursor=pointer]:
+                    - generic [ref=e1091]: B
+                    - text: Makes every declared property implicitly readonly
+                  - button "C Makes all methods static" [ref=e1092] [cursor=pointer]:
+                    - generic [ref=e1093]: C
+                    - text: Makes all methods static
+                  - button "D Caches the class's return values" [ref=e1094] [cursor=pointer]:
+                    - generic [ref=e1095]: D
+                    - text: Caches the class's return values
+              - generic [ref=e1096]:
+                - paragraph [ref=e1097]:
+                  - generic [ref=e1098]: "2."
+                  - text: Which type declaration is newly valid only from PHP 8.2?
+                - generic [ref=e1099]:
+                  - 'button "A `?string`" [ref=e1100] [cursor=pointer]':
+                    - generic [ref=e1101]: A
+                    - text: "`?string`"
+                  - 'button "B `int|string`" [ref=e1102] [cursor=pointer]':
+                    - generic [ref=e1103]: B
+                    - text: "`int|string`"
+                  - 'button "C `(Countable&Traversable)|null`" [ref=e1104] [cursor=pointer]':
+                    - generic [ref=e1105]: C
+                    - text: "`(Countable&Traversable)|null`"
+                  - 'button "D `A&B`" [ref=e1106] [cursor=pointer]':
+                    - generic [ref=e1107]: D
+                    - text: "`A&B`"
+              - generic [ref=e1108]:
+                - paragraph [ref=e1109]:
+                  - generic [ref=e1110]: "3."
+                  - text: How do you keep assigning an undeclared property on an object without a deprecation notice in 8.2?
+                - generic [ref=e1111]:
+                  - button "A Nothing is needed; dynamic properties are unchanged" [ref=e1112] [cursor=pointer]:
+                    - generic [ref=e1113]: A
+                    - text: Nothing is needed; dynamic properties are unchanged
+                  - 'button "B Add `#[\\SensitiveParameter]` to the class" [ref=e1114] [cursor=pointer]':
+                    - generic [ref=e1115]: B
+                    - text: "Add `#[\\SensitiveParameter]` to the class"
+                  - 'button "C Declare the property or add `#[\\AllowDynamicProperties]` to the class" [ref=e1116] [cursor=pointer]':
+                    - generic [ref=e1117]: C
+                    - text: "Declare the property or add `#[\\AllowDynamicProperties]` to the class"
+                  - 'button "D Wrap the assignment in `try/catch`" [ref=e1118] [cursor=pointer]':
+                    - generic [ref=e1119]: D
+                    - text: "Wrap the assignment in `try/catch`"
+              - generic [ref=e1120]:
+                - paragraph [ref=e1121]:
+                  - generic [ref=e1122]: "4."
+                  - text: "Why is `match` generally safer than `switch` for mapping a value to a result?"
+                - generic [ref=e1123]:
+                  - button "A It allows fall-through between cases" [ref=e1124] [cursor=pointer]:
+                    - generic [ref=e1125]: A
+                    - text: It allows fall-through between cases
+                  - 'button "B It uses loose `==` comparison" [ref=e1126] [cursor=pointer]':
+                    - generic [ref=e1127]: B
+                    - text: "It uses loose `==` comparison"
+                  - 'button "C It is an expression, uses strict `===`, needs no `break`, and throws if nothing matches" [ref=e1128] [cursor=pointer]':
+                    - generic [ref=e1129]: C
+                    - text: "It is an expression, uses strict `===`, needs no `break`, and throws if nothing matches"
+                  - button "D It is faster at runtime in all cases" [ref=e1130] [cursor=pointer]:
+                    - generic [ref=e1131]: D
+                    - text: It is faster at runtime in all cases
+              - button "Check answers" [disabled] [ref=e1133]
+          - generic [ref=e1134]:
+            - generic [ref=e1135] [cursor=pointer]:
+              - checkbox "Mark this section complete" [ref=e1136]
+              - text: Mark this section complete
+            - generic [ref=e1137]:
+              - button "← Previous" [ref=e1138] [cursor=pointer]
+              - button "Next →" [disabled] [ref=e1139]
+    - button "Ask the AI tutor" [ref=e619] [cursor=pointer]:
+      - generic [ref=e620]: ✨
+      - text: Ask AI
+    - complementary "AI tutor" [ref=e621]:
+      - generic [ref=e622]:
+        - generic [ref=e623]:
+          - generic [ref=e624]:
+            - generic [ref=e625]: ✨
+            - text: AI Tutor
+          - generic [ref=e626]: "Lesson: Enums: First-Class Enumerations Replace Class Constants"
+        - button "✕" [ref=e628] [cursor=pointer]
+      - generic [ref=e630]:
+        - paragraph [ref=e631]:
+          - text: Ask about anything in this lesson — or hit
+          - strong [ref=e632]: ✨ Ask AI
+          - text: on any code example to get it explained.
+        - generic [ref=e633]:
+          - button "Explain this lesson simply, with a PHP comparison." [ref=e634] [cursor=pointer]
+          - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e635] [cursor=pointer]'
+          - button "Give me a tiny real-world example." [ref=e636] [cursor=pointer]
+          - button "Quiz me with one tricky question on this topic." [ref=e637] [cursor=pointer]
+      - generic [ref=e638]:
+        - textbox "Ask a follow-up… (Enter to send)" [ref=e639]
+        - button "Send" [disabled] [ref=e640]
+      - generic [ref=e641]: Powered by Claude (Haiku 4.5)
+  - generic [ref=e642]:
+    - alert
+    - alert

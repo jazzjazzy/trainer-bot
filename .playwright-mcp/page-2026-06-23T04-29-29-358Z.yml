@@ -1,0 +1,39 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]: ◆
+        - generic [ref=e8]: DevCourses
+      - button "Switch to dark mode" [ref=e9] [cursor=pointer]: 🌙
+    - heading "Interactive developer courses" [level=1] [ref=e10]
+    - paragraph [ref=e11]: Hands-on, multimedia courses with live code playgrounds, quizzes, and an AI tutor. Pick one to begin.
+    - searchbox "Search courses… (e.g. “typescript”, “php”, “interview”)" [ref=e12]
+  - generic [ref=e13]:
+    - button "TS Intermediate TypeScript for PHP Veterans Learn modern TypeScript by mapping it to the PHP you already know. typescript php frontend backend 30 sections Start →" [ref=e14] [cursor=pointer]:
+      - generic [ref=e15]:
+        - generic [ref=e16]: TS
+        - generic [ref=e17]: Intermediate
+      - heading "TypeScript for PHP Veterans" [level=2] [ref=e18]
+      - paragraph [ref=e19]: Learn modern TypeScript by mapping it to the PHP you already know.
+      - generic [ref=e20]:
+        - generic [ref=e21]: typescript
+        - generic [ref=e22]: php
+        - generic [ref=e23]: frontend
+        - generic [ref=e24]: backend
+      - generic [ref=e25]:
+        - generic [ref=e28]: 30 sections
+        - generic [ref=e29]: Start →
+    - 'button "PHP Intermediate PHP 5.5 → 8.2: The Upgrade Catch up on everything that changed across PHP 7 and 8. php php8 php7 upgrade 30 sections Start →" [ref=e30] [cursor=pointer]':
+      - generic [ref=e31]:
+        - generic [ref=e32]: PHP
+        - generic [ref=e33]: Intermediate
+      - 'heading "PHP 5.5 → 8.2: The Upgrade" [level=2] [ref=e34]'
+      - paragraph [ref=e35]: Catch up on everything that changed across PHP 7 and 8.
+      - generic [ref=e36]:
+        - generic [ref=e37]: php
+        - generic [ref=e38]: php8
+        - generic [ref=e39]: php7
+        - generic [ref=e40]: upgrade
+      - generic [ref=e41]:
+        - generic [ref=e44]: 30 sections
+        - generic [ref=e45]: Start →

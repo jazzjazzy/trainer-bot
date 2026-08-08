@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e463]:
+      - banner [ref=e464]:
+        - generic [ref=e465]:
+          - generic [ref=e466]: ◆
+          - generic [ref=e467]: DevCourses
+        - heading "Interactive developer courses" [level=1] [ref=e468]
+        - paragraph [ref=e469]: Hands-on, multimedia courses with live code playgrounds, quizzes, and an AI tutor. Pick one to begin.
+        - searchbox "Search courses… (e.g. “typescript”, “php”, “interview”)" [ref=e470]
+      - button "TS Intermediate TypeScript for PHP Veterans Learn modern TypeScript by mapping it to the PHP you already know. typescript php frontend backend 30 sections Start →" [ref=e472] [cursor=pointer]:
+        - generic [ref=e473]:
+          - generic [ref=e474]: TS
+          - generic [ref=e475]: Intermediate
+        - heading "TypeScript for PHP Veterans" [level=2] [ref=e476]
+        - paragraph [ref=e477]: Learn modern TypeScript by mapping it to the PHP you already know.
+        - generic [ref=e478]:
+          - generic [ref=e479]: typescript
+          - generic [ref=e480]: php
+          - generic [ref=e481]: frontend
+          - generic [ref=e482]: backend
+        - generic [ref=e483]:
+          - generic [ref=e486]: 30 sections
+          - generic [ref=e487]: Start →
+    - complementary "AI tutor" [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]: ✨
+            - text: AI Tutor
+          - generic [ref=e33]: "Lesson: Why TypeScript & the Compile Step"
+        - button "✕" [ref=e35] [cursor=pointer]
+      - generic [ref=e37]:
+        - paragraph [ref=e38]:
+          - text: Ask about anything in this lesson — or hit
+          - strong [ref=e39]: ✨ Ask AI
+          - text: on any code example to get it explained, PHP-style.
+        - generic [ref=e40]:
+          - button "Explain this lesson simply, with a PHP comparison." [ref=e41] [cursor=pointer]
+          - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e42] [cursor=pointer]'
+          - button "Give me a tiny real-world example." [ref=e43] [cursor=pointer]
+          - button "Quiz me with one tricky question on this topic." [ref=e44] [cursor=pointer]
+      - generic [ref=e45]:
+        - textbox "Ask a follow-up… (Enter to send)" [ref=e46]
+        - button "Send" [disabled] [ref=e47]
+      - generic [ref=e48]: Powered by Claude (Haiku 4.5)
+  - generic [ref=e462]:
+    - alert
+    - alert

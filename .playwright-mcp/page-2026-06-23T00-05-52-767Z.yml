@@ -1,0 +1,45 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: ◆
+        - generic [ref=e7]: DevCourses
+      - heading "Interactive developer courses" [level=1] [ref=e8]
+      - paragraph [ref=e9]: Hands-on, multimedia courses with live code playgrounds, quizzes, and an AI tutor. Pick one to begin.
+      - searchbox "Search courses… (e.g. “typescript”, “php”, “interview”)" [ref=e10]
+    - button "TS Intermediate TypeScript for PHP Veterans Learn modern TypeScript by mapping it to the PHP you already know. typescript php frontend backend 30 sections Start →" [ref=e12] [cursor=pointer]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: TS
+        - generic [ref=e15]: Intermediate
+      - heading "TypeScript for PHP Veterans" [level=2] [ref=e16]
+      - paragraph [ref=e17]: Learn modern TypeScript by mapping it to the PHP you already know.
+      - generic [ref=e18]:
+        - generic [ref=e19]: typescript
+        - generic [ref=e20]: php
+        - generic [ref=e21]: frontend
+        - generic [ref=e22]: backend
+      - generic [ref=e23]:
+        - generic [ref=e26]: 30 sections
+        - generic [ref=e27]: Start →
+  - complementary "AI tutor" [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: ✨
+          - text: AI Tutor
+        - generic [ref=e33]: Ask anything about TypeScript
+      - button "✕" [ref=e35] [cursor=pointer]
+    - generic [ref=e37]:
+      - paragraph [ref=e38]:
+        - text: Ask about anything in this lesson — or hit
+        - strong [ref=e39]: ✨ Ask AI
+        - text: on any code example to get it explained, PHP-style.
+      - generic [ref=e40]:
+        - button "Explain this lesson simply, with a PHP comparison." [ref=e41] [cursor=pointer]
+        - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e42] [cursor=pointer]'
+        - button "Give me a tiny real-world example." [ref=e43] [cursor=pointer]
+        - button "Quiz me with one tricky question on this topic." [ref=e44] [cursor=pointer]
+    - generic [ref=e45]:
+      - textbox "Ask a follow-up… (Enter to send)" [ref=e46]
+      - button "Send" [disabled] [ref=e47]
+    - generic [ref=e48]: Powered by Claude (Haiku 4.5)

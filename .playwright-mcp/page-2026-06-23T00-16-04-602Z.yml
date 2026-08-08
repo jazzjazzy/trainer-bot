@@ -1,0 +1,390 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - complementary [ref=e4]:
+        - generic [ref=e5]:
+          - button "← All courses" [ref=e6] [cursor=pointer]
+          - generic [ref=e7]:
+            - generic [ref=e8]: PHP
+            - generic [ref=e9]:
+              - generic [ref=e10]: "PHP 5.5 → 8.2: The Upgrade"
+              - generic [ref=e11]: 1 sections
+          - generic [ref=e14]: 0/1 done · 0%
+        - navigation [ref=e15]:
+          - generic [ref=e16]:
+            - generic [ref=e17]: Getting Current
+            - button "1 Why Upgrade & the 5.5 → 8.2 Timeline" [ref=e18] [cursor=pointer]:
+              - generic [ref=e19]: "1"
+              - generic [ref=e20]: Why Upgrade & the 5.5 → 8.2 Timeline
+      - main [ref=e21]:
+        - article [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e24]:
+              - generic [ref=e25]: Getting Current
+              - generic [ref=e26]: Section 1 of 1
+              - generic [ref=e27]: ~10 min
+            - heading "Why Upgrade & the 5.5 → 8.2 Timeline" [level=1] [ref=e28]
+            - paragraph [ref=e29]: What changed between PHP 5.5 and 8.2, why it's worth catching up, and how to read the rest of this course.
+            - button "✨ Ask AI about this lesson" [ref=e30] [cursor=pointer]
+          - generic [ref=e31]:
+            - generic [ref=e32]:
+              - generic [ref=e33]: 📘
+              - heading "Concept" [level=2] [ref=e34]
+            - generic [ref=e35]:
+              - paragraph [ref=e36]:
+                - text: If your mental model of PHP is the
+                - strong [ref=e37]: 5.5 era
+                - text: (2013), the language has moved a long way — and almost all of it in your favour. PHP 7 made code
+                - strong [ref=e38]: two to three times faster
+                - text: for free, and PHP 7–8 turned PHP into a genuinely type-safe, modern language. Meanwhile 5.5 has been
+                - strong [ref=e39]: end-of-life since 2016
+                - text: ": no security fixes, and a growing list of libraries that won't install on it."
+              - heading "The shift in one sentence" [level=3] [ref=e40]
+              - paragraph [ref=e41]:
+                - text: You're moving from
+                - emphasis [ref=e42]: "\"types are docblock comments and everything is an array\""
+                - text: to
+                - emphasis [ref=e43]:
+                  - text: "\"typed properties, enums, readonly value objects, and"
+                  - code [ref=e44]: match
+                  - text: "\""
+                - text: — without giving up the PHP you already know.
+              - heading "The timeline you skipped" [level=3] [ref=e45]
+              - list [ref=e46]:
+                - listitem [ref=e47]:
+                  - strong [ref=e48]: "5.6"
+                  - text: (2014) — variadics (
+                  - code [ref=e49]: ...$args
+                  - text: ), argument unpacking, constant expressions.
+                - listitem [ref=e50]:
+                  - strong [ref=e51]: "7.0"
+                  - text: "(2015) — the big one:"
+                  - strong [ref=e52]: scalar type hints
+                  - text: ","
+                  - strong [ref=e53]: return types
+                  - text: ", the null coalescing operator"
+                  - code [ref=e54]: "??"
+                  - text: ", the spaceship"
+                  - code [ref=e55]: <=>
+                  - text: ","
+                  - code [ref=e56]: Throwable
+                  - text: ", and the ~2× speed-up."
+                - listitem [ref=e57]:
+                  - strong [ref=e58]: 7.1–7.4
+                  - text: — nullable types
+                  - code [ref=e59]: "?string"
+                  - text: ","
+                  - code [ref=e60]: void
+                  - text: /
+                  - code [ref=e61]: iterable
+                  - text: ","
+                  - strong [ref=e62]: typed properties
+                  - text: ","
+                  - strong [ref=e63]: arrow functions
+                  - code [ref=e64]: fn() =>
+                  - text: ","
+                  - code [ref=e65]: "??="
+                  - text: .
+                - listitem [ref=e66]:
+                  - strong [ref=e67]: "8.0"
+                  - text: (2020) —
+                  - strong [ref=e68]: named arguments
+                  - text: ","
+                  - strong [ref=e69]: union types
+                  - text: ","
+                  - strong [ref=e70]: constructor property promotion
+                  - text: ", the"
+                  - strong [ref=e71]:
+                    - code [ref=e72]: match
+                  - text: expression, the nullsafe operator
+                  - code [ref=e73]: "?->"
+                  - text: ","
+                  - strong [ref=e74]: attributes
+                  - text: ", and saner string-to-number comparisons."
+                - listitem [ref=e75]:
+                  - strong [ref=e76]: "8.1"
+                  - text: —
+                  - strong [ref=e77]: enums
+                  - text: ","
+                  - strong [ref=e78]: readonly properties
+                  - text: ", fibers,"
+                  - code [ref=e79]: never
+                  - text: ", first-class callable syntax"
+                  - code [ref=e80]: strlen(...)
+                  - text: .
+                - listitem [ref=e81]:
+                  - strong [ref=e82]: "8.2"
+                  - text: —
+                  - strong [ref=e83]: readonly classes
+                  - text: ", DNF types,"
+                  - code [ref=e84]: "null"
+                  - text: /
+                  - code [ref=e85]: "false"
+                  - text: /
+                  - code [ref=e86]: "true"
+                  - text: as standalone types, and dynamic properties deprecated.
+              - heading "How to read this course" [level=3] [ref=e87]
+              - paragraph [ref=e88]:
+                - text: Every section shows
+                - strong [ref=e89]: the PHP 5.5 way beside the modern way
+                - text: ", with the difference called out — plus the deprecations and breaking changes to watch for as you upgrade. You already know the concepts; you're learning the new spelling."
+          - generic [ref=e90]:
+            - generic [ref=e91]:
+              - generic [ref=e92]: 🔀
+              - heading "PHP 5.5 → Modern PHP" [level=2] [ref=e93]
+              - generic [ref=e94]: What you know, beside what's new
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - heading "Typing a function" [level=4] [ref=e97]
+                - generic [ref=e98]:
+                  - generic [ref=e99]:
+                    - generic [ref=e100]: PHP 5.5
+                    - code [ref=e102]:
+                      - text: <?php // PHP 5.5 — types live in a docblock the engine ignores
+                      - generic [ref=e103]: /** * @param int $a * @param int $b * @return int */
+                      - generic [ref=e104]:
+                        - text: function add(
+                        - generic [ref=e105]: $a, $b
+                        - text: )
+                      - text: "{ return $a + $b; }"
+                  - generic [ref=e106]:
+                    - generic [ref=e107]: Modern PHP
+                    - code [ref=e109]:
+                      - text: <?php declare(strict_types=1); // PHP 8.2 — real, enforced types
+                      - generic [ref=e110]:
+                        - text: function add(
+                        - generic [ref=e111]: int $a, int $b
+                        - text: "): int"
+                      - text: "{ return $a + $b; }"
+                - paragraph [ref=e112]:
+                  - strong [ref=e113]: "Difference:"
+                  - text: Scalar parameter and return types arrived in PHP 7.0; with declare(strict_types=1) they're enforced at call time instead of being hints in a comment.
+                - button "✨ Ask AI about this" [ref=e114] [cursor=pointer]
+              - generic [ref=e115]:
+                - heading "A fallback value" [level=4] [ref=e116]
+                - generic [ref=e117]:
+                  - generic [ref=e118]:
+                    - generic [ref=e119]: PHP 5.5
+                    - code [ref=e121]: "<?php // PHP 5.5 — nested isset() ternary $role = isset($user['role']) ? $user['role'] : 'guest';"
+                  - generic [ref=e122]:
+                    - generic [ref=e123]: Modern PHP
+                    - code [ref=e125]: <?php // PHP 7.0 — null coalescing operator $role = $user['role'] ?? 'guest';
+                - paragraph [ref=e126]:
+                  - strong [ref=e127]: "Difference:"
+                  - text: "?? returns the right-hand side when the left is null OR undefined, with no notice — replacing the classic isset()-ternary."
+                - button "✨ Ask AI about this" [ref=e128] [cursor=pointer]
+              - generic [ref=e129]:
+                - heading "A small value object" [level=4] [ref=e130]
+                - generic [ref=e131]:
+                  - generic [ref=e132]:
+                    - generic [ref=e133]: PHP 5.5
+                    - code [ref=e135]:
+                      - text: <?php // PHP 5.5 — declare, then assign, every property
+                      - generic [ref=e136]: class Point
+                      - text: "{ private $x; private $y; public"
+                      - generic [ref=e137]:
+                        - text: function __construct(
+                        - generic [ref=e138]: $x, $y
+                        - text: )
+                      - text: "{ $this->x = $x; $this->y = $y; } }"
+                  - generic [ref=e139]:
+                    - generic [ref=e140]: Modern PHP
+                    - code [ref=e142]:
+                      - text: <?php // PHP 8.2 — promotion + readonly in one line each
+                      - generic [ref=e143]: class Point
+                      - text: "{ public"
+                      - generic [ref=e144]:
+                        - text: function __construct(
+                        - generic [ref=e145]: public readonly int $x, public readonly int $y,
+                        - text: )
+                      - text: "{} }"
+                - paragraph [ref=e146]:
+                  - strong [ref=e147]: "Difference:"
+                  - text: Constructor property promotion (8.0) and readonly (8.1) collapse the declare-and-assign boilerplate into the constructor signature.
+                - button "✨ Ask AI about this" [ref=e148] [cursor=pointer]
+          - generic [ref=e149]:
+            - generic [ref=e150]:
+              - generic [ref=e151]: 🧪
+              - heading "Live Playground" [level=2] [ref=e152]
+              - generic [ref=e153]: Edit & run real TypeScript
+            - generic [ref=e154]:
+              - paragraph [ref=e155]: Modern PHP in a few lines. Read it, predict what it prints, then reveal the output.
+              - code [ref=e274]:
+                - generic [ref=e275]:
+                  - textbox "Editor content"
+                  - textbox [ref=e276]
+                  - generic [ref=e278]:
+                    - generic [ref=e281]: "1"
+                    - generic [ref=e283]: "2"
+                    - generic [ref=e285]: "3"
+                    - generic [ref=e287]: "4"
+                    - generic [ref=e289]: "5"
+                    - generic [ref=e291]: "6"
+                    - generic [ref=e293]: "7"
+                    - generic [ref=e295]: "8"
+                    - generic [ref=e297]: "9"
+                    - generic [ref=e298]:
+                      - generic [ref=e299] [cursor=pointer]: 
+                      - generic [ref=e300]: "10"
+                    - generic [ref=e302]: "11"
+                    - generic [ref=e304]: "12"
+                    - generic [ref=e306]: "13"
+                    - generic [ref=e308]: "14"
+                    - generic [ref=e310]: "15"
+                  - generic [ref=e331]:
+                    - generic [ref=e333]: <?php
+                    - generic [ref=e335]: declare(strict_types=1);
+                    - generic [ref=e338]: $user = ['name' => 'Ada', 'role' => null];
+                    - generic [ref=e341]: "// Null coalescing (7.0) instead of an isset() ternary:"
+                    - generic [ref=e343]: $role = $user['role'] ?? 'guest';
+                    - generic [ref=e346]: "// Arrow function (7.4) + match expression (8.0):"
+                    - generic [ref=e348]: "$label = fn(string $r): string => match ($r) {"
+                    - generic [ref=e350]: "'admin' => 'Administrator',"
+                    - generic [ref=e352]: "'guest' => 'Guest user',"
+                    - generic [ref=e354]: default => ucfirst($r),
+                    - generic [ref=e356]: "};"
+              - generic [ref=e159]:
+                - button "▶ Show output" [active] [ref=e160] [cursor=pointer]
+                - button "Reset" [ref=e161] [cursor=pointer]
+                - button "✨ Ask AI" [ref=e162] [cursor=pointer]
+                - generic [ref=e163]: Read it, predict the result, then reveal the output.
+              - generic [ref=e359]:
+                - generic [ref=e360]: Expected output
+                - generic [ref=e361]: Ada is a Guest user
+                - generic [ref=e362]: name has a 'd'
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - generic [ref=e166]: 🎯
+              - heading "Key Points" [level=2] [ref=e167]
+            - list [ref=e168]:
+              - listitem [ref=e169]:
+                - text: →
+                - paragraph [ref=e171]: PHP 5.5 is end-of-life (since 2016) — no security patches, and modern packages won't install.
+              - listitem [ref=e172]:
+                - text: →
+                - paragraph [ref=e174]:
+                  - text: PHP 7.0 alone made typical code ~2× faster and added enforced scalar/return types and
+                  - code [ref=e175]: "??"
+                  - text: .
+              - listitem [ref=e176]:
+                - text: →
+                - paragraph [ref=e178]:
+                  - text: PHP 8.0–8.2 added named args, union types, constructor promotion,
+                  - code [ref=e179]: match
+                  - text: ", enums, and readonly."
+              - listitem [ref=e180]:
+                - text: →
+                - paragraph [ref=e182]: "Everything is incremental: your 5.5 code mostly still runs — you adopt the new spellings where they help."
+              - listitem [ref=e183]:
+                - text: →
+                - paragraph [ref=e185]: Each lesson pairs the old way with the modern way and flags the breaking changes to watch for.
+          - generic [ref=e186]:
+            - generic [ref=e187]:
+              - generic [ref=e188]: 💼
+              - heading "Interview Prep" [level=2] [ref=e189]
+              - generic [ref=e190]: Click a question to reveal
+            - generic [ref=e191]:
+              - group [ref=e192]:
+                - generic "Q Why move off PHP 5.5 — what's the headline argument?" [ref=e193] [cursor=pointer]:
+                  - generic [ref=e194]: Q
+                  - text: Why move off PHP 5.5 — what's the headline argument?
+              - group [ref=e195]:
+                - generic "Q What's the single biggest leap in that range, and why?" [ref=e196] [cursor=pointer]:
+                  - generic [ref=e197]: Q
+                  - text: What's the single biggest leap in that range, and why?
+              - group [ref=e198]:
+                - generic "Q Is upgrading from 5.5 to 8.2 risky for an existing app?" [ref=e199] [cursor=pointer]:
+                  - generic [ref=e200]: Q
+                  - text: Is upgrading from 5.5 to 8.2 risky for an existing app?
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - generic [ref=e203]: ✅
+              - heading "Quiz" [level=2] [ref=e204]
+            - generic [ref=e205]:
+              - generic [ref=e206]:
+                - paragraph [ref=e207]:
+                  - generic [ref=e208]: "1."
+                  - text: Which PHP version first added enforced scalar type declarations and return types?
+                - generic [ref=e209]:
+                  - button "A PHP 5.6" [ref=e210] [cursor=pointer]:
+                    - generic [ref=e211]: A
+                    - text: PHP 5.6
+                  - button "B PHP 7.0" [ref=e212] [cursor=pointer]:
+                    - generic [ref=e213]: B
+                    - text: PHP 7.0
+                  - button "C PHP 8.0" [ref=e214] [cursor=pointer]:
+                    - generic [ref=e215]: C
+                    - text: PHP 8.0
+                  - button "D PHP 8.1" [ref=e216] [cursor=pointer]:
+                    - generic [ref=e217]: D
+                    - text: PHP 8.1
+              - generic [ref=e218]:
+                - paragraph [ref=e219]:
+                  - generic [ref=e220]: "2."
+                  - text: "What does `$user['role'] ?? 'guest'` do?"
+                - generic [ref=e221]:
+                  - button "A Throws if 'role' is undefined" [ref=e222] [cursor=pointer]:
+                    - generic [ref=e223]: A
+                    - text: Throws if 'role' is undefined
+                  - button "B Returns 'guest' only if 'role' is exactly false" [ref=e224] [cursor=pointer]:
+                    - generic [ref=e225]: B
+                    - text: Returns 'guest' only if 'role' is exactly false
+                  - button "C Returns 'guest' when 'role' is null or undefined, with no notice" [ref=e226] [cursor=pointer]:
+                    - generic [ref=e227]: C
+                    - text: Returns 'guest' when 'role' is null or undefined, with no notice
+                  - button "D Is a syntax error before PHP 8.0" [ref=e228] [cursor=pointer]:
+                    - generic [ref=e229]: D
+                    - text: Is a syntax error before PHP 8.0
+              - generic [ref=e230]:
+                - paragraph [ref=e231]:
+                  - generic [ref=e232]: "3."
+                  - text: Which two features let you replace a declare-and-assign constructor with one-liners?
+                - generic [ref=e233]:
+                  - button "A Named arguments and match" [ref=e234] [cursor=pointer]:
+                    - generic [ref=e235]: A
+                    - text: Named arguments and match
+                  - button "B Constructor property promotion and readonly" [ref=e236] [cursor=pointer]:
+                    - generic [ref=e237]: B
+                    - text: Constructor property promotion and readonly
+                  - button "C Enums and fibers" [ref=e238] [cursor=pointer]:
+                    - generic [ref=e239]: C
+                    - text: Enums and fibers
+                  - button "D Union types and attributes" [ref=e240] [cursor=pointer]:
+                    - generic [ref=e241]: D
+                    - text: Union types and attributes
+              - button "Check answers" [disabled] [ref=e243]
+          - generic [ref=e244]:
+            - generic [ref=e245] [cursor=pointer]:
+              - checkbox "Mark this section complete" [ref=e246]
+              - text: Mark this section complete
+            - generic [ref=e247]:
+              - button "← Previous" [disabled] [ref=e248]
+              - button "Next →" [disabled] [ref=e249]
+    - button "Ask the AI tutor" [ref=e250] [cursor=pointer]:
+      - generic [ref=e251]: ✨
+      - text: Ask AI
+    - complementary "AI tutor" [ref=e252]:
+      - generic [ref=e253]:
+        - generic [ref=e254]:
+          - generic [ref=e255]:
+            - generic [ref=e256]: ✨
+            - text: AI Tutor
+          - generic [ref=e257]: "Lesson: Why Upgrade & the 5.5 → 8.2 Timeline"
+        - button "✕" [ref=e259] [cursor=pointer]
+      - generic [ref=e261]:
+        - paragraph [ref=e262]:
+          - text: Ask about anything in this lesson — or hit
+          - strong [ref=e263]: ✨ Ask AI
+          - text: on any code example to get it explained.
+        - generic [ref=e264]:
+          - button "Explain this lesson simply, with a PHP comparison." [ref=e265] [cursor=pointer]
+          - 'button "What''s the #1 thing a PHP dev gets wrong here?" [ref=e266] [cursor=pointer]'
+          - button "Give me a tiny real-world example." [ref=e267] [cursor=pointer]
+          - button "Quiz me with one tricky question on this topic." [ref=e268] [cursor=pointer]
+      - generic [ref=e269]:
+        - textbox "Ask a follow-up… (Enter to send)" [ref=e270]
+        - button "Send" [disabled] [ref=e271]
+      - generic [ref=e272]: Powered by Claude (Haiku 4.5)
+  - generic [ref=e363]:
+    - alert
+    - alert

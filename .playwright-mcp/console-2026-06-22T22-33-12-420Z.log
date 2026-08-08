@@ -1,0 +1,2 @@
+[     212ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=a5671618:21550
+[   24869ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5175/api/ask:0

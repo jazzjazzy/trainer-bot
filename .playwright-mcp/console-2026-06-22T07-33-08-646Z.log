@@ -1,0 +1,8 @@
+[     685ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=baf4ae3a:21550
+[     770ms] [ERROR] Could not find the language 'plaintext', did you forget to load/include a language module? @ http://localhost:5175/node_modules/.vite/deps/highlight__js_lib_core.js?v=beb225a9:624
+[     770ms] [ERROR] Could not find the language 'plaintext', did you forget to load/include a language module? @ http://localhost:5175/node_modules/.vite/deps/highlight__js_lib_core.js?v=beb225a9:624
+[     880ms] [ERROR] Could not find the language 'plaintext', did you forget to load/include a language module? @ http://localhost:5175/node_modules/.vite/deps/highlight__js_lib_core.js?v=beb225a9:624
+[     880ms] [ERROR] Could not find the language 'plaintext', did you forget to load/include a language module? @ http://localhost:5175/node_modules/.vite/deps/highlight__js_lib_core.js?v=beb225a9:624
+[     907ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5175/favicon.ico:0
+[     909ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5175/favicon.ico:0
+[   40524ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-YZVM2MHU.js?v=baf4ae3a:21550
