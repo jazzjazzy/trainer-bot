@@ -19,7 +19,7 @@ treat it exactly like a password.
 
 ### Anatomy of a good key
 
-Stripe made the shape famous: \`sk_live_YOUR_EXAMPLE_KEY_HERE\`.
+Stripe made the shape famous: \`sk_live_4eC39HqLyjWDarjtT1zdp7dc\`.
 
 - **Prefix** (\`sk_live_\`) — identifies the key *type* and environment at a
   glance. A test key in production config becomes visible in code review,
