@@ -9,6 +9,7 @@ import bash from "highlight.js/lib/languages/bash";
 import xml from "highlight.js/lib/languages/xml";
 import yaml from "highlight.js/lib/languages/yaml";
 import sql from "highlight.js/lib/languages/sql";
+import twig from "highlight.js/lib/languages/twig";
 
 hljs.registerLanguage("typescript", typescript);
 hljs.registerLanguage("ts", typescript);
@@ -30,6 +31,8 @@ hljs.registerLanguage("svelte", xml);
 // JSX/TSX highlight acceptably with the plain JS/TS grammars.
 hljs.registerLanguage("jsx", javascript);
 hljs.registerLanguage("tsx", typescript);
+// Twig templates (Drupal/Symfony theming): highlights {{ }}/{% %} plus markup.
+hljs.registerLanguage("twig", twig);
 
 interface Props {
   code: string;
