@@ -16,6 +16,9 @@ import fullstackInterview from "./fullstack-interview/course";
 import drupalForSymfony from "./drupal-for-symfony/course";
 import drupalSiteBuilding from "./drupal-site-building/course";
 import drupalModuleDev from "./drupal-module-dev/course";
+import drupalFormsTheming from "./drupal-forms-theming/course";
+import drupalCachingPerformance from "./drupal-caching-performance/course";
+import drupalConfigDeployment from "./drupal-config-deployment/course";
 
 // The course catalog. To add a course, create `src/courses/<id>/course.ts`
 // exporting a Course, then import and list it here.
@@ -37,6 +40,9 @@ export const courses: Course[] = [
   drupalForSymfony,
   drupalSiteBuilding,
   drupalModuleDev,
+  drupalFormsTheming,
+  drupalCachingPerformance,
+  drupalConfigDeployment,
 ];
 
 export function getCourse(id: string | null): Course | undefined {
