@@ -45,9 +45,17 @@ per cron pass. Beyond the boilerplate, three rules matter:
 | Throw | Meaning |
 | --- | --- |
 | plain \`\\Exception\` | logged; item stays claimed until the lease expires, then retried |
-| \`RequeueException\` | release **this item** now for immediate retry |
+| \`RequeueException\` | "not finished yet": release **this item** so it can be claimed again immediately — for genuine **partial progress**, never for contention or failure |
 | \`DelayedRequeueException($seconds)\` | retry this item after a delay (needs a \`DelayableQueueInterface\` backend — the database queue is one) |
 | \`SuspendQueueException\` | a shared dependency is down: **stop draining this whole queue** for this pass |
+
+Watch \`RequeueException\` in particular: cron catches it with
+\`$queue->releaseItem()\`, which sets \`expire = 0\`, and \`claimItem()\` orders by
+\`created ASC\` — so the **same item** is re-claimed on the very next loop. Throw
+it on a contention or failure condition and cron spins on one item until the
+\`cron: ['time' => 30]\` budget expires, processing nothing else. For "someone
+else holds the lock", back off with \`DelayedRequeueException\` (or just
+\`return\`) instead.
 
 Core has no \`max_retries\` and no failure transport. An item that always
 throws retries **forever** — count attempts in the payload and give up
@@ -60,8 +68,11 @@ engine then redirects the browser to \`/batch\`, which calls your operation
 once per HTTP request and re-renders a progress bar in between. Each call
 receives \`&$context\`:
 
-- \`$context['sandbox']\` — your scratch state; **the only thing that survives
-  between requests**. Seed \`progress\` and \`max\` on the first call.
+- \`$context['sandbox']\` — your scratch state. Along with \`$context['results']\`,
+  it is one of the **two keys that persist across requests**; \`message\` and
+  \`finished\` are reset on every invocation (\`finished\` back to 1). Sandbox is
+  also wiped when the operation completes, results is not. Seed \`progress\` and
+  \`max\` on the first call.
 - \`$context['results']\` — accumulates for the finish callback.
 - \`$context['message']\` — the line under the progress bar.
 - \`$context['finished']\` — a **fraction, not a boolean**. Below 1 means "call
@@ -117,7 +128,6 @@ final class NotifyResponderHandler {
       ts: `<?php
 // src/Plugin/QueueWorker/IncidentNotifier.php (processItem excerpt)
 use Drupal\\Core\\Queue\\DelayedRequeueException;
-use Drupal\\Core\\Queue\\RequeueException;
 use Drupal\\Core\\Queue\\SuspendQueueException;
 
 public function processItem($data): void {
@@ -144,8 +154,11 @@ public function processItem($data): void {
     throw new SuspendQueueException('Gateway unreachable.');
   }
   if (!$this->lock->acquire('incident_notify:' . $data['nid'])) {
-    // Someone else is on it — release for immediate retry.
-    throw new RequeueException('Lock held elsewhere.');
+    // Someone else is on it. Back OFF — do not throw RequeueException here:
+    // cron releases the item (expire = 0) and claimItem() orders by created
+    // ASC, so the same item is re-claimed instantly and spins the whole
+    // cron budget. RequeueException is for genuine partial progress.
+    throw new DelayedRequeueException(60, 'Lock held elsewhere.');
   }
 
   try {
@@ -156,7 +169,7 @@ public function processItem($data): void {
   }
 }`,
       note:
-        "The big missing piece coming from Messenger: core has no max_retries and no failure transport. A plain exception leaves the item claimed until the lease expires and it is retried forever — track an attempt count in the payload and give up explicitly, or install contrib Advanced Queue.",
+        "The big missing piece coming from Messenger: core has no max_retries and no failure transport. A plain exception leaves the item claimed until the lease expires and it is retried forever — track an attempt count in the payload and give up explicitly, or install contrib Advanced Queue. And note there is no Messenger-style backoff behind RequeueException: cron releases the item and immediately re-claims it, so contention needs DelayedRequeueException, not a requeue.",
     },
     {
       label: "A long user-facing job: console ProgressBar vs batch_set()",
@@ -235,8 +248,12 @@ class IncidentBulkCloseForm extends FormBase {
       ->addOperation([static::class, 'closeChunk'], [array_values($nids)]);
 
     batch_set($batch->toArray());
-    // Don't call setRedirect(): the batch engine owns the response now
-    // and sends the browser to /batch until the job is done.
+
+    // The batch engine owns the response for the duration of the job (the
+    // browser goes to /batch). You may still call $form_state->setRedirect() —
+    // _batch_finished() honours it as the destination AFTER the batch
+    // completes; without it the user lands back on this form.
+    $form_state->setRedirect('incident_tracker.reports');
   }
 
 }`,
@@ -277,7 +294,7 @@ public function step(SessionInterface $session): JsonResponse {
  * Operation arguments come first, &$context always last.
  */
 public static function closeChunk(array $nids, array &$context): void {
-  // sandbox is the only state that survives between requests.
+  // sandbox and results are the two keys that survive between requests.
   if (!isset($context['sandbox']['progress'])) {
     $context['sandbox']['progress'] = 0;
     $context['sandbox']['max'] = count($nids);
@@ -470,9 +487,9 @@ while ($queue) {
 
   keyPoints: [
     "Choose by audience: Queue API when nobody is waiting (cron pulls in the background), Batch API when a user clicked a button and needs a progress bar — production modules usually ship both.",
-    "A good QueueWorker queues IDs not objects, is idempotent (items can be delivered twice), and picks its exception on purpose: return = delete, plain exception = retry after the lease expires, RequeueException = retry now, DelayedRequeueException($seconds) = retry later, SuspendQueueException = abandon the whole queue this pass.",
+    "A good QueueWorker queues IDs not objects, is idempotent (items can be delivered twice), and picks its exception on purpose: return = delete, plain exception = retry after the lease expires, RequeueException = 'not finished yet', claim me again immediately (partial progress only — throwing it on contention makes cron re-claim the same item and burn the whole time budget), DelayedRequeueException($seconds) = back off and retry later, SuspendQueueException = abandon the whole queue this pass.",
     "Core has no max_retries and no failure transport — an always-failing item retries forever, so count attempts in the payload yourself or use contrib Advanced Queue.",
-    "batch_set() takes operation callbacks; the engine re-invokes each one per HTTP request, passing &$context — sandbox is the only state that survives, results feeds the finish callback, and finished is a fraction (< 1 means 'call me again'), not a boolean.",
+    "batch_set() takes operation callbacks; the engine re-invokes each one per HTTP request, passing &$context — sandbox and results are the two keys that survive between requests (message and finished are reset every invocation, finished back to 1), results feeds the finish callback, and finished is a fraction (< 1 means 'call me again'), not a boolean.",
     "Build batches with BatchBuilder (setTitle / setInitMessage / setProgressMessage / setFinishCallback / addOperation / toArray); callbacks must be strings or [Class::class, 'method'] arrays because the batch is serialized — never closures.",
     "The same batch runs headless: batch_set() + drush_backend_batch_process() from a Drush command, and hook_update_N uses the identical &$sandbox protocol, which is why drush updb can chew through millions of rows.",
   ],
@@ -484,7 +501,7 @@ while ($queue) {
     },
     {
       q: "Walk me through the $context array in a batch operation. Why does the sandbox exist?",
-      a: "Because a batch is not one long request — the browser is redirected to `/batch` and each operation callback runs in a **fresh Drupal bootstrap**, so ordinary local variables and static caches are gone every time. `$context['sandbox']` is the only scratch state that persists, which is why the idiom is to seed `progress` and `max` on the first invocation (`if (!isset($context['sandbox']['progress']))`) and slice off 25–50 items per call. `$context['results']` accumulates data for the finish callback, `$context['message']` is the line under the progress bar, and `$context['finished']` is a **fraction, not a boolean** — anything below 1 means 'call me again', and if you never set it Drupal assumes 1 and moves on, which is the classic bug where a batch processes only the first chunk. The finish callback then receives `($success, $results, $operations, $elapsed)`, where `$operations` holds whatever never ran.",
+      a: "Because a batch is not one long request — the browser is redirected to `/batch` and each operation callback runs in a **fresh Drupal bootstrap**, so ordinary local variables and static caches are gone every time. `$context['sandbox']` and `$context['results']` are **the two keys that persist across requests** — core binds both by reference into the stored batch set, while `message` and `finished` are reset on every invocation (`finished` back to 1). That is why the idiom is to seed `progress` and `max` on the first invocation (`if (!isset($context['sandbox']['progress']))`) and slice off 25–50 items per call. Sandbox is wiped once the operation completes; results is not, and it accumulates data for the finish callback. `$context['message']` is the line under the progress bar, and `$context['finished']` is a **fraction, not a boolean** — anything below 1 means 'call me again', and if you never set it Drupal assumes 1 and moves on, which is the classic bug where a batch processes only the first chunk. The finish callback then receives `($success, $results, $operations, $elapsed)`, where `$operations` holds whatever never ran.",
     },
     {
       q: "You know Symfony Messenger. What is genuinely missing from Drupal's QueueWorker, and how do you compensate?",

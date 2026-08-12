@@ -68,7 +68,10 @@ an item with \`REQUIREMENT_ERROR\` **blocks installation** — check PHP
 extensions or companion modules here, not your own tables or services, which
 don't exist yet. At \`'runtime'\`, each item becomes a row on
 \`/admin/reports/status\` with \`title\`, \`value\`, \`description\` and a
-severity (\`REQUIREMENT_OK\` / \`WARNING\` / \`ERROR\` / \`INFO\`). At
+severity (\`REQUIREMENT_OK\` / \`WARNING\` / \`ERROR\` / \`INFO\` — deprecated in
+11.2 and removed in 12 in favour of the \`RequirementSeverity\` enum
+(\`RequirementSeverity::Error\` etc.), though the constants still work across
+D10 and D11). At
 \`'update'\` it can halt \`drush updb\`. Drupal 11.2 adds OOP-friendly
 \`hook_runtime_requirements()\` and \`hook_update_requirements()\` for the last
 two phases, plus a class-based option for \`'install'\` — a Requirements class
@@ -337,7 +340,7 @@ function incident_tracker_requirements(string $phase): array {
   return $requirements;
 }`,
       note:
-        "Severities: REQUIREMENT_INFO / OK / WARNING / ERROR. Drupal 11.2 adds hook_runtime_requirements()/hook_update_requirements() (OOP #[Hook]-capable) plus an InstallRequirementsInterface class in src/Install/Requirements for the install phase; hook_requirements() itself is deprecated in 11.3 but remains the cross-version (D10+D11) way to do all three.",
+        "Severities: REQUIREMENT_INFO / OK / WARNING / ERROR — these constants are deprecated in Drupal 11.2 (removed in 12) in favour of the \\Drupal\\Core\\Extension\\Requirement\\RequirementSeverity enum (RequirementSeverity::Error etc.), but they still work across D10 and D11. Drupal 11.2 adds hook_runtime_requirements()/hook_update_requirements() (OOP #[Hook]-capable) plus an InstallRequirementsInterface class in src/Install/Requirements for the install phase; hook_requirements() itself is deprecated in 11.3 but remains the cross-version (D10+D11) way to do all three.",
     },
   ],
 
@@ -510,7 +513,7 @@ No trace left - the site is exactly as it was before install.`,
       ],
       answerIndex: 1,
       explain:
-        "An ERROR-severity requirement at the 'install' phase is a hard gate: Drupal (UI or drush) refuses to install the module and surfaces your description. That's why install-phase checks must test the environment (PHP extensions, other modules) rather than the module's own not-yet-existing tables or services.",
+        "An ERROR-severity requirement at the 'install' phase is a gate: Drupal's module install UI refuses to install the module and surfaces your description. Note drush pm:install only logs the error and prompts \"The <module> module's install requirements failed. Do you wish to continue?\" (and proceeds under -y), so an install-phase gate is not a hard guarantee on the CLI. Either way, install-phase checks must test the environment (PHP extensions, other modules) rather than the module's own not-yet-existing tables or services.",
     },
   ],
 };

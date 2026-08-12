@@ -383,7 +383,7 @@ messenger: Incident "DB outage" logged.
 
   keyPoints: [
     "FormBase forms supply four methods — getFormId(), buildForm(), validateForm(), submitForm() — and FormBuilder owns the lifecycle that Symfony's controller drives by hand.",
-    "The route uses defaults._form pointing at the class (no _controller, no controller class); one route handles both GET render and POST submit.",
+    "The route uses defaults._form pointing at the class (no _controller key, no controller class of yours — a route enhancer swaps in core's HtmlFormController); one route handles both GET render and POST submit.",
     "buildForm() returns render-array elements: '#type' => 'textfield'/'select'/'textarea'/'details'/'submit' with #title, #required, #default_value, #options.",
     "There is no data_class: submitted values are plain arrays read via $form_state->getValue('name') / getValues(), and mapping them to storage is submitForm()'s job.",
     "validateForm() attaches errors with $form_state->setErrorByName('element', $this->t(...)); any error blocks submit and re-renders the form with inline messages.",
@@ -393,7 +393,7 @@ messenger: Incident "DB outage" logged.
   interview: [
     {
       q: "Walk me through the lifecycle of a Drupal form built on FormBase, and contrast it with a Symfony FormType.",
-      a: "In Symfony the controller drives everything: \`createForm()\`, \`handleRequest()\`, \`isSubmitted() && isValid()\`, persist, redirect. In Drupal there is no controller — the route's \`_form\` default points at the class, and core's \`FormBuilder\` calls your methods in order: \`buildForm()\` to get the element array, then on POST it enforces \`#required\`, calls \`validateForm()\`, and only if no errors were set calls \`submitForm()\`. On validation failure it automatically re-renders the form with inline errors, which is the part you'd otherwise write by hand in the Symfony action. The trade: Symfony gives you typed, reusable field classes and object binding; Drupal gives you a declarative array any module can alter with \`hook_form_alter()\`.",
+      a: "In Symfony the controller drives everything: \`createForm()\`, \`handleRequest()\`, \`isSubmitted() && isValid()\`, persist, redirect. In Drupal you write no controller — the route's \`_form\` default points at the class, a route enhancer swaps it for core's generic \`HtmlFormController\` (\`controller.form:getContentResult\`), which resolves your form class and hands it to \`FormBuilder\`. \`FormBuilder\` then calls your methods in order: \`buildForm()\` to get the element array, then on POST it enforces \`#required\`, calls \`validateForm()\`, and only if no errors were set calls \`submitForm()\`. On validation failure it automatically re-renders the form with inline errors, which is the part you'd otherwise write by hand in the Symfony action. The trade: Symfony gives you typed, reusable field classes and object binding; Drupal gives you a declarative array any module can alter with \`hook_form_alter()\`.",
     },
     {
       q: "A Symfony developer asks: where's the data_class? How do you get the submitted data out of a Drupal form?",
@@ -420,7 +420,7 @@ messenger: Incident "DB outage" logged.
       ],
       answerIndex: 1,
       explain:
-        "Form routes use defaults: { _form: '\\Drupal\\incident_tracker\\Form\\IncidentReportForm' } — no controller involved. FormBuilder acts as the generic controller, handling GET rendering and POST validate/submit on the same route. (Calling \\Drupal::formBuilder()->getForm() from a controller works but is unnecessary for a normal form page.)",
+        "Form routes use defaults: { _form: '\\Drupal\\incident_tracker\\Form\\IncidentReportForm' } — no controller class of your own. A route enhancer rewrites _form into _controller: 'controller.form:getContentResult', so core's HtmlFormController + FormBuilder act as the generic controller, handling GET rendering and POST validate/submit on the same route. (Calling \\Drupal::formBuilder()->getForm() from a controller works but is unnecessary for a normal form page.)",
     },
     {
       question: "In submitForm(), how do you read what the user typed into the 'title' textfield?",

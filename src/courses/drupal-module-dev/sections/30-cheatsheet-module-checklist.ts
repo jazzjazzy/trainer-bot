@@ -124,7 +124,7 @@ drush generate service:custom  # class + services.yml entry
 // Symfony 6.4/7 — the attributes ARE the registration.
 final class IncidentController extends AbstractController {
 
-  #[Route('/admin/reports/incidents', name: 'incident_list')]
+  #[Route('/incidents', name: 'incident_list')]
   #[IsGranted('ROLE_INCIDENT_VIEWER')]
   public function list(): Response {
     // Returns a finished Response.
@@ -137,14 +137,12 @@ final class IncidentController extends AbstractController {
 // Roles/hierarchy live in config/packages/security.yaml.`,
       ts: `# incident_tracker.routing.yml — the route is data.
 incident_tracker.list:
-  path: '/admin/reports/incidents'
+  path: '/incidents'
   defaults:
-    _controller: '\\Drupal\\incident_tracker\\Controller\\IncidentListController::list'
+    _controller: '\\Drupal\\incident_tracker\\Controller\\IncidentListController::build'
     _title: 'Incidents'
   requirements:
     _permission: 'view incident reports'
-  options:
-    _admin_route: TRUE
 
 # incident_tracker.permissions.yml — the grant itself,
 # which site builders then assign to roles in the UI.
@@ -260,7 +258,7 @@ $module = [
   // incident_tracker.permissions.yml
   'permissions' => ['view incident reports', 'administer incident tracker'],
   'render_arrays' => [
-    'IncidentListController::list' => [
+    'IncidentListController::build' => [
       '#theme' => 'incident_list',
       '#cache' => ['contexts' => ['user.permissions'], 'tags' => ['incident_list']],
     ],

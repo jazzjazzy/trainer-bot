@@ -41,8 +41,14 @@ plugin:block\` scaffolds all of this, version-appropriately.
 
 ### DI, plugin flavor
 
-Plugins are instantiated by the plugin manager, not resolved from the
-container, so autowiring never happens. Implement
+Plugins are built by the plugin manager, not fetched from the container, so on
+Drupal 10 and 11.0–11.2 you hand-write \`create()\`. (Drupal 11.3 added an
+autowired \`create()\` on \`PluginBase\` — a plugin that implements
+\`ContainerFactoryPluginInterface\` and defines no \`create()\` of its own gets
+its constructor type-hints and \`#[Autowire]\` parameters resolved for you;
+\`AutowireTrait\`, 10.2+, covers similar ground. The explicit \`create()\` below
+is still what every existing codebase contains and what interviewers ask
+about.) Implement
 \`ContainerFactoryPluginInterface\`: its \`create()\` receives the container
 **plus** \`$configuration\`, \`$plugin_id\`, \`$plugin_definition\` — the
 plugin's per-placement settings and identity. Forward those three to
@@ -57,11 +63,17 @@ carry extra baggage.
 \`item_list\` render array. The interesting part is \`#cache\`:
 
 - **tags: \`node_list:incident\`** — the bundle-specific list tag (core since
-  9.3). Saving, publishing, or deleting *any* incident node invalidates the
+  8.9). Saving, publishing, or deleting *any* incident node invalidates the
   block everywhere. Cheap and exact.
-- **contexts: \`user.permissions\`** — the query runs with
-  \`accessCheck(TRUE)\`, so output legitimately varies by permission set; one
-  cached copy per combination.
+- **contexts: \`user.node_grants:view\`, \`user.permissions\`** — the query
+  runs with \`accessCheck(TRUE)\`, which applies the \`node_access\` query tag,
+  so output varies by the viewer's **node grants** as well as their
+  permissions; one cached copy per combination. \`user.permissions\` alone is
+  only sufficient on a site with no node access module in play.
+  \`user.node_grants\` is a comparatively expensive context (it hashes the
+  user's grant set), which is why some sites deliberately query with
+  \`accessCheck(FALSE)\` plus an explicit \`status\` condition instead and vary
+  on permissions only.
 - **max-age: \`Cache::PERMANENT\`** — tags handle freshness, so the render
   cache may keep it forever until a tag fires.
 
@@ -218,7 +230,7 @@ class RecentIncidentsController extends AbstractController
 // Twig: {{ render_esi(controller('...::recent')) }}`,
       ts: `<?php
 // Drupal: build() declares WHAT it depends on; the render cache
-// does the rest. Cached forever, per permission set, until any
+// does the rest. Cached forever, per access variation, until any
 // incident node changes.
 use Drupal\\Core\\Cache\\Cache;
 
@@ -244,15 +256,16 @@ public function build(): array {
     '#cache' => [
       // Invalidate: any incident node added/edited/deleted.
       'tags' => ['node_list:incident'],
-      // Vary: accessCheck(TRUE) means output differs by role.
-      'contexts' => ['user.permissions'],
+      // Vary: accessCheck(TRUE) applies the node_access query tag,
+      // so results differ by node grants AND by permissions.
+      'contexts' => ['user.node_grants:view', 'user.permissions'],
       // Tags keep it fresh — no TTL needed.
       'max-age' => Cache::PERMANENT,
     ],
   ];
 }`,
       note:
-        "node_list:incident is the bundle-specific list cache tag (core since 9.3) — far cheaper than the site-wide node_list. Forgetting 'contexts' while access-checking is the classic leak: an anonymous user gets the cached copy built for an editor.",
+        "node_list:incident is the bundle-specific list cache tag (in core since Drupal 8.9) — far cheaper than the site-wide node_list. accessCheck(TRUE) on a node query means node grants decide the rows, so the vary needs user.node_grants:view; user.permissions on its own is only enough on a site running no node access module. Forgetting 'contexts' while access-checking is the classic leak: an anonymous user gets the cached copy built for an editor.",
     },
     {
       label: "Per-placement settings: blockForm()",
@@ -304,7 +317,7 @@ public function blockSubmit($form, FormStateInterface $form_state): void {
   playground: {
     lang: "php",
     intro:
-      "The whole block lifecycle in plain PHP: attribute discovery via reflection, two placements of ONE plugin class with different per-placement configuration merged over defaults, build() emitting cache metadata, and a node save firing tag-based invalidation. Predict the output, then run.",
+      "The whole block lifecycle in plain PHP: attribute discovery via reflection, two placements of ONE plugin class with different per-placement configuration merged over defaults, build() emitting cache metadata, and a node save firing tag-based invalidation. Watch step 3 closely — only tags are matched against the invalidation list; contexts sit in a separate bucket because they choose which copy to serve, never when to rebuild. Predict the output, then run.",
     code: `<?php
 // Simulate the block plugin lifecycle: attribute discovery, TWO
 // placements of one plugin with different per-placement config,
@@ -351,8 +364,10 @@ final class RecentIncidentsBlock extends BlockBase {
             '#theme' => 'item_list',
             '#items' => array_slice(self::INCIDENTS, 0, $this->configuration['items_to_show']),
             '#cache' => [
+                // Tags INVALIDATE (a node save purges these copies).
                 'tags'     => ['node_list:incident'],
-                'contexts' => ['user.permissions'],
+                // Contexts VARY (they pick which copy to serve).
+                'contexts' => ['user.node_grants:view', 'user.permissions'],
                 'max-age'  => -1,   // Cache::PERMANENT — tags handle freshness
             ],
         ];
@@ -381,16 +396,28 @@ foreach ($placements as $label => $block) {
 }
 
 // 3. Someone saves an incident node -> core invalidates node_list:incident.
+//    ONLY tags are matched against the invalidation list. Contexts never
+//    appear there: they decide WHICH cached copy a request is served.
 $invalidated = ['node_list:incident'];
 $cachedFragments = [
-    'sidebar block (anon)'  => ['node_list:incident', 'user.permissions'],
-    'footer block (editor)' => ['node_list:incident', 'user.permissions'],
-    'site branding block'   => ['config:system.site'],
+    'sidebar block (anon)'  => [
+        'tags'     => ['node_list:incident'],
+        'contexts' => ['user.node_grants:view', 'user.permissions'],
+    ],
+    'footer block (editor)' => [
+        'tags'     => ['node_list:incident'],
+        'contexts' => ['user.node_grants:view', 'user.permissions'],
+    ],
+    'site branding block'   => [
+        'tags'     => ['config:system.site'],
+        'contexts' => [],
+    ],
 ];
 $lines = [];
-foreach ($cachedFragments as $fragment => $tags) {
-    $stale = array_intersect($tags, $invalidated) !== [];
-    $lines[] = $fragment . ': ' . ($stale ? 'INVALIDATED, rebuilt on next view' : 'still cached');
+foreach ($cachedFragments as $fragment => $fragmentCache) {
+    $stale = array_intersect($fragmentCache['tags'], $invalidated) !== [];
+    $lines[] = $fragment . ': ' . ($stale ? 'INVALIDATED, rebuilt on next view' : 'still cached')
+        . ' | varies on: ' . ($fragmentCache['contexts'] ? implode(',', $fragmentCache['contexts']) : '(nothing)');
 }
 echo implode("\\n", $lines);`,
     output: `discovered: incident_tracker_recent (Recent incidents)
@@ -399,22 +426,22 @@ echo implode("\\n", $lines);`,
   - DB replica lag
   - Queue backlog on exports
   - Slow admin pages
-  cache: tags=node_list:incident contexts=user.permissions
+  cache: tags=node_list:incident contexts=user.node_grants:view,user.permissions
 
 [footer (items => 2)]
   - DB replica lag
   - Queue backlog on exports
-  cache: tags=node_list:incident contexts=user.permissions
+  cache: tags=node_list:incident contexts=user.node_grants:view,user.permissions
 
-sidebar block (anon): INVALIDATED, rebuilt on next view
-footer block (editor): INVALIDATED, rebuilt on next view
-site branding block: still cached`,
+sidebar block (anon): INVALIDATED, rebuilt on next view | varies on: user.node_grants:view,user.permissions
+footer block (editor): INVALIDATED, rebuilt on next view | varies on: user.node_grants:view,user.permissions
+site branding block: still cached | varies on: (nothing)`,
   },
 
   keyPoints: [
     "A block plugin lives in src/Plugin/Block and is declared with the #[Block(id:, admin_label:, category:)] attribute (Drupal\\Core\\Block\\Attribute\\Block) on 10.2+/11 — a docblock @Block annotation on 10.0/10.1. Definitions are cached: drush cr after adding the class.",
-    "ContainerFactoryPluginInterface::create() receives the container PLUS $configuration, $plugin_id, $plugin_definition — forward those three to parent::__construct() and append your services; plugins are never autowired.",
-    "build() returns a render array whose #cache declares tags (node_list:incident — invalidate when any incident node changes), contexts (user.permissions — vary because of accessCheck(TRUE)), and max-age (Cache::PERMANENT — tags keep it fresh).",
+    "ContainerFactoryPluginInterface::create() receives the container PLUS $configuration, $plugin_id, $plugin_definition — forward those three to parent::__construct() and append your services. On Drupal 10 and 11.0–11.2 you always hand-write create(); Drupal 11.3+ adds an autowired create() on PluginBase for plugins that implement the interface and declare none of their own, but the explicit version is what existing codebases and interviewers use.",
+    "build() returns a render array whose #cache declares tags (node_list:incident — invalidate when any incident node changes), contexts (user.node_grants:view plus user.permissions — accessCheck(TRUE) applies the node_access query tag, so grants and permissions both change the result), and max-age (Cache::PERMANENT — tags keep it fresh).",
     "defaultConfiguration() + blockForm() + blockSubmit() give each placement its own settings in $this->configuration; every placement is a block.block.* config entity (theme, region, visibility, settings) exported by drush cex.",
     "Place the block at /admin/structure/block (Block layout): pick a region, Place block, search the admin_label — your blockForm() elements render inside the dialog next to core's title and visibility options.",
     "Symfony's nearest analogue (a Twig component) is developer-placed with call-site options; a Drupal block is site-builder-placed and per-placement configurable with zero deploys — that's the point of the plugin + config-entity split.",
@@ -427,7 +454,7 @@ site branding block: still cached`,
     },
     {
       q: "Your block lists recent nodes. What cache metadata do you give it and why won't it go stale?",
-      a: "Tags, contexts and max-age on the returned render array. The tag `node_list:incident` (the bundle-specific list tag, in core since 9.3) means creating, editing, or deleting any incident node invalidates every cached copy immediately — so `max-age` can be `Cache::PERMANENT`; freshness comes from invalidation, not TTL guessing. Because the entity query runs with `accessCheck(TRUE)`, output varies by role, so the `user.permissions` context stores one copy per permission set — omit it and an anonymous visitor can be served the copy built for an editor. This declarative bubbling model is the big contrast with Symfony's HTTP-level, time-based fragment caching, where tag invalidation requires Varnish plus FOSHttpCacheBundle.",
+      a: "Tags, contexts and max-age on the returned render array. The tag `node_list:incident` (the bundle-specific list tag, in core since Drupal 8.9) means creating, editing, or deleting any incident node invalidates every cached copy immediately — so `max-age` can be `Cache::PERMANENT`; freshness comes from invalidation, not TTL guessing. Because the entity query runs with `accessCheck(TRUE)`, the `node_access` query tag is applied and the visible rows depend on the viewer's node grants, so the vary is `user.node_grants:view` alongside `user.permissions` — `user.permissions` alone is only sufficient on a site with no node access module, since two users with identical permissions can hold different grants. Omit the contexts entirely and an anonymous visitor gets served the copy built for an editor. Worth saying out loud that `user.node_grants` is not cheap, which is why some sites query with `accessCheck(FALSE)` plus an explicit `status` condition and vary on permissions only. This declarative bubbling model is the big contrast with Symfony's HTTP-level, time-based fragment caching, where tag invalidation requires Varnish plus FOSHttpCacheBundle.",
     },
     {
       q: "How does dependency injection into a plugin differ from a controller or form, and where do a block's settings actually live?",

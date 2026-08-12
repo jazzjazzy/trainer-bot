@@ -51,7 +51,10 @@ with a \`type\` (\`string\`, \`integer\`, \`boolean\`, \`email\`, \`label\`,
 - **Validation** — attach Symfony-style \`constraints\` (\`Range\`,
   \`NotBlank\`, \`Email\`); since Drupal 10.2 a top-level
   \`FullyValidatable: ~\` opts the whole object in, which \`#config_target\`
-  forms surface as field errors.
+  forms surface as field errors. Note that constraints are *opt-in, not
+  enforced on every save*: \`Config::save()\` only casts. They fire where
+  something explicitly validates the typed object — a \`#config_target\`
+  form, a recipe config action, core's own tests.
 - **Config translation** — \`label\` plus translatable types feed the
   config_translation UI.
 - **Test enforcement** — kernel and functional tests run with
@@ -371,7 +374,7 @@ Strict schema check: No schema for incident_tracker.settings:webhook_url`,
     },
     {
       q: "Coming from Symfony, how do Drupal's config defaults and schema compare to a bundle's Configuration class?",
-      a: "Symfony's `Configuration` TreeBuilder is one compile-time artifact that declares keys, merges defaults, and validates — invalid config aborts the container build, and afterwards only frozen parameters remain. Drupal splits this in two runtime files: config/install carries the defaults (copied into the database once at install, like a Flex recipe copying YAML at `composer require`), while config/schema carries the types and is consulted on every save. The consequence of staying runtime is flexibility — admins edit values, config is translatable and exportable — but weaker guarantees: nothing stops a bad `drush cset` unless you add schema constraints, whereas Symfony would have refused to boot. The 10.2+ validatable-schema work (constraints, FullyValidatable) is Drupal closing that gap.",
+      a: "Symfony's `Configuration` TreeBuilder is one compile-time artifact that declares keys, merges defaults, and validates — invalid config aborts the container build, and afterwards only frozen parameters remain. Drupal splits this in two runtime files: config/install carries the defaults (copied into the database once at install, like a Flex recipe copying YAML at `composer require`), while config/schema carries the types and is consulted on every save. The consequence of staying runtime is flexibility — admins edit values, config is translatable and exportable — but weaker guarantees: `drush cset` will *cast* your value to the schema type, yet it does not enforce constraints — `Config::save()` only casts, so `drush cset incident_tracker.settings retention_days 0` still succeeds even with `Range: min: 1`. Constraints only fire where something explicitly validates the typed object: a `#config_target` form, a recipe config action, or core's own tests. Symfony, by contrast, would have refused to boot. The 10.2+ validatable-schema work (constraints, FullyValidatable) is Drupal closing that gap.",
     },
     {
       q: "What is config/optional for, and what happens to all this config when the module is uninstalled?",

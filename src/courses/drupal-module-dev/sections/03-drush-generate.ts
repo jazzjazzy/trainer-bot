@@ -98,7 +98,7 @@ an existing file, but \`--dry-run\` first is the safe habit.
  ➤ Yes
 
  Type the service name (press enter to continue):
- ➤ entity_type.manager
+ ➤ database
 
  Would you like to create a route for this controller? [Yes]:
  ➤ Yes
@@ -150,28 +150,37 @@ declare(strict_types=1);
 namespace Drupal\\incident_tracker\\Controller;
 
 use Drupal\\Core\\Controller\\ControllerBase;
-use Drupal\\Core\\Entity\\EntityTypeManagerInterface;
+use Drupal\\Core\\Database\\Connection;
 use Symfony\\Component\\DependencyInjection\\ContainerInterface;
 
+/**
+ * Returns responses for Incident Tracker routes.
+ */
 final class ReportController extends ControllerBase {
 
   public function __construct(
-    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly Connection $connection,
   ) {}
 
   public static function create(ContainerInterface $container): self {
     return new self(
-      $container->get('entity_type.manager'),
+      $container->get('database'),
     );
   }
 
-  public function build(): array {
-    return ['#markup' => $this->t('It works!')];
+  public function __invoke(): array {
+
+    $build['content'] = [
+      '#type' => 'item',
+      '#markup' => $this->t('It works!'),
+    ];
+
+    return $build;
   }
 
 }`,
       note:
-        "The generated create() method is the canonical Drupal DI idiom (next part of the course). You could type it from memory — or let the generator produce it correctly, with strict_types and readonly promotion, every time.",
+        "The generated create() method is the canonical Drupal DI idiom (next part of the course). Two details worth copying exactly: the response method is __invoke(), because the route DCG wrote alongside it says `_controller: '\\Drupal\\incident_tracker\\Controller\\ReportController'` with no ::method suffix — Drupal only resolves that against __invoke(). And watch which service you inject: ControllerBase already declares protected $entityTypeManager, $configFactory, $currentUser, $moduleHandler, $formBuilder (plus $messenger via MessengerTrait), so promoting a readonly property with one of those names is a fatal 'Cannot redeclare non-readonly property … as readonly'. Inject `database` (as $connection here) and the collision disappears.",
     },
     {
       label: "Attribute plugins straight from the generator",
@@ -276,8 +285,14 @@ use Drupal\\Core\\Controller\\ControllerBase;
 
 final class {class} extends ControllerBase {
 
-  public function build(): array {
-    return ['#markup' => $this->t('It works!')];
+  public function __invoke(): array {
+
+    $build['content'] = [
+      '#type' => 'item',
+      '#markup' => $this->t('It works!'),
+    ];
+
+    return $build;
   }
 
 }
@@ -301,8 +316,14 @@ use Drupal\\Core\\Controller\\ControllerBase;
 
 final class ReportController extends ControllerBase {
 
-  public function build(): array {
-    return ['#markup' => $this->t('It works!')];
+  public function __invoke(): array {
+
+    $build['content'] = [
+      '#type' => 'item',
+      '#markup' => $this->t('It works!'),
+    ];
+
+    return $build;
   }
 
 }
@@ -361,7 +382,7 @@ final class ReportController extends ControllerBase {
     },
     {
       question:
-        "On a Drupal 11 site, `drush generate plugin:block` produces a class annotated how?",
+        "On a Drupal 11 site running Drush 13 (DCG 4), `drush generate plugin:block` produces a class annotated how?",
       options: [
         "With an @Block annotation in the docblock",
         "With a #[Block] PHP attribute",
@@ -370,7 +391,7 @@ final class ReportController extends ControllerBase {
       ],
       answerIndex: 1,
       explain:
-        "Attribute-based plugin discovery arrived in core 10.2, but the generated code follows the DCG version: Drupal 11 sites run Drush 13 with DCG 4, whose block template emits a `#[Block]` attribute. On Drupal 10 — even 10.2+ — composer can only install DCG 3, which still emits the legacy `@Block` annotation.",
+        "Attribute-based plugin discovery arrived in core 10.2, but the generated code follows the DCG version: Drush 13 pulls DCG 4, whose block template emits a `#[Block]` attribute; a Drupal 11 site still pinned to Drush 12 gets DCG 3 and the legacy `@Block` annotation — the output tracks the generator, not core. On Drupal 10 — even 10.2+ — composer can only resolve DCG 3 (DCG 4 needs symfony/console ^7.1, while D10 pins ^6.4), so you always get the annotation there.",
     },
     {
       question:

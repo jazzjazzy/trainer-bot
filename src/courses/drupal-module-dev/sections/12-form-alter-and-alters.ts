@@ -62,7 +62,13 @@ order you don't control by default. Three rules keep it sane:
    testable, \`.module\` functions are not.
 2. **Mind the order.** Implementations run by module weight, then alphabetically. If
    another module undoes your change, implement \`hook_module_implements_alter()\` to
-   move yourself last.
+   move yourself last — always \`isset()\`-guard your key first, because
+   \`$implementations\` holds only modules that implement the concrete \`$hook\` being
+   built, and re-adding a key for a function you don't have throws a
+   \`RuntimeException\`. That hook is **removed in Drupal 12**: on 11.2+ prefer
+   \`order:\` on \`#[Hook]\`, and if you must keep the procedural function for pre-11.2
+   support, mark it \`#[\\Drupal\\Core\\Hook\\Attribute\\LegacyModuleImplementsAlter]\` so
+   it is skipped once attribute ordering is available.
 3. **Know the modern form.** Drupal 11.1+ lets you write hooks as methods on classes
    in \`src/Hook\` marked \`#[Hook('form_alter')]\` (auto-registered, autowired
    services); 11.2 adds \`order: Order::Last\` on the attribute so ordering is
@@ -212,8 +218,13 @@ class LateResponseListener
  * Implements hook_module_implements_alter().
  */
 function incident_tracker_module_implements_alter(array &$implementations, string $hook): void {
-  if ($hook === 'form_alter') {
-    // Move our form_alter to the END so nobody undoes our changes.
+  // $hook is the CONCRETE hook name: core builds one list per hook name
+  // ('form_alter', 'form_node_form_alter', 'form_node_incident_form_alter'),
+  // and $implementations only ever contains modules that really implement it.
+  // The pass that orders the whole form_alter family is the 'form_alter' one —
+  // but we implement only the FORM_ID variant, so ALWAYS isset() first.
+  if ($hook === 'form_alter' && isset($implementations['incident_tracker'])) {
+    // Move us to the END so nobody undoes our changes.
     $group = $implementations['incident_tracker'];
     unset($implementations['incident_tracker']);
     $implementations['incident_tracker'] = $group;
@@ -225,7 +236,7 @@ function incident_tracker_module_implements_alter(array &$implementations, strin
 // use Drupal\\Core\\Hook\\Order\\Order;
 // #[Hook('form_alter', order: Order::Last)]
 // public function formAlter(array &$form, FormStateInterface $form_state, string $form_id): void {}`,
-      note: "Default hook order is module weight, then alphabetical. hook_module_implements_alter is the classic fix; D11.2's Order::First/Order::Last (and before/after variants) make it declarative.",
+      note: "Default hook order is module weight, then alphabetical. Never touch $implementations['your_module'] unguarded: core builds the list per concrete hook name and only includes modules that implement it, so re-adding a key for a function you don't have makes buildImplementationInfo() throw \"An invalid implementation incident_tracker_form_alter was added by hook_module_implements_alter()\" on every form build. Also note hook_module_implements_alter() is removed in Drupal 12 — on 11.2+ prefer order: on #[Hook], and if you must keep the procedural function for pre-11.2 support, mark it #[\\Drupal\\Core\\Hook\\Attribute\\LegacyModuleImplementsAlter] so it is skipped once attribute ordering is available.",
     },
   ],
 
@@ -324,7 +335,7 @@ Array
     },
     {
       q: "Another contrib module's form_alter runs after yours and reverts your change. How do you win?",
-      a: "Hook order is module weight (from the \`system\` module list) then alphabetical, so the fix is to make your implementation run last. The classic tool is \`hook_module_implements_alter(&$implementations, $hook)\`: for \`$hook === 'form_alter'\`, unset your module's entry and re-add it, which moves it to the end of the invocation list. On Drupal 11.2+ with OOP hook classes you can instead declare it: \`#[Hook('form_alter', order: Order::Last)]\` (with before/after variants for targeting a specific module). Whichever you use, leave a comment — ordering fights are exactly the kind of invisible coupling that bites the next developer.",
+      a: "Hook order is module weight (from the \`system\` module list) then alphabetical, so the fix is to make your implementation run last. The classic tool is \`hook_module_implements_alter(&$implementations, $hook)\`: guard with \`if ($hook === 'form_alter' && isset($implementations['incident_tracker']))\`, then unset your module's entry and re-add it, which moves it to the end of the invocation list. The \`isset()\` matters — \`$hook\` is the concrete hook name and \`$implementations\` contains only modules that implement *that* hook, so if you only implement the FORM_ID variant the key may be absent; re-adding a key whose function doesn't exist makes core throw \`An invalid implementation incident_tracker_form_alter was added by hook_module_implements_alter()\` on every form build. That hook is also removed in Drupal 12, so on 11.2+ with OOP hook classes declare it instead: \`#[Hook('form_alter', order: Order::Last)]\` (with before/after variants for targeting a specific module), and mark any procedural fallback you keep for pre-11.2 sites \`#[\\Drupal\\Core\\Hook\\Attribute\\LegacyModuleImplementsAlter]\`. Whichever you use, leave a comment — ordering fights are exactly the kind of invisible coupling that bites the next developer.",
     },
     {
       q: "How would you make incident_tracker itself extensible by other modules, Drupal-style?",

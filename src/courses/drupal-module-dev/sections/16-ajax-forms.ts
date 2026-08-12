@@ -22,9 +22,12 @@ and applies the response. You write zero JavaScript.
 When the \`change\` event fires on our category select, core JS POSTs the
 **entire form** — every current value plus the form build id — back to the
 same route with \`_wrapper_format=drupal_ajax\`. Server-side, FormBuilder
-reruns the whole lifecycle: \`buildForm()\` executes *again*, this time with
-the user's input available via \`$form_state->getValue()\`; element processing
-and validation run; and only then does your \`#ajax\` callback run — **last**.
+reruns the whole lifecycle — and \`buildForm()\` actually runs **twice**: once
+before any values exist (that pass exists so the incoming input can be
+validated against the options the browser already had), then again inside
+\`rebuildForm()\`, where \`$form_state->getValue('category')\` is populated and
+the new \`#options\` are built. Only then does your \`#ajax\` callback run —
+**last** — and it receives that second, rebuilt form.
 Its job is to pick a piece out of the already-rebuilt form and return it. Core
 JS swaps that fragment into the DOM element whose HTML id matches the
 \`wrapper\` key. The right mental model is Symfony UX Live Components (state
@@ -49,8 +52,12 @@ Category → severity has three moving parts:
 
 The classic mistake is computing the new options in the callback. That renders
 once, but the form the user eventually *submits* is validated against what
-\`buildForm()\` produced — so \`buildForm()\` must be the single source of
-truth, and the callback just selects from it.
+\`buildForm()\` produced during the rebuild: Drupal writes that rebuilt
+structure to the form cache under a fresh \`form_build_id\` and ships an
+\`UpdateBuildIdCommand\` so the browser's hidden field adopts it, and the final
+POST is then served straight from that cache — your \`buildForm()\` is not even
+called. So \`buildForm()\` must be the single source of truth, and the callback
+just selects from it.
 
 ### AjaxResponse: multiple commands
 
@@ -419,7 +426,7 @@ AjaxResponse commands (the JSON core's JS executes in order)
     },
     {
       q: "How do you build a dependent dropdown — say category driving severity options — and why must the option logic live in buildForm() rather than the AJAX callback?",
-      a: "Put \`#ajax\` (callback, wrapper, event) on the category select; give the severity element \`'#prefix' => '<div id=\\\"severity-wrapper\\\">'\` and a matching \`#suffix\` so the wrapper id survives replacement; and compute severity's \`#options\` from \`$form_state->getValue('category')\` inside \`buildForm()\`. The callback is then one line: \`return $form['severity'];\`. The logic must live in \`buildForm()\` because that's what re-runs on every AJAX request *and* on the final submit — Drupal validates the submitted value against the options \`buildForm()\` declared. If the callback invented options that \`buildForm()\` doesn't know about, the AJAX render and the eventual validation would disagree, giving 'illegal choice' errors.",
+      a: "Put \`#ajax\` (callback, wrapper, event) on the category select; give the severity element \`'#prefix' => '<div id=\\\"severity-wrapper\\\">'\` and a matching \`#suffix\` so the wrapper id survives replacement; and compute severity's \`#options\` from \`$form_state->getValue('category')\` inside \`buildForm()\`. The callback is then one line: \`return $form['severity'];\`. The logic must live in \`buildForm()\` because that's what re-runs on the AJAX rebuild, and Drupal caches that rebuilt structure — a new \`form_build_id\` is pushed into the DOM by \`UpdateBuildIdCommand\` — so the final POST is validated against exactly the options the rebuild declared. (On that final POST \`FormBuilder::buildForm()\` finds the cached form by its build id and never calls your \`buildForm()\` at all.) If the callback invented options that \`buildForm()\` doesn't know about, the AJAX render and the eventual validation would disagree, giving 'illegal choice' errors.",
     },
     {
       q: "When would you return an AjaxResponse instead of a render array from an #ajax callback, and what commands would you use?",
@@ -466,7 +473,7 @@ AjaxResponse commands (the JSON core's JS executes in order)
       ],
       answerIndex: 1,
       explain:
-        "buildForm() re-runs on every AJAX request AND on the final submission, and Drupal validates the submitted severity against the options buildForm() declared. Logic placed only in the callback would render once but desynchronize render from validation ('illegal choice' errors). The callback stays dumb: return $form['severity'];",
+        "buildForm() re-runs on every AJAX request and the rebuilt form is cached, so the final submission is validated against those same options. Logic placed only in the callback would render once but desynchronize render from validation ('illegal choice' errors). The callback stays dumb: return $form['severity'];",
     },
     {
       question: "Your callback should swap the severity select AND show a status message AND add a CSS class to the form. What do you return?",

@@ -57,8 +57,13 @@ expressed in YAML.
 ### CSRF: forms are covered, links are not
 
 Drupal's Form API embeds a per-session \`form_token\` in every form for
-authenticated users, so the confirm form's POST is already CSRF-safe — never
-add \`_csrf_token\` to a \`_form\` route. The requirement exists for
+authenticated users, so the confirm form's POST is already CSRF-safe. Adding
+\`_csrf_token\` to a \`_form\` route is therefore redundant — and actively
+harmful: \`CsrfAccessCheck\` runs on the *GET* request and validates
+\`?token=\` against the route path, so the confirm page 403s unless the URL was
+generated through \`Url\`/\`Link\`. A bookmark, a typed path, a redirect, or a
+link someone hand-wrote never carries the token, and the user is denied before
+the form renders. The requirement exists for
 *state-changing GET links*, like a one-click "Resolve" operation: put
 \`_csrf_token: 'TRUE'\` under \`requirements:\`, and any URL built through
 \`Url\`/\`Link\` gets \`?token=…\` appended automatically (injected late as a
@@ -189,13 +194,18 @@ incident_tracker.incident_delete:
 # Upcasting: {node}/{user} auto-upcast only when the name matches
 # the entity type id AND the parameter type-hints the entity class
 # (NodeInterface $node) — untyped params get the raw ID.
-# Any other placeholder needs the converter declared:
+# Any other placeholder needs the converter declared, and the
+# key under options.parameters MUST be a path placeholder name
+# or the block is inert. Generic shape, for a route whose path
+# is '/incidents/{incident}/delete' backed by nodes:
 #   options:
 #     parameters:
 #       incident:
 #         type: 'entity:node'
-# Then buildForm() receives the loaded entity, and a failed
-# load is a 404 before your code runs.`,
+# Then buildForm() receives the loaded node, and a failed load
+# is a 404 before your code runs. incident_tracker's own route
+# above keeps the raw {incident_id} — there is no entity to
+# upcast to yet.`,
       note: "Same argument-resolver idea in both stacks. Drupal's options.parameters.<name>.type is the YAML spelling of Symfony's #[MapEntity]; because incident_tracker stores rows in a custom table (not entities yet), we pass the raw id and load it ourselves.",
     },
     {
@@ -245,7 +255,7 @@ $build['operations'][] = Link::createFromRoute(
 
 // Validation is automatic too: a wrong or missing token gets a
 // 403 from the access system — your controller never runs.`,
-      note: "Only for links/GET routes that mutate state. Never put _csrf_token on a _form route: Form API already embeds its own form_token in every form for authenticated users, and doubling up breaks the route.",
+      note: "Only for links/GET routes that mutate state. Don't put _csrf_token on a _form route: Form API already embeds its own form_token in every form, so it adds nothing — and it makes CsrfAccessCheck demand ?token= on the GET, so any path to the form that wasn't generated through Url/Link gets a 403 instead of the form.",
     },
     {
       label: "Round-tripping the return path",
@@ -413,7 +423,7 @@ incidents left: []
     "Route placeholders like {incident_id} arrive as extra buildForm() arguments after $form and $form_state, resolved BY NAME — a mismatched parameter name silently yields the NULL default.",
     "Upcasting turns slugs into loaded objects: automatic when the placeholder name matches an entity type id ({node}, {user}) AND the buildForm()/controller parameter type-hints the entity class or interface (NodeInterface $node) — an untyped parameter gets the raw ID; otherwise declared via options.parameters.<name>.type (e.g. 'entity:node'), with a built-in 404 on failed load.",
     "Forms are already CSRF-safe (Form API's per-session form_token); requirements._csrf_token: 'TRUE' is for state-changing GET links, where Url/Link generation appends ?token=... automatically and the access system answers 403 on mismatch.",
-    "Never combine _csrf_token with a _form route — the form token already covers the POST, and doubling up breaks the route.",
+    "Don't combine _csrf_token with a _form route: the form token already covers the POST, so it is redundant, and CsrfAccessCheck then requires ?token= on the GET request — any URL not generated through Url/Link (bookmark, typed path, redirect) 403s before the form renders.",
     "?destination round-trips the return path: add it with $this->getDestinationArray() on the link; the confirm form's cancel link prefers it, and after submit it overrides $form_state->setRedirect(), with core rejecting non-local values.",
   ],
 
@@ -432,7 +442,7 @@ incidents left: []
     },
     {
       q: "When do you need _csrf_token on a Drupal route, and why doesn't the confirm form need it?",
-      a: "\`_csrf_token: 'TRUE'\` protects state-changing *links* — GET routes like a one-click 'Resolve' operation that mutate data. Declare it under \`requirements:\` and any URL generated through \`Url\`/\`Link\` gets a per-session \`?token=\` appended automatically (as a late placeholder, so render caching survives), and the access system returns 403 on a bad token before the controller runs — versus Symfony where I mint \`csrf_token()\` in Twig and call \`isCsrfTokenValid()\` myself. Forms never need it: Form API already embeds its own \`form_token\` in every form for authenticated users, and adding \`_csrf_token\` to a \`_form\` route actually breaks it. The rule of thumb: mutations belong in POSTs (forms), and the rare mutating GET link gets the route requirement.",
+      a: "\`_csrf_token: 'TRUE'\` protects state-changing *links* — GET routes like a one-click 'Resolve' operation that mutate data. Declare it under \`requirements:\` and any URL generated through \`Url\`/\`Link\` gets a per-session \`?token=\` appended automatically (as a late placeholder, so render caching survives), and the access system returns 403 on a bad token before the controller runs — versus Symfony where I mint \`csrf_token()\` in Twig and call \`isCsrfTokenValid()\` myself. Forms never need it: Form API already embeds its own \`form_token\` in every form for authenticated users, so on a \`_form\` route \`_csrf_token\` is redundant — and it backfires, because \`CsrfAccessCheck\` then requires \`?token=\` on the GET request, so anyone reaching the form by a bookmark, a typed path, or a redirect gets a 403 instead of the confirm page; only links generated through \`Url\`/\`Link\` still work. The rule of thumb: mutations belong in POSTs (forms), and the rare mutating GET link gets the route requirement.",
     },
   ],
 
@@ -465,13 +475,13 @@ incidents left: []
       question: "Why should you NOT add _csrf_token: 'TRUE' to the delete confirmation form's route?",
       options: [
         "Because the route already has _permission, and requirements are mutually exclusive",
-        "Because Form API already embeds its own form token in the POST; _csrf_token is for state-changing GET links and breaks _form routes",
+        "Because Form API already embeds its own form token in the POST; _csrf_token is for state-changing GET links and is redundant (and 403-prone) on _form routes",
         "Because CSRF tokens disable render caching site-wide",
         "You should — every mutating route needs _csrf_token",
       ],
       answerIndex: 1,
       explain:
-        "Forms are CSRF-protected out of the box via the per-session form_token that FormBuilder embeds and validates. _csrf_token exists for the other case: GET links that mutate state (like a one-click resolve operation), where Url/Link generation appends ?token=... automatically and the access system rejects mismatches with 403. Combining it with a _form route double-applies token handling and breaks the form.",
+        "Forms are CSRF-protected out of the box via the per-session form_token that FormBuilder embeds and validates, so _csrf_token adds nothing to the POST. It exists for the other case: GET links that mutate state (like a one-click resolve operation), where Url/Link generation appends ?token=... automatically and the access system rejects mismatches with 403. Put it on a _form route and that same CsrfAccessCheck now guards the GET that renders the form: reach the page by a bookmark, a typed path, or a redirect — anything not generated through Url/Link — and you get a 403 instead of the confirm page.",
     },
     {
       question: "A delete link carries ?destination=/dashboard. In submitForm() you call $form_state->setRedirect('incident_tracker.list'). Where does the user land after confirming?",

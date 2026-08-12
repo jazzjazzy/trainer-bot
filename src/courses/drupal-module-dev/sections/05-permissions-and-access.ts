@@ -161,7 +161,7 @@ final class IncidentController
 incident_tracker.list:
   path: '/incidents'
   defaults:
-    _controller: '\\Drupal\\incident_tracker\\Controller\\IncidentController::list'
+    _controller: '\\Drupal\\incident_tracker\\Controller\\IncidentListController::build'
     _title: 'Incidents'
   requirements:
     _permission: 'view incident reports'
@@ -202,8 +202,8 @@ public function list(): Response
     ]);
 }`,
       ts: `<?php
-// Drupal — in IncidentController extends ControllerBase
-public function list(): array {
+// Drupal — in IncidentListController extends ControllerBase
+public function build(): array {
   $build['table'] = $this->buildIncidentTable();
 
   // Only admins see the purge link.

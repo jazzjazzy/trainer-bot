@@ -24,7 +24,7 @@ all.
 severity-dashboard:
   version: 1.0.0
   css:
-    theme:                       # SMACSS category = output ordering
+    component:                   # SMACSS category = output ordering
       css/dashboard.css: {}
   js:
     js/dashboard.js: {}
@@ -37,7 +37,10 @@ severity-dashboard:
 Two details trip people up:
 
 - CSS nests under a **SMACSS category** (\`base\`, \`layout\`, \`component\`,
-  \`state\`, \`theme\`) — module styling usually goes in \`theme\`. Per-file
+  \`state\`, \`theme\`), and the category decides load order. A module's own
+  widget styles normally go in \`component\`; \`theme\` is for skinnable,
+  overridable presentation — colours, decoration, print — which is exactly
+  why \`theme\` is emitted last, so a theme's rules win. Per-file
   options ride in the braces: \`{ media: print }\`, \`{ minified: true }\`,
   \`{ preprocess: false }\` to keep a file out of aggregation,
   \`{ attributes: { defer: true } }\`, or \`header: true\` on the whole library
@@ -116,8 +119,9 @@ return [
 severity-dashboard:
   version: 1.0.0
   css:
-    theme:                    # SMACSS category controls ordering
+    component:                # your own widget styles
       css/dashboard.css: {}
+    theme:                    # skinnable/overridable — loads last
       css/dashboard-print.css: { media: print }
   js:
     js/dashboard.js: {}

@@ -350,10 +350,18 @@ $sniffs = [
         'test' => fn(string $l, int $exp): bool => str_starts_with($l, 'function '),
         'fix' => NULL,
     ],
+    // SIMPLIFIED ON PURPOSE. The real DrupalPractice sniff is scope-aware: it
+    // returns early unless the \\Drupal:: call sits inside a class that could
+    // inject the service instead (a class declared in *.services.yml, one
+    // implementing ContainerInjectionInterface, or a ControllerBase/FormBase
+    // style subclass). On the procedural .module function below, real phpcs
+    // reports 0 warnings. We run it line-wise anyway so the report shows what
+    // a non-fixable WARNING looks like beside the ERRORs -- and because the
+    // \\Drupal:: call really is the architectural smell the sniff is about.
     [
         'code' => 'DrupalPractice.Objects.GlobalDrupal',
         'type' => 'WARNING',
-        'text' => fn(string $l, int $exp): string => '\\Drupal calls should be avoided, use dependency injection instead',
+        'text' => fn(string $l, int $exp): string => '\\Drupal calls should be avoided in classes, use dependency injection instead',
         'test' => fn(string $l, int $exp): bool => str_contains($l, '\\Drupal::'),
         'fix' => NULL,
     ],
@@ -442,7 +450,7 @@ FOUND 12 ERRORS AND 1 WARNING AFFECTING 8 LINES
   4 | ERROR   | [x] Line indented incorrectly; expected 2 spaces, found 4
   4 | ERROR   | [x] Short array syntax must be used to define arrays
   5 | ERROR   | [x] Line indented incorrectly; expected 2 spaces, found 4
-  5 | WARNING | [ ] \\Drupal calls should be avoided, use dependency injection instead
+  5 | WARNING | [ ] \\Drupal calls should be avoided in classes, use dependency injection instead
   6 | ERROR   | [x] Line indented incorrectly; expected 2 spaces, found 4
   6 | ERROR   | [x] TRUE, FALSE and NULL must be uppercase; found "null"
   7 | ERROR   | [x] Line indented incorrectly; expected 4 spaces, found 8
@@ -486,7 +494,7 @@ Left over: documentation and architecture -- neither is auto-fixable.`,
   interview: [
     {
       q: "How do you enforce the Drupal coding standard on a custom module, and what can the auto-fixer not do for you?",
-      a: "Add `drupal/coder` as a dev dependency — it brings `squizlabs/php_codesniffer` and registers two standards, `Drupal` and `DrupalPractice`, via the phpcodesniffer-composer-installer plugin (which must be allow-listed in `composer.json`, a very common setup gotcha). Then run `vendor/bin/phpcs --standard=Drupal,DrupalPractice web/modules/custom/incident_tracker`, with a committed `phpcs.xml.dist` so CI and everyone's IDE use the same config and the same `--extensions` list — otherwise `.module` and `.install` files are silently skipped. `phpcbf` fixes the mechanical violations: indentation, `array()` to `[]`, lowercase `true`/`null`, `else` placement, trailing whitespace. What it cannot do is write the missing docblocks, fix a comment that does not end in a full stop with a meaningful sentence, or act on DrupalPractice warnings like \"\\Drupal calls should be avoided, use dependency injection instead\" — those are design decisions, which is exactly why they are worth reviewing by hand.",
+      a: "Add `drupal/coder` as a dev dependency — it brings `squizlabs/php_codesniffer` and registers two standards, `Drupal` and `DrupalPractice`, via the phpcodesniffer-composer-installer plugin (which must be allow-listed in `composer.json`, a very common setup gotcha). Then run `vendor/bin/phpcs --standard=Drupal,DrupalPractice web/modules/custom/incident_tracker`, with a committed `phpcs.xml.dist` so CI and everyone's IDE use the same config and the same `--extensions` list — otherwise `.module` and `.install` files are silently skipped. `phpcbf` fixes the mechanical violations: indentation, `array()` to `[]`, lowercase `true`/`null`, `else` placement, trailing whitespace. What it cannot do is write the missing docblocks, fix a comment that does not end in a full stop with a meaningful sentence, or act on DrupalPractice warnings like \"\\Drupal calls should be avoided in classes, use dependency injection instead\" — those are design decisions, which is exactly why they are worth reviewing by hand.",
     },
     {
       q: "What does phpstan-drupal add over plain PHPStan, and how would you introduce it to a legacy module with hundreds of errors?",

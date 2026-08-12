@@ -12,20 +12,30 @@ const lesson: Lesson = {
   concept: `
 ## Doctrine DBAL with a different badge
 
-Section 19 gave incident_tracker a real table — \`incident_log\`, defined in
-\`hook_schema()\`. Entities have entityQuery; bare tables have the **Database
-API**, and if you've used Doctrine DBAL's QueryBuilder the mental model
-transfers almost one-to-one: a connection service, fluent builders that compile
-to parameterized SQL, and an escape hatch for raw queries. Inject the
-\`database\` service (\`\\Drupal\\Core\\Database\\Connection\`) the usual way —
+Section 19 gave incident_tracker a real table — \`incident_log\`
+(\`id\`, \`severity\` as the strings *notice* / *warning* / *critical*,
+\`message\`, \`details\`, \`created\`), defined in \`hook_schema()\`; section 20's
+update hooks added an \`assignee\` column and a second module-owned table,
+\`incident_tracker_audit\`. Every query below uses exactly those columns.
+Entities have entityQuery; bare tables have the **Database API**, and if you've
+used Doctrine DBAL's QueryBuilder the mental model transfers almost one-to-one:
+a connection service, fluent builders that compile to parameterized SQL, and an
+escape hatch for raw queries. Inject the \`database\` service
+(\`\\Drupal\\Core\\Database\\Connection\`) the usual way —
 \`arguments: ['@database']\` in services.yml, or \`$container->get('database')\`
-in \`create()\`. The API is identical in Drupal 10 and 11.
+in \`create()\`. The **query builders** — select, insert, update, delete, merge —
+are unchanged between Drupal 10 and 11; the differences sit at the edges: the
+\`return\` option on \`query()\` (removed in 11) and the transaction layer
+(rebuilt around \`TransactionManagerInterface\` in 10.2, which changed nesting
+and rollback semantics).
 
 ## The fluent builders
 
 \`select('incident_log', 'il')\` starts a dynamic query. Chain
-\`fields('il', [...])\`, \`condition('severity', 3, '>=')\` — field, value,
-operator, with the placeholder invented for you — \`orderBy('created', 'DESC')\`,
+\`fields('il', [...])\`, \`condition('severity', ['warning', 'critical'], 'IN')\`
+— field, value, operator, with the placeholders invented for you (a scalar with
+\`'>='\`, e.g. \`condition('created', $since, '>=')\`, works the same way) —
+\`orderBy('created', 'DESC')\`,
 \`range(0, 50)\` (LIMIT/OFFSET), then \`execute()\`. That returns a statement
 whose fetchers go beyond PDO: \`fetchAll()\` (stdClass objects by default),
 \`fetchAllAssoc('id')\`, \`fetchAllKeyed()\`, \`fetchCol()\`, \`fetchField()\`.
@@ -44,7 +54,7 @@ Two DBAL habits need adjusting:
 ## Raw SQL, safely
 
 \`query()\` takes real SQL with two Drupal twists. **Placeholders are
-mandatory** — \`:sev\` for scalars, and \`:statuses[]\` expands an array into a
+mandatory** — \`:since\` for scalars, and \`:severities[]\` expands an array into a
 safe IN list. And table names go in braces — \`{incident_log}\` — so the
 per-site **table prefix** is applied; the dynamic builders do that silently,
 raw SQL needs the marker. String-concatenating a value into SQL is never
@@ -59,7 +69,8 @@ Placeholders, always.
   many tables.
 - **Your own \`hook_schema()\` tables plus reporting**: Database API.
   \`incident_log\` has no entity wrapper, and cross-table reporting joins —
-  incidents per reporter, counts per severity — are exactly what SQL is for.
+  incidents per assignee, counts per severity, log rows against their audit
+  trail — are exactly what SQL is for.
 - **Never** hand-query entity field tables like \`node__field_severity\`:
   their layout is private schema that changes without notice.
 
@@ -72,25 +83,30 @@ want an affected-row count, use the update/delete builders' return values.
     {
       label: "SELECT: DBAL QueryBuilder vs Drupal select()",
       intro:
-        "The incident list page needs the 50 most recent severe incidents. Same fluent shape on both sides — Drupal's condition() just writes the placeholder for you.",
+        "The incident list page needs the 50 most recent severe incidents. severity is a varchar_ascii holding 'notice' | 'warning' | 'critical', so 'severe' is a set membership test, not a numeric comparison. Same fluent shape on both sides — Drupal's condition() just writes the placeholders for you.",
       php: `<?php
 // Symfony: a repository over Doctrine DBAL's QueryBuilder.
 namespace App\\Repository;
 
+use Doctrine\\DBAL\\ArrayParameterType;
 use Doctrine\\DBAL\\Connection;
 
 class IncidentRepository
 {
     public function __construct(private readonly Connection $db) {}
 
-    /** @return array<int, array<string, mixed>> */
-    public function recentSevere(int $minSeverity = 3): array
+    /**
+     * @param string[] $severities
+     * @return array<int, array<string, mixed>>
+     */
+    public function recentSevere(array $severities = ['warning', 'critical']): array
     {
         return $this->db->createQueryBuilder()
-            ->select('il.id', 'il.title', 'il.severity', 'il.created')
+            ->select('il.id', 'il.message', 'il.severity', 'il.created')
             ->from('incident_log', 'il')
-            ->where('il.severity >= :sev')
-            ->setParameter('sev', $minSeverity)
+            ->where('il.severity IN (:severities)')
+            // An array parameter needs an explicit type in DBAL.
+            ->setParameter('severities', $severities, ArrayParameterType::STRING)
             ->orderBy('il.created', 'DESC')
             ->setMaxResults(50)
             ->executeQuery()
@@ -110,11 +126,14 @@ class IncidentRepository {
     private readonly Connection $database,
   ) {}
 
-  /** @return object[] rows as stdClass objects (default fetch) */
-  public function recentSevere(int $minSeverity = 3): array {
+  /**
+   * @param string[] $severities
+   * @return object[] rows as stdClass objects (default fetch)
+   */
+  public function recentSevere(array $severities = ['warning', 'critical']): array {
     return $this->database->select('incident_log', 'il')
-      ->fields('il', ['id', 'title', 'severity', 'created'])
-      ->condition('severity', $minSeverity, '>=')
+      ->fields('il', ['id', 'message', 'severity', 'created'])
+      ->condition('severity', $severities, 'IN')
       ->orderBy('created', 'DESC')
       ->range(0, 50)
       ->execute()
@@ -123,29 +142,29 @@ class IncidentRepository {
 
 }`,
       note:
-        "fields() takes the alias plus a column array instead of select() strings, and condition(field, value, operator) generates the placeholder — you never type :sev. The statement's fetchers cover more shapes than PDO: fetchAllAssoc('id'), fetchAllKeyed(), fetchCol(), fetchField().",
+        "fields() takes the alias plus a column array instead of select() strings, and condition(field, value, operator) generates the placeholders — you never type :severities, and passing an array with 'IN' needs no parameter-type hint the way DBAL does. The statement's fetchers cover more shapes than PDO: fetchAllAssoc('id'), fetchAllKeyed(), fetchCol(), fetchField().",
     },
     {
       label: "Writes: insert, update, delete — and merge(), the built-in upsert",
       intro:
-        "Logging and resolving incidents. DBAL's write helpers take arrays; Drupal's are fluent builders whose execute() return value differs per query type — and merge() is the portable upsert DBAL makes you hand-roll.",
+        "Logging an incident, assigning it, purging old rows. DBAL's write helpers take arrays; Drupal's are fluent builders whose execute() return value differs per query type — and merge() is the portable upsert DBAL makes you hand-roll.",
       php: `<?php
 // Symfony/DBAL: array-based helpers for single-table writes.
 $this->db->insert('incident_log', [
-    'title'    => 'Checkout 500s',
-    'severity' => 4,
-    'status'   => 'open',
+    'severity' => 'critical',
+    'message'  => 'Checkout 500s',
+    'details'  => 'Stripe webhook timeouts since 09:12 UTC.',
     'created'  => time(),
 ]);
 $id = (int) $this->db->lastInsertId();
 
 $affected = $this->db->update(
     'incident_log',
-    ['status' => 'resolved'],   // SET
-    ['id' => $id],              // WHERE
+    ['assignee' => 'duty-officer'],   // SET
+    ['id' => $id],                    // WHERE
 );
 
-$this->db->delete('incident_log', ['status' => 'archived']);
+$this->db->delete('incident_log', ['severity' => 'notice']);
 
 // Upsert: no portable DBAL helper — you write dialect SQL
 // (MySQL ON DUPLICATE KEY, Postgres ON CONFLICT) or
@@ -154,26 +173,26 @@ $this->db->delete('incident_log', ['status' => 'archived']);
 // Drupal: fluent builders on the injected Connection.
 $id = $this->database->insert('incident_log')
   ->fields([
-    'title'    => 'Checkout 500s',
-    'severity' => 4,
-    'status'   => 'open',
+    'severity' => 'critical',
+    'message'  => 'Checkout 500s',
+    'details'  => 'Stripe webhook timeouts since 09:12 UTC.',
     'created'  => $this->time->getRequestTime(),
   ])
   ->execute();                  // returns the new serial id
 
 $affected = $this->database->update('incident_log')
-  ->fields(['status' => 'resolved'])
+  ->fields(['assignee' => 'duty-officer'])
   ->condition('id', $id)
   ->execute();                  // returns matched-row count
 
 $this->database->delete('incident_log')
-  ->condition('status', 'archived')
+  ->condition('severity', 'notice')
   ->execute();
 
 // Upsert built in: update the row keyed on id, insert if absent.
 $result = $this->database->merge('incident_log')
   ->keys(['id' => $id])
-  ->fields(['status' => 'ack'])
+  ->fields(['assignee' => 'duty-officer'])
   ->execute();   // Merge::STATUS_INSERT or Merge::STATUS_UPDATE`,
       note:
         "Memorize the execute() returns: insert = new id, update/delete = row count, merge = which path ran. merge() works on any database Drupal supports; for many-row upserts there's also the upsert() builder with ->key() and repeated ->values().",
@@ -181,7 +200,7 @@ $result = $this->database->merge('incident_log')
     {
       label: "Raw SQL: placeholders and {table} prefix braces",
       intro:
-        "A severity breakdown for reporting. Both sides use bound parameters for values — Drupal adds braces around table names so the per-site table prefix can be applied, plus :name[] array expansion for IN lists.",
+        "A per-assignee breakdown of serious incidents. Both sides use bound parameters for values — Drupal adds braces around table names so the per-site table prefix can be applied, plus :name[] array expansion for IN lists.",
       php: `<?php
 // Symfony/DBAL: raw SQL, named parameters. Table names are
 // literal — prefixes are not a DBAL concept, and array params
@@ -189,28 +208,28 @@ $result = $this->database->merge('incident_log')
 use Doctrine\\DBAL\\ArrayParameterType;
 
 $totals = $this->db->executeQuery(
-    'SELECT il.severity, COUNT(*) AS total
+    'SELECT il.assignee, COUNT(*) AS total
      FROM incident_log il
-     WHERE il.created >= :since AND il.status IN (:statuses)
-     GROUP BY il.severity',
-    ['since' => $since, 'statuses' => ['open', 'ack']],
-    ['statuses' => ArrayParameterType::STRING],
+     WHERE il.created >= :since AND il.severity IN (:severities)
+     GROUP BY il.assignee',
+    ['since' => $since, 'severities' => ['warning', 'critical']],
+    ['severities' => ArrayParameterType::STRING],
 )->fetchAllKeyValue();`,
       ts: `<?php
 // Drupal: query() for raw SQL. {braces} mark table names so the
 // site's table prefix is applied; :name[] expands an array into
 // a safely-placeholdered IN list.
 $totals = $this->database->query(
-  'SELECT il.severity, COUNT(*) AS total
+  'SELECT il.assignee, COUNT(*) AS total
    FROM {incident_log} il
-   WHERE il.created >= :since AND il.status IN ( :statuses[] )
-   GROUP BY il.severity',
-  [':since' => $since, ':statuses[]' => ['open', 'ack']],
+   WHERE il.created >= :since AND il.severity IN ( :severities[] )
+   GROUP BY il.assignee',
+  [':since' => $since, ':severities[]' => ['warning', 'critical']],
 )->fetchAllKeyed();
 
 // NEVER this — unescaped, unprefixed, injectable:
 // $this->database->query(
-//   "SELECT * FROM incident_log WHERE status = '" . $status . "'"
+//   "SELECT * FROM incident_log WHERE severity = '" . $severity . "'"
 // );`,
       note:
         "The braces are why one database can host several Drupal sites (or share with another app) via a table prefix — dynamic builders prefix automatically, raw SQL needs the {marker}. On Drupal 11, query() always returns a statement; the old 'return' option is removed.",
@@ -224,14 +243,14 @@ $totals = $this->database->query(
 // never raw SQL against its tables.
 $incidents = $this->em->getRepository(Incident::class)
     ->createQueryBuilder('i')
-    ->where('i.severity >= :sev')
-    ->setParameter('sev', 3)
+    ->where('i.severity IN (:severities)')
+    ->setParameter('severities', ['warning', 'critical'])
     ->getQuery()
     ->getResult();
 
 // Bare reporting table => DBAL, straight SQL is fine:
-$byStatus = $this->db->executeQuery(
-    'SELECT status, COUNT(*) FROM incident_log GROUP BY status'
+$bySeverity = $this->db->executeQuery(
+    'SELECT severity, COUNT(*) FROM incident_log GROUP BY severity'
 )->fetchAllKeyValue();`,
       ts: `<?php
 // Drupal: entity data => entityQuery via entity storage. It
@@ -241,19 +260,20 @@ $nids = $this->entityTypeManager->getStorage('node')->getQuery()
   ->accessCheck(TRUE)
   ->execute();
 
-// Our hook_schema() table + a reporting join: who reported each
-// open incident? join() returns the assigned ALIAS (a string),
-// not the query — so no full chaining here.
+// Two tables THIS module owns (section 19's incident_log and the
+// incident_tracker_audit table added by section 20's update hook):
+// the latest audit note per severe incident. join() returns the
+// assigned ALIAS (a string), not the query — so no full chaining.
 $query = $this->database->select('incident_log', 'il');
-$query->join('users_field_data', 'u', 'u.uid = il.reported_by');
-$query->fields('il', ['id', 'title', 'severity']);
-$query->addField('u', 'name', 'reporter');
-$rows = $query->condition('il.status', 'open')
+$query->leftJoin('incident_tracker_audit', 'a', 'a.incident_id = il.id');
+$query->fields('il', ['id', 'message', 'severity', 'assignee']);
+$query->addField('a', 'note', 'last_note');
+$rows = $query->condition('il.severity', ['warning', 'critical'], 'IN')
   ->orderBy('il.created', 'DESC')
   ->execute()
   ->fetchAll();`,
       note:
-        "The bright line: if data belongs to an entity type, go through entity storage — field tables like node__field_severity are private schema. Custom hook_schema() tables and cross-table reporting joins are Database API territory.",
+        "The bright line: if data belongs to an entity type, go through entity storage — field tables like node__field_severity are private schema, reshaped by the Field API. Entity base/data tables (users_field_data, node_field_data) are a narrower case: stable enough that core and Views join them, so a reporting join is defensible, but they still carry no access checking — never use one to decide what a user is allowed to see. Custom hook_schema() tables and joins between them are unambiguously Database API territory.",
     },
   ],
 
@@ -377,38 +397,41 @@ class MiniMerge {
     }
 }
 
+// The real incident_log columns: id, severity (notice|warning|critical),
+// message, created — plus assignee, added by section 20's update hook.
 $db = new MiniConnection([
     'incident_log' => [
-        ['id' => 1, 'title' => 'DB replica lag',   'severity' => 2, 'status' => 'resolved', 'created' => 100],
-        ['id' => 2, 'title' => 'Checkout 500s',    'severity' => 4, 'status' => 'open',     'created' => 200],
-        ['id' => 3, 'title' => 'Slow search',      'severity' => 1, 'status' => 'open',     'created' => 300],
-        ['id' => 4, 'title' => 'Payment API down', 'severity' => 5, 'status' => 'open',     'created' => 400],
-        ['id' => 5, 'title' => 'Login flakiness',  'severity' => 3, 'status' => 'ack',      'created' => 500],
+        ['id' => 1, 'severity' => 'notice',   'message' => 'DB replica lag',   'assignee' => 'ops',  'created' => 100],
+        ['id' => 2, 'severity' => 'critical', 'message' => 'Checkout 500s',    'assignee' => '',     'created' => 200],
+        ['id' => 3, 'severity' => 'notice',   'message' => 'Slow search',      'assignee' => '',     'created' => 300],
+        ['id' => 4, 'severity' => 'critical', 'message' => 'Payment API down', 'assignee' => '',     'created' => 400],
+        ['id' => 5, 'severity' => 'warning',  'message' => 'Login flakiness',  'assignee' => 'ops',  'created' => 500],
     ],
 ], 'dr_');
 
-// 1. The fluent select: unresolved severe incidents, newest first.
+// 1. The fluent select: recent severe incidents, newest first. severity is
+// a string column, so 'severe' is an IN list — never a >= comparison.
 $rows = $db->select('incident_log', 'il')
-    ->fields('il', ['id', 'title', 'severity'])
-    ->condition('severity', 3, '>=')
-    ->condition('status', ['open', 'ack'], 'IN')
+    ->fields('il', ['id', 'message', 'severity'])
+    ->condition('severity', ['warning', 'critical'], 'IN')
+    ->condition('created', 150, '>=')
     ->orderBy('created', 'DESC')
     ->range(0, 2)
     ->execute();
 
-echo "severe + unresolved, newest first, range(0, 2):\\n";
+echo "severe + recent, newest first, range(0, 2):\\n";
 foreach ($rows as $row) {
-    echo "  #{$row->id} [sev {$row->severity}] {$row->title}\\n";
+    echo "  #{$row->id} [{$row->severity}] {$row->message}\\n";
 }
 
 // 2. merge() = upsert. keys() finds the row; fields() sets values.
 $first = $db->merge('incident_log')
     ->keys(['id' => 5])
-    ->fields(['status' => 'resolved'])
+    ->fields(['assignee' => 'duty-officer'])
     ->execute();
 $second = $db->merge('incident_log')
     ->keys(['id' => 6])
-    ->fields(['title' => 'CDN purge storm', 'severity' => 2, 'status' => 'open', 'created' => 600])
+    ->fields(['severity' => 'warning', 'message' => 'CDN purge storm', 'assignee' => '', 'created' => 600])
     ->execute();
 
 echo "\\nmerge keys id=5: " . ($first === STATUS_UPDATE ? 'STATUS_UPDATE' : 'STATUS_INSERT') . "\\n";
@@ -417,9 +440,9 @@ echo "row count now: " . count($db->tables['incident_log']) . "\\n";
 
 // 3. Raw SQL: {incident_log} braces let the site prefix be applied.
 echo "\\n" . $db->prefixTables('SELECT severity, COUNT(*) FROM {incident_log} GROUP BY severity');`,
-    output: `severe + unresolved, newest first, range(0, 2):
-  #5 [sev 3] Login flakiness
-  #4 [sev 5] Payment API down
+    output: `severe + recent, newest first, range(0, 2):
+  #5 [warning] Login flakiness
+  #4 [critical] Payment API down
 
 merge keys id=5: STATUS_UPDATE
 merge keys id=6: STATUS_INSERT
@@ -429,11 +452,11 @@ SELECT severity, COUNT(*) FROM dr_incident_log GROUP BY severity`,
   },
 
   keyPoints: [
-    "Inject the database service (\\Drupal\\Core\\Database\\Connection) — arguments: ['@database'] or $container->get('database') — and think 'Doctrine DBAL': fluent builders compiling to parameterized SQL, identical in Drupal 10 and 11.",
-    "The select() chain: fields(alias, [...]), condition(field, value, operator), orderBy(), range(offset, limit), execute() — then fetchAll() (stdClass objects by default), fetchAllAssoc('id'), fetchAllKeyed(), fetchCol(), fetchField().",
+    "Inject the database service (\\Drupal\\Core\\Database\\Connection) — arguments: ['@database'] or $container->get('database') — and think 'Doctrine DBAL': fluent builders compiling to parameterized SQL. The query builders are unchanged between Drupal 10 and 11; the churn is at the edges (query()'s removed 'return' option, and the transaction manager rewritten in 10.2).",
+    "The select() chain: fields(alias, [...]), condition(field, value, operator — pass an array with 'IN' for set membership, e.g. condition('severity', ['warning', 'critical'], 'IN')), orderBy(), range(offset, limit), execute() — then fetchAll() (stdClass objects by default), fetchAllAssoc('id'), fetchAllKeyed(), fetchCol(), fetchField().",
     "join(), addField() and addExpression() return the assigned alias string, NOT the query — multi-join queries are written statement by statement, unlike DBAL's always-fluent builder.",
     "execute() returns differ per builder: insert() = the new serial id, update()/delete() = matched-row count, merge() = Merge::STATUS_INSERT or STATUS_UPDATE — merge()->keys()->fields() is the portable upsert DBAL never shipped.",
-    "Raw query() demands placeholders (:sev, and :statuses[] to expand IN lists) and {incident_log} braces so the per-site table prefix applies; string-concatenating values into SQL is never acceptable.",
+    "Raw query() demands placeholders (:since, and :severities[] to expand IN lists) and {incident_log} braces so the per-site table prefix applies; string-concatenating values into SQL is never acceptable.",
     "Rule of thumb: entity data goes through entityQuery/entity storage (access checks, revisions, multi-table field storage); your own hook_schema() tables and reporting joins use the Database API — and entity field tables are private schema you never query by hand.",
   ],
 
@@ -448,7 +471,7 @@ SELECT severity, COUNT(*) FROM dr_incident_log GROUP BY severity`,
     },
     {
       q: "How do you keep raw SQL safe in a custom Drupal module?",
-      a: "First preference: don't write raw SQL — the dynamic builders escape identifiers, bind values, and apply the table prefix automatically. When `query()` is genuinely needed (complex reporting SQL), every value goes through a named placeholder like `:severity`, arrays go through `:statuses[]` expansion for IN clauses, and table names are wrapped as `{incident_log}` so prefixing still works. Concatenating any runtime value into the SQL string — even one you 'know' is an integer, even in a one-off update hook — is an automatic review failure, because it's both an injection vector and a prefix bypass. If an identifier (column to sort by, say) comes from user input, validate it against a hard-coded allowlist rather than escaping it.",
+      a: "First preference: don't write raw SQL — the dynamic builders escape identifiers, bind values, and apply the table prefix automatically. When `query()` is genuinely needed (complex reporting SQL), every value goes through a named placeholder like `:since`, arrays go through `:severities[]` expansion for IN clauses, and table names are wrapped as `{incident_log}` so prefixing still works. Concatenating any runtime value into the SQL string — even one you 'know' is an integer, even in a one-off update hook — is an automatic review failure, because it's both an injection vector and a prefix bypass. If an identifier (column to sort by, say) comes from user input, validate it against a hard-coded allowlist rather than escaping it.",
     },
   ],
 
@@ -481,12 +504,12 @@ SELECT severity, COUNT(*) FROM dr_incident_log GROUP BY severity`,
     },
     {
       question:
-        "This crashes: $this->database->select('incident_log', 'il')->join('users_field_data', 'u', 'u.uid = il.reported_by')->fields('il', ['id']). Why?",
+        "This crashes: $this->database->select('incident_log', 'il')->join('incident_tracker_audit', 'a', 'a.incident_id = il.id')->fields('il', ['id']). Why?",
       options: [
         "join() is not allowed on dynamic select queries — joins require raw query()",
         "join() returns the assigned table alias (a string), not the query object, so ->fields() is called on a string",
         "accessCheck(TRUE) must be called before any join since Drupal 10",
-        "The join condition must use {braces} around users_field_data",
+        "The join condition must use {braces} around incident_tracker_audit",
       ],
       answerIndex: 1,
       explain:
@@ -494,11 +517,11 @@ SELECT severity, COUNT(*) FROM dr_incident_log GROUP BY severity`,
     },
     {
       question:
-        "merge('incident_log')->keys(['id' => 42])->fields(['status' => 'ack'])->execute() runs, but no row with id 42 exists. What happens?",
+        "merge('incident_log')->keys(['id' => 42])->fields(['assignee' => 'duty-officer'])->execute() runs, but no row with id 42 exists. What happens?",
       options: [
         "It throws an exception because the row to update is missing",
         "Nothing — merge() only updates existing rows",
-        "A row with id 42 and status 'ack' is inserted, and execute() returns Merge::STATUS_INSERT",
+        "A row with id 42 and assignee 'duty-officer' is inserted, and execute() returns Merge::STATUS_INSERT",
         "A new revision of the row is created",
       ],
       answerIndex: 2,

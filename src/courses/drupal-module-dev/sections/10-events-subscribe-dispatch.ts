@@ -12,8 +12,10 @@ const lesson: Lesson = {
   concept: `
 ## The dispatcher you already own
 
-\`IncidentManager\` (previous section) can now record an incident — but other code
-needs to *react* when one lands: notify a channel, escalate criticals, reset a
+This section adds the service that owns the save — call it \`IncidentManager\`, a
+plain class in \`src/\` next to the severity calculator from the previous
+section. It records an incident, but other code needs to *react* when one lands:
+notify a channel, escalate criticals, reset a
 dashboard cache. Instead of hard-coding those calls into the manager, we dispatch
 an event. Drupal ships the same \`symfony/event-dispatcher\` your Symfony apps use,
 registered under the service id \`event_dispatcher\`. Listeners, priorities,
@@ -63,7 +65,7 @@ The same class can listen to core's own events alongside yours:
 public static function getSubscribedEvents(): array {
   return [
     ConfigEvents::SAVE => 'onConfigSave',
-    KernelEvents::REQUEST => ['onRequest', 30],
+    KernelEvents::REQUEST => ['onRequest', 300],
   ];
 }
 
@@ -75,9 +77,14 @@ public function onConfigSave(ConfigCrudEvent $event): void {
 }
 \`\`\`
 
-\`KernelEvents::REQUEST\` (\`RequestEvent\`) gives you early per-request logic —
-the classic use is checking state and setting a response before routing work
-happens. \`ConfigEvents::SAVE\` fires for *any* config save, including config
+\`KernelEvents::REQUEST\` (\`RequestEvent\`) gives you per-request logic, and on
+this event the priority number is the whole game: core's router listener matches
+the route at priority **32**. Anything above 32 runs *before* routing — that's
+where you sit to check state and short-circuit with \`$event->setResponse()\`
+(core's authentication subscriber uses 300, hence the number above). Anything
+below 32 runs after the route is matched and can read it, which is exactly why
+core's \`MaintenanceModeSubscriber\` picks 30.
+\`ConfigEvents::SAVE\` fires for *any* config save, including config
 import on deploy, so it catches changes your settings form never sees.
 
 ### D10 vs D11
@@ -192,12 +199,12 @@ final class IncidentManager
         }
     }
 }`,
-      ts: `// src/Service/IncidentManager.php
-// incident_tracker.services.yml gains the argument:
+      ts: `// src/IncidentManager.php
+// incident_tracker.services.yml gains the service:
 //   incident_tracker.manager:
-//     class: Drupal\\incident_tracker\\Service\\IncidentManager
+//     class: Drupal\\incident_tracker\\IncidentManager
 //     arguments: ['@event_dispatcher']
-namespace Drupal\\incident_tracker\\Service;
+namespace Drupal\\incident_tracker;
 
 use Drupal\\incident_tracker\\Event\\IncidentEvents;
 use Drupal\\incident_tracker\\Event\\IncidentReportedEvent;
@@ -391,7 +398,7 @@ escalated: true`,
     "Dispatch with the injected event_dispatcher service: $this->eventDispatcher->dispatch($event, IncidentEvents::NEW_REPORT) — event object first, name second; dispatch() returns the same event so callers can read results subscribers wrote onto it.",
     "Subscribers implement Symfony's EventSubscriberInterface with static getSubscribedEvents(); [method, priority] tuples order them, higher priority first — identical to Symfony.",
     "Registration is the Drupal difference: modules get no autoconfigure by default, so you hand-write the { name: event_subscriber } tag in *.services.yml — or opt in per file with _defaults: autoconfigure: true (Drupal 10.2+). #[AsEventListener] is silently ignored either way.",
-    "Core events worth knowing: KernelEvents::REQUEST (RequestEvent, early per-request logic) and ConfigEvents::SAVE (ConfigCrudEvent — check getConfig()->getName() and isChanged('key')), which also fires on config import.",
+    "Core events worth knowing: KernelEvents::REQUEST (RequestEvent — priority decides everything, since core's router listener matches the route at 32: above it you can short-circuit before routing, below it you get the matched route, like core's MaintenanceModeSubscriber at 30) and ConfigEvents::SAVE (ConfigCrudEvent — check getConfig()->getName() and isChanged('key')), which also fires on config import.",
     "Dispatching your own event is how incident_tracker becomes extensible: other modules react to NEW_REPORT with their own tagged subscribers, no hooks required.",
   ],
 

@@ -36,13 +36,21 @@ that fills subject and body. It never sends. Any module can set
 \`$message['send'] = FALSE\` in \`hook_mail_alter()\` to cancel delivery
 (\`result\` comes back NULL rather than FALSE).
 
-**Version reality check:** core's default plugin in both Drupal 10 and 11 is
-still \`php_mail\` — PHP's \`mail()\`, plain text, no retries. Real projects
-add contrib immediately: \`drupal/symfony_mailer\` (Symfony Mailer transports
-plus Twig-templated HTML email), or \`drupal/smtp\` and \`drupal/mailsystem\`
-if you only need a transport swap. On Drupal 11.1+ the hook can be a
-\`#[Hook('mail')]\` method on your hook class instead of a \`.module\`
-function.
+**Version reality check:** core ships three mail plugins. \`php_mail\` —
+PHP's \`mail()\`, plain text, no retries — is still the \`interface.default\`
+in both Drupal 10 and 11. \`test_mail_collector\` is the one tests swap in.
+And since **10.2** there is an experimental \`symfony_mailer\` plugin
+(\`Drupal\\Core\\Mail\\Plugin\\Mail\\SymfonyMailer\`) wrapping the
+symfony/mailer component, dialling whatever \`system.mail\`'s new
+\`mailer_dsn\` key (\`scheme\`, \`host\`, \`port\`, \`user\`, \`password\`,
+\`options\`) points at — so \`system.mail\` is now incomplete without a
+\`mailer_dsn\`. Careful: that core plugin is **not** the contrib module of
+the same name — \`drupal/symfony_mailer\` 2.x is "Mailer Plus", and it takes
+over delivery through \`mailer_override\`, not the \`interface\` map. Most
+projects still add contrib: \`drupal/symfony_mailer\` for Twig-templated HTML
+email, or \`drupal/smtp\` plus \`drupal/mailsystem\` if you only need a
+transport swap. On Drupal 11.1+ the hook can be a \`#[Hook('mail')]\` method
+on your hook class instead of a \`.module\` function.
 
 ## Tokens: because non-developers write the strings
 
@@ -115,24 +123,29 @@ use Drupal\\Core\\Url;
  */
 function incident_tracker_mail(string $key, array &$message, array $params): void {
   $token = \\Drupal::token();
+  // The $message['langcode'] the mail manager handed you is the whole
+  // point of the $langcode you passed to mail() — pass it on. Nothing
+  // switches the active language for you, so a bare t() here renders in
+  // the SENDING user's language, not the recipient's.
+  $options = ['langcode' => $message['langcode']];
 
   switch ($key) {
     case 'new_incident':
       $data = ['incident' => $params['incident']];
       // replacePlain() — no HTML escaping for a text/plain body.
       $message['subject'] = $token->replacePlain(
-        '[[incident:severity]] #[incident:id]: [incident:title]', $data);
+        '[[incident:severity]] #[incident:id]: [incident:title]', $data, $options);
       $message['body'][] = $token->replacePlain(
-        $params['intro_text'], $data);          // site-builder wording
+        $params['intro_text'], $data, $options);   // site-builder wording
       $message['body'][] = Url::fromRoute('incident_tracker.view',
         ['id' => $params['incident']['id']], ['absolute' => TRUE])->toString();
       break;
 
     case 'incident_resolved':
       $message['subject'] = t('Resolved: @title',
-        ['@title' => $params['incident']['title']]);
+        ['@title' => $params['incident']['title']], $options);
       $message['body'][] = t('Closed after @mins minutes.',
-        ['@mins' => $params['minutes']]);
+        ['@mins' => $params['minutes']], $options);
       break;
   }
 }
@@ -141,7 +154,7 @@ function incident_tracker_mail(string $key, array &$message, array $params): voi
 //   #[Hook('mail')]
 //   public function mail(string $key, array &$message, array $params): void {…}`,
       note:
-        "$message['body'] is an ARRAY of parts that the mail plugin joins and wraps — append to it, never assign a string. hook_mail runs only on the module named in the mail() call; hook_mail_alter() then runs on every module and can rewrite anything or set $message['send'] = FALSE to cancel.",
+        "$message['body'] is an ARRAY of parts that the mail plugin joins and wraps — append to it, never assign a string. MailManager does not switch the active language before calling you, so every t() and token call needs ['langcode' => $message['langcode']] or it renders in the sending user's language. hook_mail runs only on the module named in the mail() call; hook_mail_alter() then runs on every module and can rewrite anything or set $message['send'] = FALSE to cancel.",
     },
     {
       label: "Sending it from a service",
@@ -180,6 +193,7 @@ namespace Drupal\\incident_tracker;
 use Drupal\\Core\\Config\\ConfigFactoryInterface;
 use Drupal\\Core\\Mail\\MailManagerInterface;
 use Drupal\\Core\\Language\\LanguageManagerInterface;
+use Drupal\\Core\\Session\\AccountInterface;
 
 final class IncidentMailer {
 
@@ -189,11 +203,16 @@ final class IncidentMailer {
     private readonly LanguageManagerInterface $languageManager,
   ) {}
 
-  public function notify(array $incident): bool {
+  public function notify(array $incident, ?AccountInterface $oncall = NULL): bool {
     $config = $this->configFactory->get('incident_tracker.settings');
-    $to = $config->get('notify_email');
-    // Send in the RECIPIENT's language so t() and tokens translate.
-    $langcode = $this->languageManager->getDefaultLanguage()->getId();
+    $to = $oncall ? $oncall->getEmail() : $config->get('notify_email');
+    // Send in the RECIPIENT's language: for a real user that is
+    // getPreferredLangcode(), which is what core's own _user_mail_notify()
+    // passes. getDefaultLanguage() is the SITE's language — the right
+    // fallback only when there is no account (a shared on-call alias).
+    $langcode = $oncall
+      ? $oncall->getPreferredLangcode()
+      : $this->languageManager->getDefaultLanguage()->getId();
 
     // mail($module, $key, $to, $langcode, $params, $reply = NULL, $send = TRUE)
     $result = $this->mailManager->mail(
@@ -354,20 +373,42 @@ framework:
     routing:
       Symfony\\Component\\Mailer\\Messenger\\SendEmailMessage: async`,
       ts: `# Drupal: system.mail maps module (or module_key) -> mail
-# plugin id. Core ships php_mail (PHP mail(), plain text) and
-# test_mail_collector; everything better comes from contrib.
-#
-#   composer require drupal/symfony_mailer
-#   drush en symfony_mailer
+# plugin id. Core ships php_mail (PHP mail(), plain text — still
+# the default in D10 and D11), test_mail_collector, and since
+# 10.2 an experimental symfony_mailer plugin driven by mailer_dsn.
 
 # config/sync/system.mail.yml
 interface:
-  default: php_mail                         # site-wide fallback
-  incident_tracker: symfony_mailer          # all our mail
-  incident_tracker_new_incident: smtp       # just this one $key
+  default: php_mail                              # site-wide fallback
+  incident_tracker: symfony_mailer               # all our mail
+  incident_tracker_new_incident: SMTPMailSystem  # just this one $key
+mailer_dsn:                    # what core's symfony_mailer dials
+  scheme: smtp
+  host: smtp.example.com
+  port: 587
+  user: ops@example.com
+  password: null               # override in settings.php, not in config
+  options: {}
 _core:
   default_config_hash: 7Q1Ky8sVJdBSnMPBHrpNIVLzUwMNbxsGZ2sScJcAV_I
 
+# Two traps in those few lines:
+#  * symfony_mailer here is CORE's experimental plugin (10.2+), NOT
+#    the contrib module of the same name. drupal/symfony_mailer 2.x
+#    ships as "Mailer Plus" and takes over via mailer_override — it
+#    never appears in this interface map.
+#  * SMTPMailSystem is contrib drupal/smtp's plugin id, and really
+#    is CamelCase — not a typo. There is no 'smtp' plugin id in core
+#    or contrib, so writing one is a PluginNotFoundException:
+#      drush cset system.mail interface.default SMTPMailSystem
+#    Core's own ids are snake_case (php_mail, test_mail_collector,
+#    symfony_mailer). Omitting mailer_dsn is invalid since 10.2; the
+#    shipped default is {scheme: sendmail, host: default}.
+#
+# The contrib route is still the common one:
+#   composer require drupal/symfony_mailer   # Mailer Plus, HTML/Twig
+#   composer require drupal/smtp drupal/mailsystem  # transport swap
+#
 # Lookup order in MailManager::getInstance():
 #   1. interface['incident_tracker_new_incident']  (module_key)
 #   2. interface['incident_tracker']               (module)
@@ -564,7 +605,8 @@ Owner:  / Sev: CRITICAL`,
     "Sending is two halves: \\Drupal::service('plugin.manager.mail')->mail('incident_tracker', 'new_incident', $to, $langcode, $params) requests a send, and hook_mail() in incident_tracker builds that message — omit the hook and the mail goes out empty.",
     "$key is the template name: hook_mail() switches on it and fills $message['subject'] plus $message['body'] (an ARRAY of parts you append to). hook_mail_alter() then runs on every module and can rewrite anything, or set $message['send'] = FALSE to cancel.",
     "mail() returns the $message array; check $result['result'] — TRUE/FALSE, NULL if cancelled. It never throws, and it sends synchronously, so queue it (section 23) rather than blocking a request.",
-    "Delivery is a site decision, not a module decision: system.mail's 'interface' map resolves module_key, then module, then default to a mail plugin id. Core only ships php_mail and test_mail_collector — production sites add drupal/symfony_mailer or drupal/smtp + drupal/mailsystem.",
+    "Nothing switches the active language before hook_mail() runs, so a bare t() renders in the SENDING user's language: build $options = ['langcode' => $message['langcode']] and pass it to every t() and token replace() call. Pick that langcode at the mail() call site — $account->getPreferredLangcode() for a real recipient (what core's user mail does), the site default only when there is no account.",
+    "Delivery is a site decision, not a module decision: system.mail's 'interface' map resolves module_key, then module, then default to a mail plugin id. Core ships php_mail (still the default in D10 and D11), test_mail_collector, and since 10.2 an experimental symfony_mailer plugin configured by system.mail's mailer_dsn key — production sites usually still add drupal/symfony_mailer (contrib 'Mailer Plus', a different thing) or drupal/smtp + drupal/mailsystem, whose plugin id is the CamelCase SMTPMailSystem.",
     "Tokens are a sandboxed [type:name] substitution language that exists because site builders — not developers — compose the strings in Pathauto patterns, mail bodies and field defaults; Twig plays that role in Symfony but is far too powerful to hand to an editor.",
     "hook_token_info() declares types and names for the 'Browse available tokens' UI; hook_tokens() resolves, keying $replacements by the full original token string and registering cacheability on the BubbleableMetadata argument. Call \\Drupal::token()->replace($text, ['incident' => $incident]) — or replacePlain() for text/plain mail — with $data keys matching your declared needs-data.",
   ],

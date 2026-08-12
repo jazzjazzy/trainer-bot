@@ -63,14 +63,20 @@ function runs normally. On D10 you must also register the class yourself in
 \`incident_tracker.services.yml\` with \`autowire: true\`, since only 11.1+
 auto-registers it.
 
-Not everything can move: hooks that run **before a container exists** — all of
-\`.install\` (\`hook_install\`, \`hook_update_N\`, \`hook_schema\`,
-\`hook_requirements\`) plus a few bootstrap hooks like \`hook_hook_info\` —
-stay procedural forever.
+Not everything can move: hooks that run **before a container exists** — the
+\`.install\` set (\`hook_install\`, \`hook_uninstall\`, \`hook_schema\`,
+\`hook_update_N\`) plus a couple of bootstrap hooks (\`hook_hook_info\`,
+\`hook_module_implements_alter\`) — stay procedural forever.
+\`hook_requirements()\` used to be on this list; 11.2 split it into
+\`hook_runtime_requirements()\` / \`hook_update_requirements()\` (both
+OOP-capable) plus \`InstallRequirementsInterface\`, and deprecated
+\`hook_requirements()\` in 11.3.
 
-Either way, hook discovery is cached (bootstrap cache classically, the compiled
-container for attribute classes), so the rule is the same: **added or moved a
-hook? \`drush cr\`.**
+On Drupal 10 the procedural implementation list lives in the bootstrap cache;
+from 11.1 the same compiler pass (\`HookCollectorPass\`) collects BOTH
+procedural functions and \`#[Hook]\` methods into the compiled container. Either
+way it is cached, so the rule is identical: **added or moved a hook?
+\`drush cr\`.**
 `,
 
   comparisons: [
@@ -375,14 +381,14 @@ Saved: Database outage (severity: medium)
     ".module functions have no constructor, so classic hooks fall back to static service location (\\Drupal::logger()) instead of real dependency injection.",
     "Drupal 11.1+ hook classes live in src/Hook (namespace Drupal\\MODULE\\Hook), mark methods with #[Hook('hook_name')], and are auto-registered as autowired services — full constructor injection is the headline win.",
     "To support Drupal 10 and 11 from one codebase: logic in the class, a thin .module bridge marked #[LegacyHook] (skipped on 11.1+, inert and executed on 10.x), plus an autowire: true services.yml entry for D10.",
-    "Hooks that run without a container — hook_install, hook_update_N, hook_schema, hook_requirements, and a few bootstrap hooks — must stay procedural even on Drupal 11.",
+    "Hooks that run without a container — hook_install, hook_uninstall, hook_schema, hook_update_N, hook_hook_info, hook_module_implements_alter — must stay procedural even on Drupal 11. hook_requirements() used to be on this list; 11.2 split it into hook_runtime_requirements() / hook_update_requirements() (both OOP-capable) plus InstallRequirementsInterface, and deprecated hook_requirements() in 11.3.",
     "hook_theme registers the incident_summary render element (template templates/incident-summary.html.twig); hook_help answers on the help.page.incident_tracker route.",
   ],
 
   interview: [
     {
       q: "How does Drupal discover hook implementations, and why did your new hook 'not work' until you rebuilt caches?",
-      a: "Classic discovery is by naming convention: Drupal scans enabled modules for functions named `MODULE_HOOKNAME` and caches the per-hook implementation list so it is not re-scanning on every request. In 11.1+ there is a second path: a compiler pass scans each module's `Drupal\\MODULE\\Hook` namespace for `#[Hook]` attributes and compiles those registrations into the container. Both paths are cached — the bootstrap cache classically, the compiled container for attribute classes — so a freshly added implementation is invisible until `drush cr`. That is the single most common 'my hook is broken' cause in code review and interviews alike.",
+      a: "Classic discovery is by naming convention: Drupal scans enabled modules for functions named `MODULE_HOOKNAME` and caches the per-hook implementation list so it is not re-scanning on every request. In 11.1+ there is a second style of implementation: a compiler pass scans each module's `Drupal\\MODULE\\Hook` namespace for `#[Hook]` attributes and compiles those registrations into the container. On Drupal 10 the procedural implementation list lives in the bootstrap cache; from 11.1 that same compiler pass (`HookCollectorPass`) collects BOTH procedural functions and `#[Hook]` methods into the compiled container. Either way it is cached, so the rule is identical: a freshly added implementation is invisible until `drush cr`. That is the single most common 'my hook is broken' cause in code review and interviews alike.",
     },
     {
       q: "What do Drupal 11's #[Hook] classes give you that .module functions never could?",
@@ -419,7 +425,7 @@ Saved: Database outage (severity: medium)
       ],
       answerIndex: 2,
       explain:
-        "Install and update hooks (hook_install, hook_update_N, hook_schema, hook_requirements) can run while the container is being rebuilt or unavailable, so they must stay procedural in the .install file. Regular runtime hooks like entity_presave, user_login, and theme all work as attribute methods.",
+        "Install and update hooks (hook_install, hook_uninstall, hook_schema, hook_update_N) can run while the container is being rebuilt or unavailable, so they must stay procedural in the .install file — as do hook_hook_info and hook_module_implements_alter. hook_requirements() used to be on this list; 11.2 split it into hook_runtime_requirements() / hook_update_requirements() (both OOP-capable) plus InstallRequirementsInterface, and deprecated hook_requirements() in 11.3. Regular runtime hooks like entity_presave, user_login, and theme all work as attribute methods.",
     },
     {
       question:

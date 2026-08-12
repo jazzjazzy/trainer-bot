@@ -306,7 +306,7 @@ public function import(array $row): void {
   playground: {
     lang: "php",
     intro:
-      "The whole constraint machine in plain PHP: a plugin registry (what #[Constraint] discovery builds), validators resolved by the class-name-plus-Validator convention, and a shared context collecting violations across fields. Two incident drafts get validated — predict both results, then run.",
+      "The whole constraint machine in plain PHP: a plugin registry (what #[Constraint] discovery builds), validators resolved by the class-name-plus-Validator convention, and a shared context collecting violations across fields. Note the field-level wrinkle — each validator receives the item LIST, loops deltas and calls atPath() — so predict the violation paths too, then run.",
     code: `<?php
 // Simulate Drupal's constraint plugin machinery: a registry maps plugin IDs
 // to constraint classes (what #[Constraint] discovery builds), and
@@ -315,18 +315,43 @@ public function import(array $row): void {
 
 class ExecutionContext {
     private array $violations = [];
+    // The field being validated — the root of every violation path.
     public string $path = '';
 
-    // The real API: $this->context->addViolation($message, $placeholders).
-    public function addViolation(string $template, array $params = []): void {
-        $this->violations[] = [
-            'path'    => $this->path,
-            'message' => strtr($template, $params),
-        ];
+    // The real API: $this->context->buildViolation($message)->addViolation().
+    public function buildViolation(string $template, array $params = []): ViolationBuilder {
+        return new ViolationBuilder($this, $template, $params);
+    }
+
+    public function collect(string $path, string $message): void {
+        $this->violations[] = ['path' => $path, 'message' => $message];
     }
 
     public function violations(): array {
         return $this->violations;
+    }
+}
+
+class ViolationBuilder {
+    private string $path;
+
+    public function __construct(
+        private ExecutionContext $context,
+        private string $template,
+        private array $params,
+    ) {
+        // Without atPath() a violation lands on the field itself.
+        $this->path = $context->path;
+    }
+
+    // atPath((string) $delta) pins the violation to one item in the list.
+    public function atPath(string $delta): static {
+        $this->path = $this->context->path . '.' . $delta;
+        return $this;
+    }
+
+    public function addViolation(): void {
+        $this->context->collect($this->path, strtr($this->template, $this->params));
     }
 }
 
@@ -348,13 +373,16 @@ class IncidentSeverityRangeConstraint {
 class IncidentSeverityRangeConstraintValidator {
     public function __construct(private ExecutionContext $context) {}
 
-    public function validate(mixed $value, object $constraint): void {
-        if ($value < $constraint->min || $value > $constraint->max) {
-            $this->context->addViolation($constraint->message, [
-                '%value' => $value,
-                '%min'   => $constraint->min,
-                '%max'   => $constraint->max,
-            ]);
+    // Field-level attachment => $items is the FieldItemList, never a scalar.
+    public function validate(mixed $items, object $constraint): void {
+        foreach ($items as $delta => $value) {
+            if ($value < $constraint->min || $value > $constraint->max) {
+                $this->context->buildViolation($constraint->message, [
+                    '%value' => (string) $value,
+                    '%min'   => (string) $constraint->min,
+                    '%max'   => (string) $constraint->max,
+                ])->atPath((string) $delta)->addViolation();
+            }
         }
     }
 }
@@ -368,9 +396,13 @@ class NotBlankConstraint {
 class NotBlankConstraintValidator {
     public function __construct(private ExecutionContext $context) {}
 
-    public function validate(mixed $value, object $constraint): void {
-        if ($value === '' || $value === null) {
-            $this->context->addViolation($constraint->message);
+    public function validate(mixed $items, object $constraint): void {
+        foreach ($items as $delta => $value) {
+            if ($value === '' || $value === null) {
+                $this->context->buildViolation($constraint->message)
+                    ->atPath((string) $delta)
+                    ->addViolation();
+            }
         }
     }
 }
@@ -389,7 +421,7 @@ $fieldConstraints = [
     'severity' => [['IncidentSeverityRange', ['min' => 1, 'max' => 5]]],
 ];
 
-function validateIncident(array $values, array $fieldConstraints, array $registry): array {
+function validateIncident(array $fieldValues, array $fieldConstraints, array $registry): array {
     $context = new ExecutionContext();
     foreach ($fieldConstraints as $field => $constraints) {
         $context->path = $field;
@@ -398,20 +430,22 @@ function validateIncident(array $values, array $fieldConstraints, array $registr
             $constraint = new $constraintClass($options);
             // Symfony's default validatedBy(): class name + 'Validator'.
             $validatorClass = $constraintClass . 'Validator';
-            (new $validatorClass($context))->validate($values[$field], $constraint);
+            // The whole item list goes in — even a single-valued field is a list.
+            (new $validatorClass($context))->validate($fieldValues[$field], $constraint);
         }
     }
     return $context->violations();
 }
 
+// Every field is an item LIST keyed by delta — what the validator receives.
 $drafts = [
-    ['title' => '', 'severity' => 9],
-    ['title' => 'DB replica lag on prod', 'severity' => 2],
+    ['title' => [''], 'severity' => [9]],
+    ['title' => ['DB replica lag on prod'], 'severity' => [2]],
 ];
 
-foreach ($drafts as $i => $values) {
+foreach ($drafts as $i => $fieldValues) {
     echo "\\$incident->validate() on draft #" . ($i + 1) . ":\\n";
-    $violations = validateIncident($values, $fieldConstraints, $registry);
+    $violations = validateIncident($fieldValues, $fieldConstraints, $registry);
     echo "  " . count($violations) . " violation(s)\\n";
     foreach ($violations as $v) {
         echo "  - [" . $v['path'] . "] " . $v['message'] . "\\n";
@@ -422,8 +456,8 @@ foreach ($drafts as $i => $values) {
 echo "Same constraints fire for the entity form, REST and JSON:API.\\n";`,
     output: `$incident->validate() on draft #1:
   2 violation(s)
-  - [title] This value should not be blank.
-  - [severity] Severity 9 is out of range 1-5.
+  - [title.0] This value should not be blank.
+  - [severity.0] Severity 9 is out of range 1-5.
   -> reject the save, flag the fields
 
 $incident->validate() on draft #2:

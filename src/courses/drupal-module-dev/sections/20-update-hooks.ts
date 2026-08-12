@@ -57,8 +57,11 @@ database backup you took before running \`updb\`.
 An update touching a million rows cannot finish in one request. Accept
 \`&$sandbox\`, stash \`progress\` and \`max\` in it, process one slice, and set
 \`$sandbox['#finished']\` to a float. Anything below 1 makes the runner call
-the **same function again** with the same sandbox; 1 means done. The string
-you return becomes the progress message.
+the **same function again** with the same sandbox; 1 means done. Whatever you
+return is the **result message, reported once the update finishes** — the
+progress line during batching is core's own "Updating <module>", and each pass's
+return value overwrites the previous one, so only the last survives. Make it a
+summary, not a running tally.
 
 ### hook_post_update_NAME: the second phase
 
@@ -439,7 +442,7 @@ Applied 0 update(s) - each hook_update_N runs ONCE per site.`,
     "hook_update_N lives in the .install file; N = core major + module major + two-digit counter (10001, 10002, ...). N only increases, and a shipped update is never renumbered or edited — sites that ran it will never run it again.",
     "Each site tracks the highest executed N as one integer per module in key_value collection 'system.schema' — Drupal's doctrine_migration_versions. drush updb (or /update.php) runs the pending ones in order; drush deploy chains updb + config:import + cache rebuild.",
     "Schema changes use the raw Schema API — \\Drupal::database()->schema() with addField(), changeField(), createTable() — and there is no down(): rollback means restoring the pre-updb database backup.",
-    "Big data changes accept &$sandbox: store progress/max, process a slice, set $sandbox['#finished'] to a fraction — below 1 re-invokes the same function with the same sandbox; the returned string is the progress message.",
+    "Big data changes accept &$sandbox: store progress/max, process a slice, set $sandbox['#finished'] to a fraction — below 1 re-invokes the same function with the same sandbox. The returned string is the result message shown after the update completes (the batch progress line is core's own 'Updating <module>'), and each pass overwrites the previous one — so return a summary, not a running tally.",
     "hook_post_update_NAME in MODULE.post_update.php runs after ALL modules' update_N on a rebuilt container — full entity/config API available, tracked by function name, batchable the same way. Schema surgery in update_N; API-level fixes in post_update.",
     "Discipline: hook_update_N runs in a half-upgraded site, so keep it self-contained — raw queries only, never your module's services/classes or the entity API (they may not match the old container). Throw UpdateException on failure. Update hooks stay procedural even under Drupal 11's #[Hook] classes.",
   ],
@@ -459,7 +462,7 @@ Applied 0 update(s) - each hook_update_N runs ONCE per site.`,
     },
     {
       q: "A hook_update_N has to touch two million rows. How do you keep it from timing out?",
-      a: "Use the sandbox batch protocol. Accept `&$sandbox`, and on the first call initialize `$sandbox['progress']` and `$sandbox['max']` (e.g. a COUNT query). Each invocation processes one bounded slice — say 500 rows selected with a range — and then sets `$sandbox['#finished']` to `progress / max`; any value below 1 tells the runner to call the same function again with the same sandbox, while 1 marks it complete. Through the `/update.php` UI each pass is its own HTTP request, so memory and time limits reset; under `drush updb` the loop just runs continuously. The returned string is displayed as the progress message.",
+      a: "Use the sandbox batch protocol. Accept `&$sandbox`, and on the first call initialize `$sandbox['progress']` and `$sandbox['max']` (e.g. a COUNT query). Each invocation processes one bounded slice — say 500 rows selected with a range — and then sets `$sandbox['#finished']` to `progress / max`; any value below 1 tells the runner to call the same function again with the same sandbox, while 1 marks it complete. Through the `/update.php` UI each pass is its own HTTP request, so memory and time limits reset; under `drush updb` the loop just runs continuously. One thing people get backwards: the string you return is *not* the progress line — core sets that itself (`t('Updating @module')`). Your return value lands in the update's results and is shown after the update completes, and each pass overwrites the last, so make it a summary rather than a running tally.",
     },
   ],
 

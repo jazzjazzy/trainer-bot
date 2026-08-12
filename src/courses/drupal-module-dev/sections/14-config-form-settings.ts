@@ -15,8 +15,14 @@ const lesson: Lesson = {
 Every real module grows settings: where to send incident notifications, how long
 to keep resolved incidents, which severity triggers an email. In Drupal those
 live in a **simple config object** — \`incident_tracker.settings\` — and the
-admin page that edits it is a \`ConfigFormBase\` subclass (identical in Drupal
-10 and 11). It's \`FormBase\` plus config plumbing:
+admin page that edits it is a \`ConfigFormBase\` subclass. The four methods you
+write are the same in Drupal 10 and 11 — but **if you override the constructor
+to inject a service, Drupal 11 requires a second argument**: \`create()\` must
+pass \`$container->get('config.typed')\` and \`__construct()\` must forward it as
+\`parent::__construct($config_factory, $typed_config_manager)\`
+(\`TypedConfigManagerInterface\`). Omitting it is deprecated in 10.2 and a fatal
+\`ArgumentCountError\` in 11. The example below never overrides the constructor,
+so it's safe as written. It's \`FormBase\` plus config plumbing:
 
 - \`getFormId()\` — unique form ID, as always.
 - \`getEditableConfigNames()\` — return \`['incident_tracker.settings']\`. This
@@ -368,6 +374,7 @@ what cron / controllers now read:
 
   keyPoints: [
     "ConfigFormBase = FormBase + config plumbing: getFormId(), getEditableConfigNames(), buildForm() pulling #default_value from $this->config(), submitForm() doing ->set()->save() — and always call the parent build/submit implementations.",
+    "D10 vs D11 trap unique to ConfigFormBase (plain FormBase has none): if you override the constructor to inject a service, ConfigFormBase::__construct() takes a second TypedConfigManagerInterface argument — create() must pass $container->get('config.typed') and __construct() must forward it to parent::__construct($config_factory, $typed_config_manager). Optional (deprecated) in 10.2, required in 11.0, where omitting it is a fatal ArgumentCountError.",
     "getEditableConfigNames() returning ['incident_tracker.settings'] is what makes $this->config('incident_tracker.settings') hand back a mutable, override-free object you can save(); other names come back immutable.",
     "A settings page needs three YAML wires: a route using _form with a _permission requirement, a menu link parented under system.admin_config_system, and a dedicated permission with restrict access: true.",
     "config/install/incident_tracker.settings.yml seeds values exactly once at module install — editing it later does nothing on existing sites; ship an update hook to change live defaults.",

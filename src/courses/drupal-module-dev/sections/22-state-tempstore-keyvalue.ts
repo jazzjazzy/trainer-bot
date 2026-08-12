@@ -149,16 +149,31 @@ class ReportWizardController
 // expires entries (default: one week). Survives logout/login.
 namespace Drupal\\incident_tracker\\Form;
 
+use Drupal\\Core\\Form\\FormBase;
+use Drupal\\Core\\TempStore\\PrivateTempStore;
 use Drupal\\Core\\TempStore\\PrivateTempStoreFactory;
+use Symfony\\Component\\DependencyInjection\\ContainerInterface;
 
-class ReportWizardForm {
+// FormBase implements ContainerInjectionInterface — but a custom
+// constructor still means you must override create() (section 8).
+class ReportWizardForm extends FormBase {
 
-  private readonly \\Drupal\\Core\\TempStore\\PrivateTempStore $tempStore;
+  private readonly PrivateTempStore $tempStore;
 
   public function __construct(PrivateTempStoreFactory $factory) {
     // Collection 'incident_tracker' in the key_value_expire table.
     $this->tempStore = $factory->get('incident_tracker');
   }
+
+  public static function create(ContainerInterface $container): static {
+    return new static($container->get('tempstore.private'));
+  }
+
+  public function getFormId(): string {
+    return 'incident_tracker_report_wizard';
+  }
+
+  // buildForm()/submitForm() omitted — they call saveStep() below.
 
   public function saveStep(array $values): void {
     $draft = $this->tempStore->get('report_wizard') ?? [];
@@ -173,7 +188,7 @@ class ReportWizardForm {
 
 }`,
       note:
-        "Inject '@tempstore.private' and call ->get('incident_tracker') to derive your collection. set() can throw TempStoreException if the underlying lock can't be acquired. For plain flash-style data, $request->getSession() still works exactly as in Symfony.",
+        "Grab 'tempstore.private' in create() (forms and controllers are built by ClassResolver, not the services.yml container) and call ->get('incident_tracker') to derive your collection. set() can throw TempStoreException if the underlying lock can't be acquired. For plain flash-style data, $request->getSession() still works exactly as in Symfony.",
     },
     {
       label: "Edit locks: symfony/lock vs shared TempStore",
@@ -204,14 +219,21 @@ class TriageController
 // "locked by Alice — break lock?" banner comes almost for free.
 namespace Drupal\\incident_tracker\\Controller;
 
+use Drupal\\Core\\Controller\\ControllerBase;
+use Drupal\\Core\\TempStore\\SharedTempStore;
 use Drupal\\Core\\TempStore\\SharedTempStoreFactory;
+use Symfony\\Component\\DependencyInjection\\ContainerInterface;
 
-class TriageController {
+class TriageController extends ControllerBase {
 
-  private readonly \\Drupal\\Core\\TempStore\\SharedTempStore $tempStore;
+  private readonly SharedTempStore $tempStore;
 
   public function __construct(SharedTempStoreFactory $factory) {
     $this->tempStore = $factory->get('incident_tracker');
+  }
+
+  public static function create(ContainerInterface $container): static {
+    return new static($container->get('tempstore.shared'));
   }
 
   public function edit(int $id) {
