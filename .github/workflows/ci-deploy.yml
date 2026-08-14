@@ -109,7 +109,13 @@ jobs:
       group: deploy-production
       cancel-in-progress: false
     env:
-      COOLIFY_URL: http://localhost:8000
+      # 127.0.0.1, not localhost: localhost resolves to ::1 first, which takes
+      # the IPv6 docker-proxy into the Coolify container. Coolify then sees an
+      # IPv6 source address that its API allowlist doesn't cover, and answers
+      # 403. The IPv4 path arrives from the bridge gateway (10.0.1.1), which is
+      # allowlisted. curl is also pinned to -4 so a hosts-file change can't
+      # quietly reintroduce the problem.
+      COOLIFY_URL: http://127.0.0.1:8000
       COOLIFY_APP_UUID: cd0aw5iyjsl5t5dluoltbdp6
     steps:
       - name: Trigger Coolify deployment
@@ -118,7 +124,7 @@ jobs:
           body=$(mktemp)
           # Deliberately not using curl -f: it swallows the response body, and
           # Coolify explains *why* it refused in that body.
-          status=$(curl -sS -o "$body" -w '%{http_code}' -X GET \
+          status=$(curl -4 -sS -o "$body" -w '%{http_code}' -X GET \
             -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
             "${COOLIFY_URL}/api/v1/deploy?uuid=${COOLIFY_APP_UUID}&force=false")
 
