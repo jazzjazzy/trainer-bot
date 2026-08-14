@@ -25,7 +25,7 @@ input / output):
   summaries, routing.
 - **\`claude-sonnet-5\`** — $3 / $15 (intro $2 / $10 through 2026-08-31). The
   workhorse for most product features.
-- **\`claude-opus-4-8\`** — $5 / $25. The hardest reasoning and long-horizon
+- **\`claude-opus-5\`** — $5 / $25. The hardest reasoning and long-horizon
   agentic work.
 
 A single big model for everything is like running every query through your
@@ -106,7 +106,7 @@ const messages = [
       php: `// First attempt: Opus for everything, including trivial work
 async function handle(task: Task) {
   return client.messages.create({
-    model: "claude-opus-4-8", // $5 / $25 per MTok — even to label a ticket
+    model: "claude-opus-5", // $5 / $25 per MTok — even to label a ticket
     max_tokens: 1024,
     messages: [{ role: "user", content: task.text }],
   });
@@ -116,7 +116,7 @@ function pickModel(task: Task): string {
   if (task.kind === "classify" || task.kind === "extract")
     return "claude-haiku-4-5"; // $1 / $5
   if (task.kind === "hard-reasoning")
-    return "claude-opus-4-8";   // $5 / $25
+    return "claude-opus-5";   // $5 / $25
   return "claude-sonnet-5";     // $3 / $15 — the workhorse default
 }
 
@@ -175,7 +175,7 @@ type Rates = { in: number; out: number };
 const PRICES: Record<string, Rates> = {
   "claude-haiku-4-5": { in: 1, out: 5 },
   "claude-sonnet-5": { in: 3, out: 15 },
-  "claude-opus-4-8": { in: 5, out: 25 },
+  "claude-opus-5": { in: 5, out: 25 },
 };
 
 // One job type the product runs each month.
@@ -199,7 +199,7 @@ const MTOK = 1000000;
 // Naive: every job on Opus, and a timestamp in the system prompt busts the
 // cache, so the full prefix is billed at input price on every call.
 function naiveCost(job: Job): number {
-  const r = PRICES["claude-opus-4-8"];
+  const r = PRICES["claude-opus-5"];
   const inTok = job.prefixTokens + job.variableTokens;
   return (
     (job.requests * inTok / MTOK) * r.in +
@@ -211,7 +211,7 @@ function naiveCost(job: Job): number {
 const TIER_MODEL: Record<Job["tier"], string> = {
   classify: "claude-haiku-4-5",
   workhorse: "claude-sonnet-5",
-  hard: "claude-opus-4-8",
+  hard: "claude-opus-5",
 };
 
 function tieredCost(job: Job): number {
@@ -241,7 +241,7 @@ console.log("production is " + (naiveTotal / prodTotal).toFixed(1) + "x cheaper 
   },
 
   keyPoints: [
-    "Tier by difficulty: claude-haiku-4-5 ($1/$5) for classify/extract/summarize, claude-sonnet-5 ($3/$15) as the workhorse, claude-opus-4-8 ($5/$25) for the hardest reasoning — a cheap classifier can do the routing.",
+    "Tier by difficulty: claude-haiku-4-5 ($1/$5) for classify/extract/summarize, claude-sonnet-5 ($3/$15) as the workhorse, claude-opus-5 ($5/$25) for the hardest reasoning — a cheap classifier can do the routing.",
     "Prompt caching (`cache_control: {type: \"ephemeral\"}`) reads a stable prefix at ~0.1x; the first write is ~1.25x, so it pays off from the second hit.",
     "Caching is a prefix match — a timestamp or per-user field near the front of the system prompt silently invalidates the whole cache. Keep volatile content after the last breakpoint.",
     "Verify caching worked with `usage.cache_read_input_tokens`; zero across repeated calls means something is busting the prefix.",
@@ -252,7 +252,7 @@ console.log("production is " + (naiveTotal / prodTotal).toFixed(1) + "x cheaper 
   interview: [
     {
       q: "An LLM feature's API bill is too high. What are the first levers you reach for?",
-      a: "Three, in order. First, model tiering — I check whether every request really needs the top model. Most traffic is classification, extraction, or short summaries that claude-haiku-4-5 handles at a fifth of Opus's price, so I put a cheap classifier in front that routes by difficulty and reserve claude-opus-4-8 for genuinely hard reasoning. Second, prompt caching — if there's a large stable prefix like a system prompt or retrieved docs, I mark it with cache_control so repeat requests read it at about a tenth of input price, and I make sure nothing volatile like a timestamp sits in the prefix busting the cache. Third, the Batch API for anything non-urgent, at half price. Tiering and caching usually cut the bill by multiples before I touch anything else.",
+      a: "Three, in order. First, model tiering — I check whether every request really needs the top model. Most traffic is classification, extraction, or short summaries that claude-haiku-4-5 handles at a fifth of Opus's price, so I put a cheap classifier in front that routes by difficulty and reserve claude-opus-5 for genuinely hard reasoning. Second, prompt caching — if there's a large stable prefix like a system prompt or retrieved docs, I mark it with cache_control so repeat requests read it at about a tenth of input price, and I make sure nothing volatile like a timestamp sits in the prefix busting the cache. Third, the Batch API for anything non-urgent, at half price. Tiering and caching usually cut the bill by multiples before I touch anything else.",
     },
     {
       q: "Why does putting the current time in your system prompt wreck prompt caching?",
@@ -282,7 +282,7 @@ console.log("production is " + (naiveTotal / prodTotal).toFixed(1) + "x cheaper 
       question:
         "You're processing 100,000 documents overnight for a report due tomorrow morning. Which approach fits best?",
       options: [
-        "A synchronous for-loop on claude-opus-4-8 for maximum quality",
+        "A synchronous for-loop on claude-opus-5 for maximum quality",
         "The Batch API at 50% price, keying each result back by custom_id",
         "100,000 parallel synchronous requests to finish fastest",
         "Prompt caching alone, with no change to how requests are sent",

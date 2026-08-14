@@ -188,7 +188,7 @@ console.log("this prints immediately, before the awaits complete");`,
     },
     {
       q: "How do you run several async operations in parallel, and why does it matter?",
-      a: "Use `Promise.all([...])`, which starts all the promises immediately and resolves once every one is done (rejecting fast if any fails). Awaiting calls one after another is **sequential** — total time is the *sum* of each. `Promise.all` is **concurrent** — total time is roughly the *slowest single* operation. For independent I/O (e.g. several API calls) this is often a multiple-times speedup, and it's something plain PHP can't do without extensions like Fibers or AMPHP.",
+      a: "Use `Promise.all([...])`, which starts all the promises immediately and resolves once every one is done (rejecting fast if any fails). Awaiting calls one after another is **sequential** — total time is the *sum* of each. `Promise.all` is **concurrent** — total time is roughly the *slowest single* operation. For independent I/O (e.g. several API calls) this is often a multiple-times speedup, and it's something PHP only reaches with core Fibers (8.1+), an event-loop library like AMPHP or ReactPHP, or curl_multi_exec.",
     },
     {
       q: "How do you handle errors from `await`ed code?",

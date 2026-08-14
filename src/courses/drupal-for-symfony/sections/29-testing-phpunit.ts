@@ -37,8 +37,10 @@ that still exercises what you need.
 ### Booting modules — the key difference
 
 In Symfony the kernel loads whatever bundles \`registerBundles()\` returns. In
-Drupal a test declares a \`protected static array $modules\` property, and the
-base class enables exactly those. In a **kernel** test you must *also* explicitly
+Drupal a test declares a \`protected static $modules\` property — untyped, because
+\`KernelTestBase\` declares it that way and PHP forbids adding a type when
+redeclaring an inherited untyped property — and the base class enables exactly
+those. In a **kernel** test you must *also* explicitly
 install the pieces of schema/config you touch — there is no full site install
 happening for you:
 
@@ -64,8 +66,10 @@ Drupal ships a PHPUnit config at **\`core/phpunit.xml.dist\`** — copy it to
 \`core/phpunit.xml\`, set the \`SIMPLETEST_DB\` and \`SIMPLETEST_BASE_URL\` env
 vars, then run \`vendor/bin/phpunit -c core/phpunit.xml <path>\`. Test files live
 under \`modules/custom/<name>/tests/src/{Unit,Kernel,Functional,FunctionalJavascript}\`
-and are namespaced \`Drupal\\Tests\\<module>\\<Type>\`. Drupal 10/11 are identical
-here; both run PHPUnit 9/10-era APIs.
+and are namespaced \`Drupal\\Tests\\<module>\\<Type>\`. The runner differs by branch:
+Drupal 10 pins PHPUnit 9.6, while Drupal 11 moved to PHPUnit 10.5+ (now 11.5), so
+11.x core uses attribute metadata such as \`#[Group('...')]\` where 10.x still uses
+\`@group\` annotations.
 `,
 
   comparisons: [

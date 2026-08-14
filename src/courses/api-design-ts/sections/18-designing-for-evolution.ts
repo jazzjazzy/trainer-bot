@@ -47,9 +47,10 @@ the *tolerant reader* pattern. A client that does
 change a breaking one. This is where zod quietly helps: \`z.object()\` **strips
 unknown keys by default** when parsing, so a zod-validated client is a
 tolerant reader out of the box — new server fields simply vanish from the
-parsed result instead of crashing anything. (Don't put \`.strict()\` on
-schemas that parse *responses*; save strictness for validating requests you
-own.)
+parsed result instead of crashing anything. (Don't reach for
+\`z.strictObject()\` on schemas that parse *responses* — Zod 4 replaced the
+deprecated \`.strict()\` method with it; save strictness for validating
+requests you own.)
 
 Enums deserve special care on both sides. The producer treats a new enum
 value as a semi-breaking change; the consumer defends itself by mapping
@@ -266,7 +267,7 @@ console.log("missing currency defaulted, unknown status mapped safely.");
     "Evolve additively: never remove, rename, or retype a live field — add the better field alongside and retire the old one through a deprecation lifecycle.",
     "New request fields must be optional with a server-side default (zod: `.default(...)`) so last year's requests keep validating.",
     "Never repurpose a field's meaning — `status` int quietly becoming a string breaks every consumer with zero errors; a new meaning is a new field.",
-    "Clients must be tolerant readers: consume known fields, ignore unknown ones — zod's `z.object()` strips unknown keys by default, so zod-parsed responses get this for free (don't `.strict()` response schemas).",
+    "Clients must be tolerant readers: consume known fields, ignore unknown ones — zod's `z.object()` strips unknown keys by default, so zod-parsed responses get this for free (don't use `z.strictObject()` for response schemas — it's Zod 4's replacement for the deprecated `.strict()`).",
     "Handle enum evolution defensively: map unrecognised values to a fallback like `\"unknown\"` instead of throwing on them.",
     "Retire on a visible schedule: document, send `Deprecation: @<unix-ts>` (RFC 9745) + `Sunset: <HTTP-date>` (RFC 8594) + a docs `Link`, monitor remaining usage, then remove.",
   ],
@@ -278,7 +279,7 @@ console.log("missing currency defaulted, unknown status mapped safely.");
     },
     {
       q: "What is the tolerant reader pattern and how does zod relate to it?",
-      a: "Tolerant reader means a client consumes only what it understands: unknown fields are ignored, missing optional fields get defaults, and unexpected enum values map to a safe fallback rather than throwing. It's the consumer half of the evolution bargain — 'additive changes are non-breaking' is only true if clients don't exact-match the response shape. zod helps because `z.object()` strips unknown keys by default when parsing, so a client that validates responses through a zod schema is a tolerant reader automatically — a new server field simply doesn't appear in the parsed output. The corollary is to keep `.strict()` off response schemas; strictness belongs on requests you own, where unknown keys indicate a caller bug.",
+      a: "Tolerant reader means a client consumes only what it understands: unknown fields are ignored, missing optional fields get defaults, and unexpected enum values map to a safe fallback rather than throwing. It's the consumer half of the evolution bargain — 'additive changes are non-breaking' is only true if clients don't exact-match the response shape. zod helps because `z.object()` strips unknown keys by default when parsing, so a client that validates responses through a zod schema is a tolerant reader automatically — a new server field simply doesn't appear in the parsed output. The corollary is to keep strictness off response schemas — in Zod 4 that means not reaching for `z.strictObject()`, which replaced the now-deprecated `.strict()` method; strictness belongs on requests you own, where unknown keys indicate a caller bug.",
     },
     {
       q: "Walk me through properly deprecating a field on a public API.",

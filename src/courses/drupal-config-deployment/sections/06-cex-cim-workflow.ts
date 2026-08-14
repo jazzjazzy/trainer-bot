@@ -62,7 +62,8 @@ edit hides inside \`display.default.display_options\`. Two things help: read the
 \`dependencies:\` block first (it tells you what the View now needs), and treat a
 whole-file rewrite as a red flag — that usually means someone deleted and
 recreated the View, so it has a **new UUID**. UUID churn is how a "small tweak"
-becomes an import that refuses to run on production.
+becomes an import that deletes and recreates the View in production instead of
+updating it — the storage comparer treats same-name-different-uuid as a recreate.
 
 Also scan for what should never ship: \`system.logging\` flipped to \`verbose\`,
 a \`devel.\`-prefixed file, \`system.performance\` with aggregation switched off,
@@ -397,7 +398,7 @@ Line diff for one changed display file
     },
     {
       q: "You open a PR and the diff shows views.view.events.yml rewritten end to end, with a changed uuid. What's happened, and why does it matter?",
-      a: "Somebody deleted the View and rebuilt it rather than editing it. Config entities carry a UUID generated once at creation. Import still matches objects by config name — the storage comparer builds its create/update/delete changelist from names — but Drupal uses the UUIDs to spot renames and to refuse an update whose UUID no longer matches the stored entity. That mismatch is what aborts the import (ConfigDuplicateUUIDException) on a site that still holds the original View. On top of that, a full-file rewrite is unreviewable — you cannot see what actually changed. The fix is to revert the recreation and make the edit in place, or, if the rebuild was genuinely necessary, to coordinate it as a deliberate delete-then-create and verify `drush cim --diff` on a copy of production before merging.",
+      a: "Somebody deleted the View and rebuilt it rather than editing it. Config entities carry a UUID generated once at creation. Import still matches objects by config name — the storage comparer builds its create/update/delete changelist from names — but Drupal also compares UUIDs: `StorageComparer::addChangelistUpdate()` classifies a same-name object whose uuid no longer matches the stored entity's as a *recreate*, so the import does not abort — it puts the name in both the delete and the create changelist and, because deletes run first, quietly destroys the live View and builds the incoming one in its place, taking everything that depended on the old entity with it. On top of that, a full-file rewrite is unreviewable — you cannot see what actually changed. The fix is to revert the recreation and make the edit in place, or, if the rebuild was genuinely necessary, to coordinate it as a deliberate delete-then-create and verify `drush cim --diff` on a copy of production before merging.",
     },
     {
       q: "When is `drush cim --partial` the right tool, and when is it a smell?",

@@ -374,7 +374,7 @@ attemptImport('sync dir vs a CLONE of the same site', $sync, $clonedProd);
       options: [
         "drush site:install standard, then drush cim -y.",
         "drush site:install standard, then delete system.site.yml from the sync directory.",
-        "Restore a dump of the production database, then drush cim && drush updb.",
+        "Restore a dump of the production database, then drush updb && drush cim.",
         "Run composer install and skip the database entirely.",
       ],
       answerIndex: 2,

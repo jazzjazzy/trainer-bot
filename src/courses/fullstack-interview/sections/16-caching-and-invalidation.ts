@@ -171,12 +171,15 @@ async function getFeed() {
   // misses await that same promise instead of piling on.
   let p = inFlight.get('feed:home');
   if (!p) {
-    p = db.buildHomeFeed().then(async (feed) => {
-      const ttl = 60 + Math.floor(Math.random() * 20); // jitter
-      await cache.set('feed:home', JSON.stringify(feed), { ttl });
-      inFlight.delete('feed:home');
-      return feed;
-    });
+    p = db.buildHomeFeed()
+      .then(async (feed) => {
+        const ttl = 60 + Math.floor(Math.random() * 20); // jitter
+        await cache.set('feed:home', JSON.stringify(feed), { ttl });
+        return feed;
+      })
+      // Clear on failure too — otherwise one DB blip parks a
+      // rejected promise here and every later miss gets it.
+      .finally(() => inFlight.delete('feed:home'));
     inFlight.set('feed:home', p);
   }
   return p;

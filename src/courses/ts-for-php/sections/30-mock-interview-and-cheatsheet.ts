@@ -19,7 +19,7 @@ production-grade experience. TypeScript is a new dialect, not a new craft.
 
 | Concept | PHP | TypeScript |
 | --- | --- | --- |
-| Typed variable | \`int $n = 5;\` | \`const n: number = 5;\` |
+| Typed variable | \`$n = 5;\` (locals can't be typed) | \`const n: number = 5;\` |
 | Typed function | \`function f(int $a): int\` | \`function f(a: number): number\` |
 | Nullable | \`?string\` | \`string \| null\` (or \`string \| undefined\`) |
 | Union | \`int\|string\` | \`number \| string\` |

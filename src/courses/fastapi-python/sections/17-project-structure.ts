@@ -70,8 +70,10 @@ The naming trips people up, so fix it now:
 
 ### Imports: packages and one-directional layers
 
-Python's import system needs each directory to be a package (an
-\`__init__.py\` file, even empty) and favours **absolute imports**:
+A directory becomes a package by carrying an \`__init__.py\` file (even
+empty); since Python 3.3 a directory without one still imports as an implicit
+*namespace package*, but real projects mark theirs. Python favours
+**absolute imports**:
 \`from app.routers import users\`, not fragile relative dot-hopping. There is
 no PSR-4 autoloader — the package tree *is* the namespace.
 
@@ -190,7 +192,7 @@ use App\\Models\\User;
 // composer dump-autoload wires it up;
 // no per-directory marker files needed.
 $service = new UserService();`,
-      ts: `# Every package directory needs __init__.py (even empty):
+      ts: `# Mark every package directory with __init__.py (even empty):
 #   app/__init__.py
 #   app/users/__init__.py
 
@@ -247,7 +249,7 @@ tree app
     "Docs' layout for small apps: `app/main.py` + `app/routers/` + `app/dependencies.py`, everything grouped by file type.",
     "Domain layout for bigger apps: `app/users/{router,schemas,models,service}.py` — every feature is self-contained, like a modular monolith.",
     "Vocabulary matters: **schemas** = Pydantic (wire), **models** = SQLAlchemy (database), **service** = business logic. ≈ FormRequest+Resource, Eloquent model, service class.",
-    "Python packaging: every directory needs `__init__.py`, prefer absolute imports (`from app.users import schemas`), and run uvicorn from the project root.",
+    "Python packaging: mark each package directory with `__init__.py` (a directory without one still imports as a PEP 420 namespace package, but real projects mark theirs), prefer absolute imports (`from app.users import schemas`), and run uvicorn from the project root.",
     "Kill circular imports with one-directional layers: router → service → models, schemas at the bottom importing nothing of yours.",
   ],
 

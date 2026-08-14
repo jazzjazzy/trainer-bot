@@ -10,8 +10,9 @@ const lesson: Lesson = {
     "Svelte 5 treats events as plain properties — type DOM handlers precisely, and replace dispatched component events with typed callback props.",
 
   concept: `
-In Svelte 5, events stopped being a special language feature. There is no
-\`on:click\` directive any more — an event handler is **just a property** like
+In Svelte 5, events stopped being a special language feature. The \`on:click\`
+directive is deprecated (it still compiles, with a warning) — an event handler
+is now **just a property** like
 any other: \`<button onclick={handler}>\`. That one design decision is what makes
 events so pleasant to type: if a handler is just a function-valued prop, then
 everything you learned about typing functions and props applies directly.
@@ -250,7 +251,7 @@ the second inferred automatically from the markup.`,
       ],
       answerIndex: 1,
       explain:
-        "Svelte 5 removed the on: directive; event handlers are regular properties. That's why they can be typed, spread, and forwarded exactly like any other prop.",
+        "Svelte 5 deprecated the on: directive — it still compiles, with a warning — in favour of event handlers as regular properties. That's why they can be typed, spread, and forwarded exactly like any other prop.",
     },
     {
       question:

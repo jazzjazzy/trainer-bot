@@ -25,7 +25,7 @@ jobs:                         # one or more JOBS
     runs-on: ubuntu-latest    # which machine (the RUNNER)
     steps:                    # ordered STEPS
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -65,7 +65,7 @@ between steps. Each step is one of:
 
 - \`run:\` — a shell command, exactly what you'd type over SSH.
 - \`uses:\` — a reusable **action** from the marketplace, versioned with
-  \`@\`: \`actions/checkout@v6\`, \`actions/setup-node@v4\`. The \`with:\`
+  \`@\`: \`actions/checkout@v6\`, \`actions/setup-node@v7\`. The \`with:\`
   block passes inputs — \`setup-node\`'s \`cache: npm\` caches the npm
   download cache between runs for free. The \`@v6\` major-version tag is the
   common convention; the security-hardened practice (GitHub's own docs do
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run lint
@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm test`,
@@ -195,7 +195,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -206,7 +206,7 @@ jobs:
 
 ✓ Set up job                                            2s
 ✓ Run actions/checkout@v6                               1s
-✓ Run actions/setup-node@v4                             4s
+✓ Run actions/setup-node@v7                             4s
 ✓ Run npm ci                                           31s
 ✗ Run npm test                                         12s
   > shop-api@1.0.0 test
@@ -218,7 +218,7 @@ jobs:
   Tests  1 failed | 2 passed (3)
   Error: Process completed with exit code 1.
 ○ Run npm run build                               skipped
-✓ Post Run actions/setup-node@v4                        0s
+✓ Post Run actions/setup-node@v7                        0s
 ✓ Complete job                                          0s
 
 Job "test" failed — steps after the failing step were skipped,
@@ -228,7 +228,7 @@ and the commit 3f9c2ab is marked with a red ✗ on GitHub.`,
   keyPoints: [
     "A workflow is a YAML file in `.github/workflows/`: `name`, `on` (triggers: push/pull_request with `branches:` filters, schedule, workflow_dispatch), and `jobs`.",
     "Each job runs on its own fresh VM (`runs-on: ubuntu-latest`) and jobs run in parallel by default — order them with `needs:`, and nothing (not even the repo) carries over between jobs.",
-    "Almost every job starts with `uses: actions/checkout@v6`, because the runner starts without your code; `actions/setup-node@v4` with `cache: npm` installs Node and caches the npm cache.",
+    "Almost every job starts with `uses: actions/checkout@v6`, because the runner starts without your code; `actions/setup-node@v7` with `cache: npm` installs Node and caches the npm cache.",
     "Steps are `uses:` (a versioned, reusable action with `with:` inputs) or `run:` (a shell command); steps in one job share the VM and run in order.",
     "A failing step skips the rest of the job's steps and fails the job — fail-fast at step granularity.",
     "`${{ ... }}` expressions are evaluated by Actions before the shell runs; the github context provides `github.sha`, `github.ref`, `github.actor`, `github.event_name` for logic like `if: github.ref == 'refs/heads/main'`.",
@@ -237,7 +237,7 @@ and the commit 3f9c2ab is marked with a red ✗ on GitHub.`,
   interview: [
     {
       q: "Walk me through the structure of a GitHub Actions workflow file.",
-      a: "Three levels. At the top, `name` for display and `on` for triggers — typically `push` and `pull_request` with branch filters, plus `schedule` with cron syntax or `workflow_dispatch` for a manual button. Under `jobs`, each job declares `runs-on` — usually `ubuntu-latest` — and gets a fresh, isolated VM; jobs run in parallel unless you order them with `needs:`. Each job is a list of `steps`, which are either `uses:` — a reusable, versioned action like `actions/checkout@v6` or `actions/setup-node@v4` with inputs under `with:` — or `run:`, a plain shell command. Steps share their job's VM and run sequentially; a non-zero exit fails the step, skips the remaining steps, and fails the job.",
+      a: "Three levels. At the top, `name` for display and `on` for triggers — typically `push` and `pull_request` with branch filters, plus `schedule` with cron syntax or `workflow_dispatch` for a manual button. Under `jobs`, each job declares `runs-on` — usually `ubuntu-latest` — and gets a fresh, isolated VM; jobs run in parallel unless you order them with `needs:`. Each job is a list of `steps`, which are either `uses:` — a reusable, versioned action like `actions/checkout@v6` or `actions/setup-node@v7` with inputs under `with:` — or `run:`, a plain shell command. Steps share their job's VM and run sequentially; a non-zero exit fails the step, skips the remaining steps, and fails the job.",
     },
     {
       q: "Why does every job start with actions/checkout, and why do two jobs in the same workflow both need it?",

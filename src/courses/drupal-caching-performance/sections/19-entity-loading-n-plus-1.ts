@@ -70,7 +70,7 @@ a loop. Collect the target ids across all nodes first, then load once.
 
 The core version matters here, so check it before repeating the folklore.
 
-**Drupal 10 through Drupal 11.2 — unbounded.** In a web request the identity map
+**Drupal 10 through Drupal 11.1 — unbounded.** In a web request the identity map
 is bounded by the request. In \`drush\` scripts, queue workers, cron and
 migrations there is no request end, so one process can load a million nodes and
 the memory cache will hold every one — a slow climb to "Allowed memory size
@@ -84,7 +84,7 @@ exhausted". You clear it yourself:
 Call one of them at the end of each batch. Query counts do not change; peak
 memory does.
 
-**Drupal 11.3 and later — a bounded LRU.** Core replaced the static cache with a
+**Drupal 11.2 and later — a bounded LRU.** Core replaced the static cache with a
 least-recently-used cache capped by the \`entity.memory_cache.slots\` container
 parameter (issue #3498154). The default is 1000, and it is documented in
 \`sites/default/default.services.yml\`: *"The maximum number of entities stored in
@@ -187,7 +187,7 @@ $authors = $this->entityTypeManager->getStorage('user')
     {
       label: "Long-running processes: clearing the identity map",
       intro:
-        "A queue worker re-indexing 200,000 incidents. In both stacks the per-request identity map has no request to end, so on Drupal 10 and 11.2 or earlier it grows until the process dies. (Drupal 11.3 caps it — see the note below.)",
+        "A queue worker re-indexing 200,000 incidents. In both stacks the per-request identity map has no request to end, so on Drupal 10 and 11.1 or earlier it grows until the process dies. (Drupal 11.2 caps it — see the note below.)",
       php: `<?php
 // Doctrine: the UnitOfWork holds every managed entity for the process life.
 foreach ($this->batches($ids, 100) as $batch) {
@@ -200,8 +200,8 @@ foreach ($this->batches($ids, 100) as $batch) {
   gc_collect_cycles();
 }`,
       ts: `<?php
-// Drupal 10 / 11.2 and earlier: entity.memory_cache holds every loaded
-// entity for the process life. From 11.3 it is an LRU capped at the
+// Drupal 10 / 11.1 and earlier: entity.memory_cache holds every loaded
+// entity for the process life. From 11.2 it is an LRU capped at the
 // entity.memory_cache.slots parameter (default 1000), so it self-evicts.
 public function processItem($data): void {
   $storage = $this->entityTypeManager->getStorage('node');
@@ -220,7 +220,7 @@ public function processItem($data): void {
   // became an LRU (change record 3139212).
   \\Drupal::service('entity.memory_cache')->deleteAll();
 }`,
-      note: "Neither call changes the query count — both processes issue the same number of queries. They change peak RSS, which is what actually kills the worker. On Drupal 11.3+ the LRU already bounds RSS, so the Drupal-side clear becomes optional: lower entity.memory_cache.slots in services.yml instead.",
+      note: "Neither call changes the query count — both processes issue the same number of queries. They change peak RSS, which is what actually kills the worker. On Drupal 11.2+ the LRU already bounds RSS, so the Drupal-side clear becomes optional: lower entity.memory_cache.slots in services.yml instead.",
       leftLang: "php",
       rightLang: "php",
     },
@@ -380,7 +380,7 @@ printf("D  entityQuery -> loadMultiple queries=%d  rows=%d  (kept %d)\\n",
   $d->queries, $d->rows, count($matching));
 
 // --- The long-running process: the identity map never lets go ----------
-// (This models Drupal 10 / 11.2 and earlier. From 11.3 the cache is an LRU
+// (This models Drupal 10 / 11.1 and earlier. From 11.2 the cache is an LRU
 // capped at entity.memory_cache.slots, so "held" would stop at that cap.)
 echo "\\nQueue worker processing 4 batches without resetCache():\\n";
 $w = new FakeNodeStorage($db);
@@ -423,7 +423,7 @@ Queries are identical (4 vs 4); only the memory profile differs.
     "Two caches sit in front of the database: the per-request static cache from the entity.memory_cache service (an identity map — you get the same object instance back) and the persistent cache_entity bin across requests. Both default to on for content entities via the static_cache and persistent_cache entity-type properties.",
     "The static cache hides N+1 bugs: the second pass over the same ids is free, so the loop looks harmless in tests and only bites on a cold cache under real traffic — benchmark after drush cache:rebuild.",
     "Use entityQuery with conditions and range() to get ids, then one loadMultiple() — never loadMultiple() with no argument followed by array_filter(). entityQuery requires an explicit accessCheck(TRUE|FALSE) or it throws QueryException. referencedEntities() batches per target type, but calling it once per node inside a loop reintroduces the N+1.",
-    "Through Drupal 11.2 the static cache never expires inside a CLI process, so drush scripts, queue workers, cron and migrations must call $storage->resetCache() or \\Drupal::service('entity.memory_cache')->deleteAll() per batch to keep peak memory flat. From Drupal 11.3 entity.memory_cache is an LRU bounded by the entity.memory_cache.slots parameter (default 1000, set in sites/default/services.yml), so it evicts on its own and the manual clear becomes a tuning knob.",
+    "Through Drupal 11.1 the static cache never expires inside a CLI process, so drush scripts, queue workers, cron and migrations must call $storage->resetCache() or \\Drupal::service('entity.memory_cache')->deleteAll() per batch to keep peak memory flat. From Drupal 11.2 entity.memory_cache is an LRU bounded by the entity.memory_cache.slots parameter (default 1000, set in sites/default/services.yml), so it evicts on its own and the manual clear becomes a tuning knob.",
     "Prove the fix with numbers: Database::startLog('key') / Database::getLog('key') gives you the query count, timings and the caller of each query.",
   ],
 
@@ -434,11 +434,11 @@ Queries are identical (4 vs 4); only the memory profile differs.
     },
     {
       q: "Explain Drupal's entity static cache to someone who knows Doctrine.",
-      a: "It is Doctrine's identity map with a shorter life. Entity storage keeps loaded entities in a `MemoryCacheInterface` backend from the `entity.memory_cache` service, keyed by entity type and id, so a second `load()` in the same request returns the *same PHP object* with no query — mutate it through one reference and the other sees the change. The difference from Doctrine is scope and intent: it is per-request only, it is not a unit of work (there is no change tracking or flush; you call `$entity->save()` yourself), and behind it Drupal has a second, persistent tier in the `cache_entity` bin that survives across requests and is invalidated by the entity's cache tags. The failure mode used to be the same as Doctrine's: in a long-running CLI process nothing ends the request, so on Drupal 10 and 11.2 or earlier the map grows until memory runs out, and you clear it with `$storage->resetCache()` the way you would call `EntityManager::clear()`. Drupal 11.3 turned that cache into an LRU bounded by the `entity.memory_cache.slots` parameter — default 1000 — so it now evicts for you, which Doctrine's UnitOfWork still does not.",
+      a: "It is Doctrine's identity map with a shorter life. Entity storage keeps loaded entities in a `MemoryCacheInterface` backend from the `entity.memory_cache` service, keyed by entity type and id, so a second `load()` in the same request returns the *same PHP object* with no query — mutate it through one reference and the other sees the change. The difference from Doctrine is scope and intent: it is per-request only, it is not a unit of work (there is no change tracking or flush; you call `$entity->save()` yourself), and behind it Drupal has a second, persistent tier in the `cache_entity` bin that survives across requests and is invalidated by the entity's cache tags. The failure mode used to be the same as Doctrine's: in a long-running CLI process nothing ends the request, so on Drupal 10 and 11.1 or earlier the map grows until memory runs out, and you clear it with `$storage->resetCache()` the way you would call `EntityManager::clear()`. Drupal 11.2 turned that cache into an LRU bounded by the `entity.memory_cache.slots` parameter — default 1000 — so it now evicts for you, which Doctrine's UnitOfWork still does not.",
     },
     {
       q: "When would you deliberately call resetCache(), and what does it cost?",
-      a: "In anything that outlives a normal web request: `drush` scripts, queue workers, `hook_cron` implementations, migrations and Batch API operations that walk large id sets. On Drupal 10 and Drupal 11 up to 11.2 the `entity.memory_cache` identity map is unbounded, so without a clear it accumulates every entity the process ever touched and you hit `Allowed memory size exhausted` partway through a 200,000-row job. I call `$storage->resetCache()` at the end of each batch, or `\\Drupal::service('entity.memory_cache')->deleteAll()` when several entity types are involved — that is what `MigrateExecutable::attemptMemoryReclaim()` did on those versions (`drupal_static_reset()`, `entity.memory_cache->deleteAll()`, `gc_collect_cycles()`). I would check the core version first, though: Drupal 11.3 made that cache an LRU capped at the `entity.memory_cache.slots` parameter (default 1000) and removed Migrate's memory management entirely for exactly that reason (change record 3139212), so on 11.3+ the knob is the slot count in `services.yml` rather than a manual clear. Either way the cost is the same: a later re-load of the same entity goes back to the persistent `cache_entity` bin or the database, so it is a memory-versus-queries trade, and in a batch job that never revisits an id it is pure win. I would not force it inside a web request, where the identity map is exactly what you want.",
+      a: "In anything that outlives a normal web request: `drush` scripts, queue workers, `hook_cron` implementations, migrations and Batch API operations that walk large id sets. On Drupal 10 and Drupal 11 up to 11.1 the `entity.memory_cache` identity map is unbounded, so without a clear it accumulates every entity the process ever touched and you hit `Allowed memory size exhausted` partway through a 200,000-row job. I call `$storage->resetCache()` at the end of each batch, or `\\Drupal::service('entity.memory_cache')->deleteAll()` when several entity types are involved — that is what `MigrateExecutable::attemptMemoryReclaim()` did on those versions (`drupal_static_reset()`, `entity.memory_cache->deleteAll()`, `gc_collect_cycles()`). I would check the core version first, though: Drupal 11.2 made that cache an LRU capped at the `entity.memory_cache.slots` parameter (default 1000), and Drupal 11.3 then removed Migrate's memory management entirely for exactly that reason (change record 3139212), so on 11.2+ the knob is the slot count in `services.yml` rather than a manual clear. Either way the cost is the same: a later re-load of the same entity goes back to the persistent `cache_entity` bin or the database, so it is a memory-versus-queries trade, and in a batch job that never revisits an id it is pure win. I would not force it inside a web request, where the identity map is exactly what you want.",
     },
     {
       q: "Why is `loadMultiple()` with no arguments a red flag in a code review?",
@@ -471,7 +471,7 @@ Queries are identical (4 vs 4); only the memory profile differs.
       ],
       answerIndex: 2,
       explain:
-        "The static cache is scoped to a request, and a CLI process is one very long request. On Drupal 10 — and on Drupal 11 up to 11.2 — that cache has no size limit, so every entity ever loaded stays in the identity map. Call `$storage->resetCache()` — or `\\Drupal::service('entity.memory_cache')->deleteAll()` for all entity types — at the end of each batch. Query counts are unchanged; only peak memory drops. From Drupal 11.3 the same cache is an LRU capped at `entity.memory_cache.slots` (default 1000), so this job would plateau rather than die, and the fix becomes lowering the slot count in `services.yml`.",
+        "The static cache is scoped to a request, and a CLI process is one very long request. On Drupal 10 — and on Drupal 11 up to 11.1 — that cache has no size limit, so every entity ever loaded stays in the identity map. Call `$storage->resetCache()` — or `\\Drupal::service('entity.memory_cache')->deleteAll()` for all entity types — at the end of each batch. Query counts are unchanged; only peak memory drops. From Drupal 11.2 the same cache is an LRU capped at `entity.memory_cache.slots` (default 1000), so this job would plateau rather than die, and the fix becomes lowering the slot count in `services.yml`.",
     },
     {
       question:

@@ -132,7 +132,7 @@ display:
           order: DESC
           plugin_id: date
       pager:
-        type: full
+        type: mini
         options:
           items_per_page: 10
       row:

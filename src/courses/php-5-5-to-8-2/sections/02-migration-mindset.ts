@@ -8,10 +8,10 @@ const lesson: Lesson = {
   estMinutes: 12,
 
   summary:
-    "A practical, low-risk playbook for crossing four major versions: deprecations vs breaking changes, strict_types, the error-level shifts in 7 and 8, and the tooling that does the heavy lifting.",
+    "A practical, low-risk playbook for crossing two major versions: deprecations vs breaking changes, strict_types, the error-level shifts in 7 and 8, and the tooling that does the heavy lifting.",
 
   concept: `
-Jumping from PHP 5.5 to 8.2 means crossing **four major versions** (7.0, 8.0)
+Jumping from PHP 5.5 to 8.2 means crossing **two major versions** (7.0 and 8.0)
 and a pile of minors. Done blindly that's terrifying; done methodically it's a
 sequence of small, testable steps. The mindset: **one major version at a time,
 green tests at every stop.**
@@ -45,8 +45,9 @@ coercing — surfacing exactly the boundary bugs an upgrade tends to expose.
 - **7.0** introduced \`Throwable\`; fatal engine errors became catchable \`Error\`
   objects, and many were thrown where 5.5 simply died.
 - **8.0** promoted a long list of \`E_WARNING\`/\`E_NOTICE\` to \`Error\`/\`TypeError\`
-  — calling a method on \`null\`, passing too few arguments, and reading an
-  undefined array key all got stricter or noisier.
+  — writing to a property of a non-object, passing too few arguments to an
+  *internal* function, and reading an undefined array key all got stricter or
+  noisier. (Calling a *method* on \`null\` already threw an \`Error\` from 7.0.)
 
 So code that "worked" on 5.5 by ignoring warnings can now *throw*. That's a
 feature: it converts silent corruption into a loud, traceable failure.
@@ -91,11 +92,11 @@ foreach ($array as $key => $val) {
 $name = $user->getProfile()->name; // if getProfile() is null...
 echo $name; // 5.5: notice/warning, $name is NULL`,
       ts: `<?php
-// PHP 8.0 — same code now throws, so guard it
+// PHP 8.0 — that read still only warns and yields null; be explicit
 $name = $user->getProfile()?->name; // nullsafe stops the chain
 echo $name ?? 'unknown';`,
       note:
-        "In 8.0 calling a method/property on null is a fatal Error, not a warning; the nullsafe operator ?-> (8.0) short-circuits the chain to null instead.",
+        "Calling a method on null has been a catchable Error since 7.0, while reading a property on null is still only a warning (E_NOTICE in 5.5, E_WARNING since 8.0); the nullsafe operator ?-> (8.0) short-circuits the whole chain to null instead of warning.",
     },
     {
       label: "Enforcing argument types",
@@ -165,7 +166,7 @@ echo ($order->customer?->name ?? 'guest'), "\\n";
 $order->customer = new Customer();
 echo ($order->customer?->name ?? 'guest'), "\\n";
 
-// 8.0 promoted this from a warning to a hard error if uncaught:
+// Since 7.0 this is a catchable Error (in 5.5 it was an uncatchable fatal):
 try {
     $n = null;
     $n->charge();
@@ -201,7 +202,7 @@ caught: Call to a member function charge() on null`,
     },
     {
       q: "How did error and exception handling change across PHP 7 and 8 in ways that affect old code?",
-      a: "**7.0** added the `Throwable` hierarchy: many fatal engine errors became catchable `Error` objects, so things that killed a 5.5 script can now be caught. **8.0** promoted a long list of warnings/notices to `Error`/`TypeError` — calling a method on `null`, passing too few arguments, undefined array keys. The practical upshot: 5.5 code that limped along by ignoring warnings may now *throw*. That's beneficial — silent corruption becomes a loud, traceable exception — but you must handle or fix those paths.",
+      a: "**7.0** added the `Throwable` hierarchy: many fatal engine errors became catchable `Error` objects, so things that killed a 5.5 script can now be caught. **8.0** promoted a long list of warnings/notices to `Error`/`TypeError` — writing to a property of a non-object, passing too few arguments to an internal function — and turned many notices into warnings, such as reading an undefined array key. (Calling a *method* on `null` had already become a catchable `Error` back in 7.0.) The practical upshot: 5.5 code that limped along by ignoring warnings may now *throw*. That's beneficial — silent corruption becomes a loud, traceable exception — but you must handle or fix those paths.",
     },
     {
       q: "Which tools would you reach for during the upgrade, and what does each do?",
@@ -241,13 +242,13 @@ caught: Call to a member function charge() on null`,
         "Which change in PHP 8.0 most often turns previously 'working' 5.5 code into a thrown exception?",
       options: [
         "Arrow functions replacing closures",
-        "Promotion of many warnings/notices (e.g. method call on null) to Error/TypeError",
+        "Promotion of many warnings/notices (e.g. writing to a property of a non-object) to Error/TypeError",
         "Enums replacing class constants",
         "Readonly properties replacing getters",
       ],
       answerIndex: 1,
       explain:
-        "PHP 8.0 promoted numerous warnings and notices — such as calling a method on null or passing too few arguments — to Error/TypeError, so code that previously emitted a warning and continued now throws.",
+        "PHP 8.0 promoted numerous warnings and notices — such as writing to a property of a non-object or passing too few arguments to an internal function — to Error/TypeError, so code that previously emitted a warning and continued now throws.",
     },
   ],
 };

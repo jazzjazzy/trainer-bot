@@ -124,10 +124,10 @@ function describeOk(thing: unknown): string {
 declare(strict_types=1);
 
 function initial(?string $name): string {
-    // PHP won't force you to check. If $name is null this doesn't
-    // fatal — $name[0] gives a "null offset" warning and returns null,
-    // and strtoupper(null) returns "" (deprecated since 8.1). You
-    // silently get an empty string instead of being made to handle null.
+    // Nothing stops this at compile time. If $name is null, $name[0]
+    // warns ("Trying to access array offset on null") and yields null,
+    // and under strict_types strtoupper(null) then throws a TypeError.
+    // (In coercive mode it's an 8.1 deprecation that returns "".)
     return strtoupper($name[0]);
 }`,
       ts: `// With strictNullChecks, the compiler forces the guard:
@@ -136,7 +136,7 @@ function initial(name: string | null): string {
   return name[0].toUpperCase(); // safe: narrowed to string here
 }`,
       note:
-        "PHP's '?string' lets null through and silently degrades (a warning plus an empty string) when you forget the guard. strictNullChecks makes the guard mandatory — at compile time.",
+        "PHP's '?string' lets null through and only complains once it runs — a warning, then a TypeError under strict_types (an empty string in coercive mode). strictNullChecks makes the guard mandatory — at compile time.",
     },
     {
       label: "Import aliases: PSR-4 vs paths",

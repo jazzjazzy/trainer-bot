@@ -76,7 +76,7 @@ control:
 \`\`\`tsx
 export const dynamic = 'force-dynamic'; // always render per request
 // or:
-export const dynamic = 'force-static';  // prerender; error if impossible
+export const dynamic = 'force-static';  // prerender anyway; cookies()/headers() return empty
 // or, the middle ground:
 export const revalidate = 60; // static, but re-render in the background
                               // at most every 60s (must be a literal)

@@ -55,7 +55,7 @@ config deploy; the content is data you never commit.
 
 ### Declaring them
 
-An entity type is declared with an **attribute** (Drupal 11 / 10.3+) or the older
+An entity type is declared with an **attribute** (Drupal 11) or the older
 **annotation** on the class — the class's docblock-or-attribute *is* the plugin
 definition, discovered by the entity type manager, much like a Symfony attribute
 route is discovered by the router. The rule of thumb: if a value differs between
@@ -253,7 +253,7 @@ Deploy config entities? yes -> drush config:export`,
     "**Config entities** (node type, view, image style, role, field definition) are site structure: exported to YAML and deployed — `ConfigEntityBase` / `ConfigEntityInterface`, with `config_export` listing saved properties.",
     "They interlock: a config entity is usually the **bundle** (type) of a content entity — `node.type.article` (config) vs an actual article (content).",
     "Rule of thumb: if a value differs between prod and your laptop it's **content**; if it should be identical everywhere and travel in git it's **config**.",
-    "Entity types are declared with a `#[ContentEntityType]` / `#[ConfigEntityType]` attribute (Drupal 11 / 10.3+) or the older annotation — both still supported.",
+    "Entity types are declared with a `#[ContentEntityType]` / `#[ConfigEntityType]` attribute (Drupal 11) or the older annotation — both still supported.",
   ],
 
   interview: [

@@ -71,9 +71,9 @@ class Bell {
   ring() { console.log(this.sound); }
 }
 const b = new Bell();
-setTimeout(b.ring, 0);         // 💥 under strict mode "this" is undefined
-                               // when the timer fires (in sloppy mode the
-                               // timer call gets the global object instead)
+setTimeout(b.ring, 0);         // 💥 logs undefined: the host supplies its own
+                               // receiver (window in browsers, the Timeout
+                               // object in Node) — never the Bell instance
 \`\`\`
 
 The fix is an **arrow method**, which captures \`this\` from where it was defined
@@ -129,7 +129,7 @@ echo User::$count;                 // 1`,
 const u = User.fromName("Ada");
 console.log(User.count);           // 1`,
       note:
-        "PHP uses self::/static:: and ::; TypeScript uses ClassName. and .. There is no late-static-binding `static` keyword — you name the class.",
+        "PHP uses self::/static:: and ::; TypeScript uses ClassName. and .. There's no `static::` keyword, but inside a static method `this` *is* the class it was called on, so `new this()` gives you PHP's late static binding.",
     },
     {
       label: "Magic accessors vs real accessors",

@@ -50,9 +50,10 @@ namespace that SvelteKit already consumes.
 - **\`PageData\`** — properties common to *all* pages' \`data\` (things your
   root layout always loads, like the current user). Page-specific data still
   comes from generated \`./$types\`; this is only for the shared core.
-- **\`Error\`** — the shape of **expected** errors (the object you pass to
-  \`error(404, {...})\` and read back on \`page.error\` in \`+error.svelte\`).
-  It must at least contain \`message: string\`.
+- **\`Error\`** — the common shape of **expected and unexpected** errors: the
+  object you pass to \`error(404, {...})\` and read back on \`page.error\` in
+  \`+error.svelte\`, and also the shape the \`handleError\` hooks must return
+  for unexpected exceptions. It must at least contain \`message: string\`.
 - **\`PageState\`** — the shape of \`page.state\` used by **shallow routing**
   (\`pushState\`/\`replaceState\` from \`$app/navigation\`), e.g. "a photo
   modal is open".
@@ -268,12 +269,12 @@ console.log(
       options: [
         "It types unexpected runtime exceptions like TypeError",
         "It can have any shape you like, with no required fields",
-        "It types expected errors passed to error() and read from page.error, and must include message: string",
+        "It types expected errors passed to error() and read from page.error, and the object handleError returns for unexpected ones — and must include message: string",
         "It's only used during server-side rendering",
       ],
       answerIndex: 2,
       explain:
-        "App.Error describes the shape of *expected* errors — the object you hand to `error(status, {...})` and read back on `page.error` in `+error.svelte`. SvelteKit requires it to contain at least `message: string`; extra fields like a `code` are your additions.",
+        "App.Error describes the common shape of *expected and unexpected* errors — the object you hand to `error(status, {...})` and read back on `page.error` in `+error.svelte`, and the object the `handleError` hooks return for uncaught exceptions. (It isn't the type of the thrown exception itself, which `handleError` receives as `unknown`.) SvelteKit requires it to contain at least `message: string`; extra fields like a `code` are your additions.",
     },
     {
       question: "Why are the five App interfaces empty in a fresh project?",

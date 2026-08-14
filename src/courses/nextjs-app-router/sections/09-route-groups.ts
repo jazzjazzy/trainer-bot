@@ -54,8 +54,9 @@ excluded from routing, even if a \`page.tsx\` sneaks in. Use it for the
 
 ### Colocation is safe by default
 
-Here's the mental shift from PHP: inside \`app/\`, **only** the special
-files (\`page\`, \`route\`, \`layout\`, and friends) are publicly reachable.
+Here's the mental shift from PHP: inside \`app/\`, only the special
+filenames mean anything to the router at all — and of those, **only**
+\`page\` and \`route\` make a URL publicly reachable.
 A \`Chart.tsx\`, \`helpers.ts\`, or \`page.test.tsx\` sitting right next to
 the page that uses it is invisible to the router. Colocating code with the
 route it serves is encouraged — the \`test.php\`-in-production failure mode
@@ -108,7 +109,7 @@ app/
 │   └── _components/      # private: opted out of routing entirely
 │       └── ProductCard.tsx
 └── api/health/route.ts   # → /api/health`,
-      note: "The PHP tree exposes by default and hides by configuration; the app/ tree hides by default and exposes only the special files. (marketing) and (shop) exist purely to scope layouts and keep the tree tidy.",
+      note: "The PHP tree exposes by default and hides by configuration; the app/ tree hides by default and exposes only page and route files. (marketing) and (shop) exist purely to scope layouts and keep the tree tidy.",
       leftLang: "bash",
       rightLang: "bash",
     },
@@ -209,7 +210,7 @@ for (const file of files) {
     "Two groups must not resolve to the same path — `(a)/about` and `(b)/about` both claiming `/about` is an error.",
     "Groups can carry different ROOT layouts (each with `<html>`/`<body>`) if you omit the top-level one — but navigating across root layouts is a full page load.",
     "`_folder` opts a subtree out of routing entirely, even if it contains a `page.tsx` — the explicit 'never a route' marker.",
-    "Colocation is safe: only `page`, `route`, `layout` and the other special files are reachable, so components, helpers, and tests can live next to the routes that use them.",
+    "Colocation is safe: only the special filenames mean anything to the router, and only `page` and `route` create a URL — so components, helpers, and tests can live next to the routes that use them.",
     "Convention: `src/app` for the route tree, `src/lib` and `src/components` for cross-cutting code; colocate anything used by exactly one route.",
   ],
 
@@ -220,7 +221,7 @@ for (const file of files) {
     },
     {
       q: "Is it safe to put non-route files inside app/? How does that compare to a PHP webroot?",
-      a: "Yes — and that's a deliberate inversion of the PHP model. In a PHP webroot, every file is reachable by default; you hide things with `.htaccess` rules or by moving them out of the docroot, and forgetting is how `test.php` ends up live in production. In `app/`, only the special files — `page`, `route`, `layout`, `loading`, `error`, and so on — are publicly reachable. A `Chart.tsx` or `helpers.ts` next to a page is invisible to the router, so colocating a route's components, helpers, and tests with the route is encouraged. For an explicit signal you can prefix a folder with an underscore: `_components` is excluded from routing entirely, even if someone drops a `page.tsx` inside it.",
+      a: "Yes — and that's a deliberate inversion of the PHP model. In a PHP webroot, every file is reachable by default; you hide things with `.htaccess` rules or by moving them out of the docroot, and forgetting is how `test.php` ends up live in production. In `app/`, only the special filenames — `page`, `route`, `layout`, `loading`, `error`, and so on — mean anything to the router at all, and of those only `page` and `route` make a URL publicly reachable. A `Chart.tsx` or `helpers.ts` next to a page is invisible to the router, so colocating a route's components, helpers, and tests with the route is encouraged. For an explicit signal you can prefix a folder with an underscore: `_components` is excluded from routing entirely, even if someone drops a `page.tsx` inside it.",
     },
     {
       q: "How would you organize a Next.js project with a marketing site, an authenticated app, and shared code?",

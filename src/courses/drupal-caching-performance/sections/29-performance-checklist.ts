@@ -145,7 +145,8 @@ done
 #    means a session was open or the method was not GET/HEAD.
 #  - Cache-Control is built from system.performance cache.page.max_age, not
 #    from the response's bubbled max-age, so it still advertises 900s. The
-#    uncacheable string, when you do see it, is 'no-cache, must-revalidate'.
+#    uncacheable string, when you do see it, is 'must-revalidate, no-cache,
+#    private'.
 
 # Then locally only, to name the culprit:
 #   parameters:

@@ -67,8 +67,9 @@ Forms that cannot be rebuilt from scratch are stored server-side:
 \`$form_state->setCached()\` (POST only — calling it on GET throws), and
 \`FormCache\` writes the built \`$form\` and the \`$form_state\` into the
 key-value-expirable \`form\` / \`form_state\` collections keyed by \`form_build_id\`,
-for six hours — a lifetime \`\\Drupal\\Core\\Form\\FormCache\` hard-codes as
-\`$expire = 21600\` and does not expose as a setting. That is the
+for six hours by default — \`\\Drupal\\Core\\Form\\FormCache::setCache()\` uses
+\`$expire = Settings::get('form_cache_expiration', 21600)\`, so a site can retune it
+with \`$settings['form_cache_expiration']\` in \`settings.php\`. That is the
 **form cache**, and it is unrelated to \`#cache\` keys/contexts/tags, which is the
 **render cache** on the render-array side.
 
@@ -296,8 +297,10 @@ $form_state->setCached();
 // FormCache then stores, keyed by form_build_id:
 //   key_value_expire collection 'form'       -> the built $form array
 //   key_value_expire collection 'form_state' -> the FormState
-// Lifetime: FormCache::setCache() hard-codes $expire = 21600 (6 hours).
-// There is no settings.php key for it — nothing to tune.
+// Lifetime: FormCache::setCache() does
+//   $expire = Settings::get('form_cache_expiration', 21600);
+// so six hours is only the DEFAULT — override it with
+// $settings['form_cache_expiration'] in settings.php.
 
 // Do NOT confuse that with the RENDER cache on the same array:
 $form['#cache'] = [
@@ -442,7 +445,7 @@ getValue(['name'])                  -> NULL
     "doBuildForm() is the recursive walk that merges #type defaults from element_info, sets #parents/#array_parents/#name/#id, extracts values, runs #process, recurses, then runs #after_build.",
     "#process runs while an element is expanded and may add children (Checkboxes::processCheckboxes); #after_build runs once the element and its children are complete — the last hook before validation and rendering.",
     "Every POST re-enters buildForm(), and $form_state->setRebuild() makes it happen again with values preserved — so buildForm() must be deterministic and side-effect free, with per-build state in $form_state->set().",
-    "form_id selects which form's handlers run; form_build_id keys the server-side form cache (key-value-expirable 'form'/'form_state' collections, six hours, hard-coded in FormCache as 21600 seconds and not configurable) written when $form_state->setCached() is set — a completely different thing from #cache render caching.",
+    "form_id selects which form's handlers run; form_build_id keys the server-side form cache (key-value-expirable 'form'/'form_state' collections; FormCache::setCache() uses Settings::get('form_cache_expiration', 21600), so six hours unless settings.php overrides it) written when $form_state->setCached() is set — a completely different thing from #cache render caching.",
     "A child's #parents is the parent's #parents + key only when the parent has #tree TRUE (inherited downward); otherwise it flattens to [key] — which is why getValue('steps') works but getValue(['diagnostics','steps']) is NULL.",
   ],
 
@@ -461,7 +464,7 @@ getValue(['name'])                  -> NULL
     },
     {
       q: "Where does Drupal store a form between the render and the submit, and how is that different from #cache?",
-      a: "Normally nothing is stored — the form is rebuilt from \`buildForm()\`. But when a build can't be reproduced (AJAX, elements added by a rebuild, \`#process\` output that depends on prior input) the form is cached server-side: \`$form_state->setCached()\` (which throws on a GET request, since caching state on a safe method is a side effect), and \`FormCache\` writes the built array and the \`FormState\` into the key-value-expirable \`form\` and \`form_state\` collections keyed by the \`form_build_id\` hidden field, for six hours, hard-coded in \`FormCache\` (21600 seconds) and not configurable. What gets stored is the structure as it was *before* \`doBuildForm()\` ran — core deliberately keeps an \`$unprocessed_form\` copy, because \`doBuildForm()\` has to run on every request to map the new input. So on the next POST the build_id restores that pre-process structure and it is walked again: \`#process\` and \`#after_build\` both fire. What the cache hit skips is \`retrieveForm()\` and \`prepareForm()\`, so my \`buildForm()\` and \`hook_form_alter()\` do not run again for that build. That is completely separate from \`#cache\` on a render array, which is the render cache with keys, contexts, tags and max-age — same array, two unrelated caching systems, and mixing them up in an interview is a giveaway.",
+      a: "Normally nothing is stored — the form is rebuilt from \`buildForm()\`. But when a build can't be reproduced (AJAX, elements added by a rebuild, \`#process\` output that depends on prior input) the form is cached server-side: \`$form_state->setCached()\` (which throws on a GET request, since caching state on a safe method is a side effect), and \`FormCache\` writes the built array and the \`FormState\` into the key-value-expirable \`form\` and \`form_state\` collections keyed by the \`form_build_id\` hidden field, for six hours by default — \`FormCache::setCache()\` reads \`Settings::get('form_cache_expiration', 21600)\`, so \`$settings['form_cache_expiration']\` in settings.php can retune it. What gets stored is the structure as it was *before* \`doBuildForm()\` ran — core deliberately keeps an \`$unprocessed_form\` copy, because \`doBuildForm()\` has to run on every request to map the new input. So on the next POST the build_id restores that pre-process structure and it is walked again: \`#process\` and \`#after_build\` both fire. What the cache hit skips is \`retrieveForm()\` and \`prepareForm()\`, so my \`buildForm()\` and \`hook_form_alter()\` do not run again for that build. That is completely separate from \`#cache\` on a render array, which is the render cache with keys, contexts, tags and max-age — same array, two unrelated caching systems, and mixing them up in an interview is a giveaway.",
     },
   ],
 

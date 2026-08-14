@@ -253,12 +253,11 @@ set -euo pipefail
 
 composer install --no-dev --optimize-autoloader --no-interaction
 
-# 'drush deploy' is these five steps in one command. Spelled out:
+# 'drush deploy' (Drush 13+) is these four steps in one command. Spelled out:
 
 # Entity/schema updates first, so the code cim runs against is sane.
 # This runs HOOK_update_N() then HOOK_post_update_NAME() — both BEFORE import.
-drush updatedb --no-cache-clear
-drush cache:rebuild
+drush updatedb
 
 # ONE import. core.extension installs incident_tracker, then the sorted
 # changelist creates field.storage -> field.field -> views.view.

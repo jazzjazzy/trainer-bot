@@ -26,8 +26,10 @@ type is: parameters, return types, and (since 7.4) typed properties.
 function format(int|string $id): string { /* ... */ }
 \`\`\`
 
-Pass a \`float\` and you get a \`TypeError\` — the same enforcement you'd get from a
-single scalar hint, now spanning several accepted types.
+Under \`declare(strict_types=1)\`, pass a \`float\` and you get a \`TypeError\` — the same
+enforcement you'd get from a single scalar hint, now spanning several accepted types.
+(In the default coercive mode the float is coerced instead, following the
+int → float → string → bool preference order, so \`42.1\` arrives as \`int(42)\`.)
 
 ### \`Foo|null\` and \`?Foo\` are the same thing
 

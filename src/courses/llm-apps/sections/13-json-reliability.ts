@@ -101,11 +101,15 @@ Two rules interviewers like to probe:
 
 - \`additionalProperties: false\` is **required** on objects — the API rejects
   schemas without it. This is what kills invented fields.
-- Structural constraints are enforced; **numeric ranges are not**. Types,
-  required fields, and enums are guaranteed, but \`minimum\`/\`maximum\` on
-  numbers are not enforced server-side. A \`score\` of 47 on a 1–5 scale can
-  still come back. Business-rule validation stays your job — that is the
-  next section.
+- Structural constraints are enforced; **numeric ranges can't even be
+  expressed**. Types, required fields, and enums are guaranteed, but numeric
+  keywords like \`minimum\`/\`maximum\` are outside the JSON Schema subset
+  structured outputs supports — a hand-written schema containing them is
+  rejected with a 400. (The SDK helpers hide that: \`zodOutputFormat\` strips
+  the range keywords from the wire schema and re-checks them locally after
+  the response.) Either way generation never guarantees the range, so a
+  \`score\` of 47 on a 1–5 scale is only caught by your own validation.
+  Business-rule validation stays your job — that is the next section.
 
 One more edge: check \`stop_reason\`. A response truncated at \`max_tokens\`
 can end mid-JSON even with structured output — truncation beats formatting.
@@ -279,18 +283,18 @@ console.log("(no fences, no preamble, no extractor to maintain)");`,
     "The current fix is `output_config: { format: { type: \"json_schema\", schema } }` on messages.create — the response text is guaranteed parseable and schema-conforming. The old top-level `output_format` param is deprecated.",
     "In TypeScript, `client.messages.parse()` with `zodOutputFormat(YourSchema)` sends the schema and returns a typed `parsed_output` — no manual JSON.parse.",
     "Object schemas must set `additionalProperties: false` — that is what prevents invented fields.",
-    "Structure is enforced; business rules are not: numeric `minimum`/`maximum` are not enforced server-side, so range checks stay in your code.",
+    "Structure is enforced; business rules are not: numeric keywords like `minimum`/`maximum` are outside the supported JSON Schema subset (a raw schema containing them returns a 400), so range checks stay in your code.",
     "Assistant-turn prefill (seeding the reply with `{`) was the legacy trick — it now returns 400 on current models. Also still check `stop_reason`: a reply truncated at max_tokens can end mid-JSON.",
   ],
 
   interview: [
     {
       q: "How do you get reliable JSON out of an LLM in production?",
-      a: "Not with prompting alone — 'reply with JSON only' degrades in production into fenced output, preamble text, and invented fields. The Anthropic API has structured output as a first-class feature: you pass `output_config` with `format: { type: \"json_schema\", schema }` and the API constrains generation so the response text is guaranteed to parse and match the schema — `additionalProperties: false` is required, which is what kills invented fields. In TypeScript I use `client.messages.parse()` with `zodOutputFormat`, so the Zod schema I already use for my domain types becomes the output contract and I get a typed `parsed_output`. I still validate business rules afterwards, because structural guarantees don't cover things like numeric ranges — those aren't enforced server-side.",
+      a: "Not with prompting alone — 'reply with JSON only' degrades in production into fenced output, preamble text, and invented fields. The Anthropic API has structured output as a first-class feature: you pass `output_config` with `format: { type: \"json_schema\", schema }` and the API constrains generation so the response text is guaranteed to parse and match the schema — `additionalProperties: false` is required, which is what kills invented fields. In TypeScript I use `client.messages.parse()` with `zodOutputFormat`, so the Zod schema I already use for my domain types becomes the output contract and I get a typed `parsed_output`. I still validate business rules afterwards, because structural guarantees don't cover things like numeric ranges — those keywords aren't even in the supported schema subset.",
     },
     {
       q: "What does structured output guarantee, and what does it not?",
-      a: "It guarantees syntax and structure: the output parses as JSON, required fields are present, types match, enums contain only the listed values, and no extra fields appear. It does not guarantee semantics: numeric `minimum`/`maximum` aren't enforced server-side, so a score of 47 on a 1–5 scale can still come back; nothing checks that an ID refers to a real row or that a date is in a sensible range. And truncation trumps formatting — if the reply hits `max_tokens`, you can get cut-off JSON, so I check `stop_reason` before parsing. So the pattern is: schema for shape, then my own validation layer for meaning.",
+      a: "It guarantees syntax and structure: the output parses as JSON, required fields are present, types match, enums contain only the listed values, and no extra fields appear. It does not guarantee semantics: numeric keywords like `minimum`/`maximum` aren't part of the supported schema subset — a raw schema containing them returns a 400, and the SDK helpers strip them and re-check locally — so a score of 47 on a 1–5 scale is only caught by my own validation; nothing checks that an ID refers to a real row or that a date is in a sensible range. And truncation trumps formatting — if the reply hits `max_tokens`, you can get cut-off JSON, so I check `stop_reason` before parsing. So the pattern is: schema for shape, then my own validation layer for meaning.",
     },
     {
       q: "You see a codebase with a 'stripMarkdownFences' helper around every LLM call. What do you tell the team?",
@@ -318,12 +322,12 @@ console.log("(no fences, no preamble, no extractor to maintain)");`,
       options: [
         "A reply wrapped in markdown fences",
         "An invented field not in the schema",
-        "A number outside the schema's minimum/maximum range",
+        "A number outside the range your business rules require",
         "'Here is the JSON:' preamble before the object",
       ],
       answerIndex: 2,
       explain:
-        "Structured output guarantees parseability, required fields, types, and enums, and additionalProperties: false blocks invented fields. Numeric range keywords are not enforced server-side — range checks belong in your own validation layer.",
+        "Structured output guarantees parseability, required fields, types, and enums, and additionalProperties: false blocks invented fields. Numeric range keywords aren't in the supported schema subset at all (a raw schema containing them returns a 400), so nothing in generation bounds the value — range checks belong in your own validation layer.",
     },
     {
       question:

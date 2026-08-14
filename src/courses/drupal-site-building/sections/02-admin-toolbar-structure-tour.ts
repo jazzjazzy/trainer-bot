@@ -12,9 +12,10 @@ const lesson: Lesson = {
   concept: `
 ## Seven doors, one habit to unlearn
 
-Log in as an administrator and Drupal's toolbar shows seven top-level sections.
-Every one of them replaces something you'd otherwise do in code, a terminal, or
-a YAML file in Symfony. Learn the map once and you'll stop hunting:
+Log in as an administrator and Drupal's toolbar is your control panel. Seven of
+its top-level sections matter for site building, and every one of them replaces
+something you'd otherwise do in code, a terminal, or a YAML file in Symfony.
+Learn the map once and you'll stop hunting:
 
 - **Content** (\`/admin/content\`) — the rows: nodes, media, files. This is
   *data*, the one section that is NOT config.
@@ -272,7 +273,7 @@ Task router:
     },
     {
       q: "A teammate asks why you always install the Admin Toolbar module first on a new build. What's the case for it?",
-      a: "Core's toolbar only shows the seven top-level sections, so every task means clicking through intermediate landing pages. The contrib **Admin Toolbar** module (`drupal/admin_toolbar`) turns the same toolbar into hover-driven drop-down menus that reach any admin page — a specific content type's field settings, a specific View — in one or two moves, and its `admin_toolbar_tools` submodule adds practical extras like a flush-caches link. It changes no behaviour for anonymous users or editors without admin access; it's pure admin ergonomics. Because site building in Drupal *is* navigating the admin UI hundreds of times a day, it pays for itself immediately — which is why it's one of the most-installed contrib modules in the ecosystem.",
+      a: "Core's toolbar only shows the top-level sections, so every task means clicking through intermediate landing pages. The contrib **Admin Toolbar** module (`drupal/admin_toolbar`) turns the same toolbar into hover-driven drop-down menus that reach any admin page — a specific content type's field settings, a specific View — in one or two moves, and its `admin_toolbar_tools` submodule adds practical extras like a flush-caches link. It changes no behaviour for anonymous users or editors without admin access; it's pure admin ergonomics. Because site building in Drupal *is* navigating the admin UI hundreds of times a day, it pays for itself immediately — which is why it's one of the most-installed contrib modules in the ecosystem.",
     },
   ],
 

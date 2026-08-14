@@ -10,12 +10,16 @@ const lesson: Lesson = {
     "A practical tour of the ten or so core services you reach for daily — entity_type.manager, current_user, config.factory, messenger, the logger, route match, request_stack and friends — and how to inject each properly instead of reaching for \\Drupal::service().",
 
   concept: `
-By now you know Drupal runs the Symfony container but with autowiring off by
-default — core services and controllers list arguments explicitly, so you name
-services by **string ID** in a static \`create()\`. (You *can* opt in per service
-with \`autowire: true\` since Drupal 9.2, but the convention is to name every
-argument.) This section is the cheat-sheet: the handful of core services you'll
-type from memory within a week, and their Symfony counterparts.
+By now you know Drupal runs the Symfony container with autowiring off by default
+for the services you declare in \`*.services.yml\` — there you name every argument
+by **string ID**. (You *can* opt in per service with \`autowire: true\` since
+Drupal 9.3, but the convention is to name every argument.) Controllers are the
+exception since Drupal 10.2: \`ControllerBase\` uses \`AutowireTrait\`, so a
+controller that omits \`create()\` has its constructor type-hints resolved from
+the container automatically. Core still writes an explicit \`create()\` in most
+classes, and that is the form you will read and copy most often. This section is
+the cheat-sheet: the handful of core services you'll type from memory within a
+week, and their Symfony counterparts.
 
 ### The two ways to get a service
 
@@ -138,12 +142,21 @@ use Symfony\\Component\\DependencyInjection\\ContainerInterface;
 
 final class DashboardController extends ControllerBase {
 
+  // ControllerBase already declares $entityTypeManager, $currentUser and
+  // $configFactory (untyped), and MessengerTrait declares $messenger. PHP
+  // forbids re-declaring an inherited untyped property WITH a type, so assign
+  // them in the body instead of promoting typed constructor properties.
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected AccountProxyInterface $currentUser,
-    protected ConfigFactoryInterface $configFactory,
-    protected MessengerInterface $messenger,
-  ) {}
+    EntityTypeManagerInterface $entity_type_manager,
+    AccountProxyInterface $current_user,
+    ConfigFactoryInterface $config_factory,
+    MessengerInterface $messenger,
+  ) {
+    $this->entityTypeManager = $entity_type_manager;
+    $this->currentUser = $current_user;
+    $this->configFactory = $config_factory;
+    $this->messenger = $messenger;
+  }
 
   public static function create(ContainerInterface $container): static {
     return new static(
@@ -162,7 +175,7 @@ final class DashboardController extends ControllerBase {
     return ['#markup' => 'Hi ' . $this->currentUser->getAccountName()];
   }
 }`,
-      note: "config.factory->get('x.settings')->get('key') replaces Symfony bound parameters; messenger->addStatus() is addFlash('status', ...); current_user is an AccountProxy, so getAccountName()/hasPermission(), not a User entity.",
+      note: "config.factory->get('x.settings')->get('key') replaces Symfony bound parameters; messenger->addStatus() is addFlash('status', ...); current_user is an AccountProxy, so getAccountName()/hasPermission(), not a User entity. Watch the promoted-property trap: ControllerBase declares $entityTypeManager, $currentUser and $configFactory untyped (and MessengerTrait declares $messenger), and PHP fatals if a subclass re-declares an inherited untyped property with a type — so assign these in the constructor body.",
     },
     {
       label: "Logging and reading the request",
@@ -249,7 +262,7 @@ services:
   logger.channel.my_module:
     parent: logger.channel_base
     arguments: ['my_module']`,
-      note: "Autowiring off by default means you list '@service.id' for every constructor arg, in order (you could set autowire: true per service since Drupal 9.2, but the convention is explicit args). The logger.channel_base parent trick registers a dedicated PSR-3 channel you can then inject as '@logger.channel.my_module'.",
+      note: "Autowiring off by default means you list '@service.id' for every constructor arg, in order (you could set autowire: true per service since Drupal 9.3, but the convention is explicit args). The logger.channel_base parent trick registers a dedicated PSR-3 channel you can then inject as '@logger.channel.my_module'.",
     },
   ],
 
@@ -336,7 +349,7 @@ config limit = 25
     "`config.factory->get('my_module.settings')->get('key')` replaces Symfony bound parameters; `messenger->addStatus()/addError()` is Symfony's `addFlash()`.",
     "`logger.factory` is a factory — call `->get('channel')` for a PSR-3 logger, and use Drupal's @/%/: placeholders, not Monolog's {curly} syntax.",
     "`request_stack` is the exact Symfony service; for route parameters prefer `current_route_match->getParameter('node')`, which returns the upcasted entity rather than a raw string.",
-    "In a `*.services.yml` you list every constructor argument explicitly as `'@service.id'` — autowiring is off by default, so Drupal core services and controllers name each argument; you can opt in per service with `autowire: true` (since Drupal 9.2), but the convention is to be explicit.",
+    "In a `*.services.yml` you list every constructor argument explicitly as `'@service.id'` — autowiring is off by default there, so Drupal core services name each argument; you can opt in per service with `autowire: true` (since Drupal 9.3), but the convention is to be explicit. Controllers differ: `ControllerBase` uses `AutowireTrait` (Drupal 10.2+), so one that omits `create()` is autowired by type-hint.",
   ],
 
   interview: [
@@ -366,11 +379,11 @@ config limit = 25
         "Call \\Drupal::messenger() directly in the method",
         "Type-hint MessengerInterface in the constructor and list '@messenger' (via 'messenger' ID) in create()",
         "Read it from the global $GLOBALS array",
-        "Autowire it by type-hint alone; Drupal resolves it automatically",
+        "Add 'messenger' to the module's *.info.yml dependencies list",
       ],
       answerIndex: 1,
       explain:
-        "Autowiring is off by default in Drupal, so core services and controllers inject explicitly: type-hint MessengerInterface and name the 'messenger' ID in create(). \\Drupal::messenger() works but is the discouraged static shortcut, reserved for procedural code. (You can opt in per service with autowire: true since Drupal 9.2, but the convention is explicit arguments.)",
+        "Explicit injection — type-hint MessengerInterface and name the 'messenger' ID in create() — is what core writes and what you will read in nearly every module. \\Drupal::messenger() works but is the discouraged static shortcut, reserved for procedural code; *.info.yml dependencies list modules, not services. (Since Drupal 10.2 ControllerBase also uses AutowireTrait, so a controller may legitimately drop create() and let its type-hints resolve, but the explicit form remains the convention.)",
     },
     {
       question: "What does the current_user service return?",

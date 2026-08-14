@@ -291,7 +291,7 @@ t≈800ms — the promise resolves; React retries Comments:
     {
       question: "Which of these is use() allowed to do that ordinary hooks are not?",
       options: [
-        "Run on the server",
+        "Be called during the render phase",
         "Be called inside an if statement or a loop",
         "Trigger a re-render",
         "Read component props",

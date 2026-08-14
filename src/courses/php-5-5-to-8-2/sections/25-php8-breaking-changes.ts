@@ -40,7 +40,8 @@ Many things that emitted a *warning* and limped on in 5.5 now **throw**:
 - Passing the wrong type to an internal function → \`TypeError\`.
 - An invalid argument value (e.g. a negative width, an empty needle in some
   funcs) → \`ValueError\` (a new 8.0 exception type).
-- Calling a method on a non-object → \`Error\`, not a fatal you can't catch.
+- Calling a method on a non-object → \`Error\`, not a fatal you can't catch (that
+  one actually landed in **7.0**, but it's new to you coming from 5.5).
 
 ### @ no longer silences fatal errors
 
@@ -201,7 +202,7 @@ bool(false)`,
     },
     {
       q: "Your legacy code uses `@` liberally. What's the gotcha in 8.0?",
-      a: "The `@` error-suppression operator still hides warnings and notices, but in 8.0 it **no longer suppresses errors that halt execution** (fatals). Any code path that quietly depended on `@` swallowing a fatal — say `@$obj->method()` where `$obj` is null — will now actually crash with an uncatchable-looking `Error` unless you handle it. Treat every `@` as a code smell and remove it.",
+      a: "The `@` error-suppression operator still hides warnings and notices, but in 8.0 it **no longer suppresses errors that halt execution** (fatals). Concretely: `@trigger_error($msg, E_USER_ERROR)` now surfaces instead of vanishing, and custom error handlers that detect `@` by testing `error_reporting() == 0` must switch to `!(error_reporting() & $err_no)`, because `@` now sets a non-zero mask. Treat every `@` as a code smell and remove it.",
     },
     {
       q: "What removed functions should you grep for before upgrading from 5.5?",

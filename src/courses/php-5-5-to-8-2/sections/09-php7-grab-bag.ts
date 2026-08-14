@@ -154,7 +154,8 @@ $pages = intdiv($total, $perPage);
       php: `<?php
 // PHP 5.6 — only the const keyword can hold an array
 const SIZES = ['small', 'medium', 'large'];
-// (in 5.5 even this was unavailable; define('SIZES', [...]) was a fatal error)`,
+// (in 5.5 even this was unavailable, and define('SIZES', [...]) only
+// raised a warning: Constants may only evaluate to scalar values)`,
       ts: `<?php
 // PHP 7.0 — define() now accepts arrays too
 define('SIZES', ['small', 'medium', 'large']);`,
@@ -231,7 +232,7 @@ abc
     },
     {
       q: "What changed about `define()` between 5.5 and 7.0?",
-      a: "In 5.5, `define()` could only take scalar (and resource) values — passing an array was a fatal error, so array constants had to use the `const` keyword (which can't be conditional or computed at runtime). **PHP 7.0** let `define()` accept arrays, so you can now create a constant array dynamically, e.g. inside an `if` or built from a function call: `define('SIZES', ['s', 'm', 'l']);`.",
+      a: "In 5.5, `define()` could only take scalar (and resource) values — passing an array raised `Warning: Constants may only evaluate to scalar values` and left the constant undefined, so array constants had to use the `const` keyword (which can't be conditional or computed at runtime). **PHP 7.0** let `define()` accept arrays, so you can now create a constant array dynamically, e.g. inside an `if` or built from a function call: `define('SIZES', ['s', 'm', 'l']);`.",
     },
   ],
 

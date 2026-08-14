@@ -222,7 +222,7 @@ source exhausted
   interview: [
     {
       q: "You know PHP generators. What's actually different about Python's?",
-      a: "Mechanically, almost nothing — `yield` makes a lazy generator (PHP 5.5), `yield from` delegates (PHP 7.0), and neither runs any body code until iterated. The differences are around the edges. First, reach: Python's whole language speaks the iteration protocol, so generators plug straight into `sum()`, unpacking, comprehensions and itertools, and even open files iterate lazily line by line. Second, generator *expressions* give a literal syntax — `sum(x*x for x in xs)` — where PHP needs a function. Third, the trap: an exhausted Python generator silently yields nothing on a second pass, whereas PHP at least throws 'Cannot rewind a generator that was already run'. Silent emptiness is the bug to watch for.",
+      a: "Mechanically, almost nothing — `yield` makes a lazy generator (PHP 5.5), `yield from` delegates (PHP 7.0), and neither runs any body code until iterated. The differences are around the edges. First, reach: Python's whole language speaks the iteration protocol, so generators plug straight into `sum()`, unpacking, comprehensions and itertools, and even open files iterate lazily line by line. Second, generator *expressions* give a literal syntax — `sum(x*x for x in xs)` — where PHP needs a function. Third, the trap: an exhausted Python generator silently yields nothing on a second pass, whereas PHP at least throws 'Cannot traverse an already closed generator'. Silent emptiness is the bug to watch for.",
     },
     {
       q: "When do you return a generator instead of a list?",

@@ -47,9 +47,9 @@ it("rejects for an unknown user", async () => {
 
 Note the \`await\` in front of \`expect\` — \`rejects.toThrow\` returns a
 promise, and an un-awaited one is the same silent-pass bug wearing a nicer
-outfit. \`rejects\` is also the *only* correct way to test an error path:
-wrapping in \`try/catch\` yourself risks a test that passes when the function
-doesn't throw at all.
+outfit. \`rejects\` is also the safest way to test an error path: a
+hand-rolled \`try/catch\` silently passes when the function doesn't throw at
+all, unless you pin it down with \`expect.assertions(1)\` or a sentinel value.
 
 ### Fake timers: don't sleep, time-travel
 

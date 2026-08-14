@@ -133,13 +133,15 @@ test('bug #4812: three items at $0.10 total $0.30, not $0.29', () => {
     {
       label: "A red that lies vs a red you can trust",
       intro:
-        "Two brand-new tests for an unwritten validatePromo() function. One passes immediately — which should terrify you — and one fails with exactly the message you predicted.",
+        "Two brand-new tests for a validatePromo() that isn't implemented yet. One passes immediately — which should terrify you — and one fails with exactly the message you predicted.",
       php: `// promo.test.ts
-// New test for code that DOESN'T EXIST YET... and it passes?
+// New test whose target is only a STUB... and it passes?
 test('rejects expired promo codes', () => {
+  // validatePromo exists but is empty: const validatePromo = () => {};
   const result = validatePromo('XMAS2019');
-  // validatePromo doesn't exist; result is undefined;
-  // expect(undefined).not.toBe(true) — passes vacuously.
+  // result is undefined, so expect(undefined).not.toBe(true)
+  // passes vacuously. (If the function were truly absent this
+  // would throw a ReferenceError and FAIL — a red you CAN trust.)
   expect(result).not.toBe(true);
 });
 // Green on first run = the test proves nothing.`,
@@ -251,7 +253,7 @@ console.log("rhythm: red, green, refactor — one rule at a time");`,
   quiz: [
     {
       question:
-        "You write a test for a function that doesn't exist yet, run it, and it passes. What does TDD say you should do?",
+        "You write a test for behaviour that isn't implemented yet, run it, and it passes. What does TDD say you should do?",
       options: [
         "Celebrate — the behaviour is already covered",
         "Delete the test since it's redundant",
@@ -260,7 +262,7 @@ console.log("rhythm: red, green, refactor — one rule at a time");`,
       ],
       answerIndex: 2,
       explain:
-        "A test that passes against non-existent code is asserting nothing useful — often it's comparing against undefined or never reaching the code under test. Red exists to verify the test can actually detect the missing behaviour; without a genuine failure the net has holes.",
+        "A test that passes against unimplemented code is asserting nothing useful — often it's comparing against the undefined a stub returns, or never reaching the code under test. Red exists to verify the test can actually detect the missing behaviour; without a genuine failure the net has holes.",
     },
     {
       question:

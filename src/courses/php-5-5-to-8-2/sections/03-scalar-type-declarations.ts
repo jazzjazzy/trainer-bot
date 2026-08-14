@@ -135,9 +135,11 @@ function price(int $cents): float {
       intro:
         "An area() function multiplies a width and height that should both be numbers. Here a caller passes genuinely wrong values (an array and a non-numeric string), and the question is whether that mistake surfaces as a clear error or quietly produces nonsense.",
       php: `<?php
-// PHP 5.5 — silently produces garbage or a warning
+// PHP 5.5 — no exception either way: silent garbage, or a hard fatal
 function area($w, $h) {
-    return $w * $h;   // area([], 'x') -> 0 with warnings, no exception
+    return $w * $h;   // area(2, 'x') -> 0 silently ('x' becomes 0);
+                      // area([], 'x') -> uncatchable fatal:
+                      // Unsupported operand types
 }`,
       ts: `<?php
 // PHP 7.0 — non-coercible input throws a catchable TypeError
@@ -145,7 +147,7 @@ function area(float $w, float $h): float {
     return $w * $h;   // area([], 'x') -> TypeError
 }`,
       note:
-        "TypeError (a Throwable) is thrown in 7.0 when an argument can't be coerced to the declared scalar type — catchable, unlike 5.5's silent fallback.",
+        "TypeError (a Throwable) is thrown in 7.0 when an argument can't be coerced to the declared scalar type — catchable, unlike 5.5's silent fallback or uncatchable fatal.",
     },
   ],
 

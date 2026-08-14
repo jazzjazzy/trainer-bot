@@ -20,9 +20,10 @@ two mistakes that cost real debugging hours.
 \`ControllerBase\` and \`FormBase\` **already implement**
 \`ContainerInjectionInterface\`, so for classes extending them you never re-add
 the interface — you **override create()** and write a constructor. Their
-default \`create()\`s differ, though: \`FormBase\` still ships the bare
-\`return new static();\`, while \`ControllerBase\` (since **10.2**) uses
-\`AutowireTrait\`, whose inherited \`create()\` reflects on your constructor and
+default \`create()\`s depend on the core version, though: \`ControllerBase\` has
+used \`AutowireTrait\` since **10.2** and \`FormBase\` since **11.4**; on
+10.x–11.3 \`FormBase::create()\` was the bare \`return new static();\`. The
+\`create()\` inherited from \`AutowireTrait\` reflects on your constructor and
 tries to autowire each parameter by type-hint or \`#[Autowire]\` attribute —
 succeeding where an interface alias or class-name service ID exists (core
 aliases \`TimeInterface\` to \`datetime.time\`, for example) and throwing an
@@ -237,7 +238,7 @@ final class IncidentReportForm extends FormBase {
     $this->messenger()->addStatus($this->t('Incident logged.'));
   }
 }`,
-      note: "Forget to override create() here and FormBase's default `return new static();` runs — with required constructor params that's a loud ArgumentCountError the moment the form is built.",
+      note: "Forget to override create() on Drupal 10.x–11.3 and FormBase's default `return new static();` runs — with required constructor params that's a loud ArgumentCountError the moment the form is built. Since 11.4 FormBase uses AutowireTrait too, so the inherited create() autowires the constructor instead and only errors when a parameter can't be resolved.",
     },
     {
       label: "The order pitfall: same interface, two services",
@@ -437,7 +438,7 @@ TypeError: constructor rejected the mis-ordered service
   },
 
   keyPoints: [
-    "ControllerBase and FormBase already implement ContainerInjectionInterface — you override create(), you never re-declare the interface. FormBase's default create() is a bare `return new static();`; ControllerBase's (since 10.2, via AutowireTrait) tries to autowire constructor type-hints and throws an autowiring error when it can't.",
+    "ControllerBase and FormBase already implement ContainerInjectionInterface — you override create(), you never re-declare the interface. Both now inherit AutowireTrait's create(), which tries to autowire constructor type-hints and throws an autowiring error when it can't — ControllerBase since 10.2, FormBase only since 11.4; on 10.x–11.3 FormBase's default create() was a bare `return new static();`.",
     "The drill is always the same: promoted-property constructor listing dependencies, static create() reading services by string ID, `return new static(...)` in the exact constructor order.",
     "create() is positional: cross-type swaps throw a runtime TypeError on the first request; same-interface swaps (two logger channels, two storages) fail silently — one get() per line, reviewed against the constructor.",
     "ControllerBase shortcuts like $this->entityTypeManager() lazily pull from the global container — fine for prototypes, but explicit injection lets unit tests do `new Controller($mock, ...)` with no Drupal bootstrap.",
@@ -467,7 +468,7 @@ TypeError: constructor rejected the mis-ordered service
   quiz: [
     {
       question:
-        "Your IncidentReportForm extends FormBase with a promoted-property constructor requiring IncidentRepository — but you forget to override create(). What happens when the form loads?",
+        "On a Drupal 10.x–11.3 site, your IncidentReportForm extends FormBase with a promoted-property constructor requiring IncidentRepository — but you forget to override create(). What happens when the form loads?",
       options: [
         "The repository property is silently null",
         "FormBase's default create() runs `new static()` with no arguments, so PHP throws an ArgumentCountError",
@@ -476,7 +477,7 @@ TypeError: constructor rejected the mis-ordered service
       ],
       answerIndex: 1,
       explain:
-        "FormBase already implements ContainerInjectionInterface with a default create() that returns `new static();` (unlike ControllerBase, which since 10.2 autowires via AutowireTrait). With a required constructor parameter, that no-arg instantiation throws ArgumentCountError as soon as the form is built — a loud failure, unlike the silent null you'd get from a bare class that never implemented the interface at all.",
+        "Through Drupal 11.3, FormBase implemented ContainerInjectionInterface with a default create() that returns `new static();` (unlike ControllerBase, which has autowired via AutowireTrait since 10.2). With a required constructor parameter, that no-arg instantiation throws ArgumentCountError as soon as the form is built — a loud failure, unlike the silent null you'd get from a bare class that never implemented the interface at all. Drupal 11.4 added AutowireTrait to FormBase as well, so on 11.4+ the inherited create() autowires the constructor instead.",
     },
     {
       question:

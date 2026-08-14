@@ -146,16 +146,16 @@ const isReady: boolean = true;
 console.log("ready?", isReady);
 
 // Template literal: backticks + \${ } interpolation, multi-line for free:
-const name = "Ada";
-const report = \`User \${name} has \${whole + 1} credits.
+const userName = "Ada";
+const report = \`User \${userName} has \${whole + 1} credits.
 Status: \${isReady ? "active" : "inactive"}\`;
 console.log(report);
 
 // typeof is the runtime cousin of PHP's gettype():
-console.log(typeof whole);   // "number"
-console.log(typeof decimal); // "number" (no "double"!)
-console.log(typeof name);    // "string"
-console.log(typeof isReady); // "boolean"
+console.log(typeof whole);    // "number"
+console.log(typeof decimal);  // "number" (no "double"!)
+console.log(typeof userName); // "string"
+console.log(typeof isReady);  // "boolean"
 
 // Try it: change the next assignment and watch the editor flag it.
 let count = 0;     // inferred as number

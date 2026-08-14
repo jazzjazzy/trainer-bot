@@ -42,7 +42,7 @@ They stay procedural, in \`MODULE.install\` and \`MODULE.post_update.php\`.
 
 ### The order, and the trap inside it
 
-\`drush deploy\` (Drush 12 and 13, the versions you use with Drupal 10/11)
+\`drush deploy\` (Drush 13 and later, the versions you use with Drupal 10.3+/11)
 runs a fixed sequence:
 
 \`\`\`
@@ -50,10 +50,10 @@ drush updatedb
 drush config:import
 drush cache:rebuild
 drush deploy:hook
-drush cache:warm       # Drush 13+, and only on Drupal 11.2+
+drush cache:warm       # only on Drupal 11.2+
 \`\`\`
 
-Drush 11 and earlier ran a different shape — \`updatedb --no-cache-clear\`,
+Drush 12 and earlier ran a different shape — \`updatedb --no-cache-clear\`,
 plus a \`cache:rebuild\` *before* the import as well as after — so older
 runbooks and blog posts will not match what your Drush actually does. The
 part that has never changed is the part that matters below.
@@ -194,13 +194,13 @@ composer install --no-dev --optimize-autoloader --no-interaction
 # 2. Safety net. There is no "undo" for updatedb or cim.
 drush sql:dump --gzip --result-file=/backups/pre-deploy-$(date +%s).sql
 
-# 3. Everything below is what "drush deploy" does on Drush 12/13. Spelled
+# 3. Everything below is what "drush deploy" does on Drush 13 and later. Spelled
 #    out so you can see the ordering; in CI just run: drush deploy -y
 drush updatedb -y                    # hook_update_N, then hook_post_update_NAME
 drush config:import -y               # sync/ -> active storage
 drush cache:rebuild
 drush deploy:hook -y                 # hook_deploy_NAME, post-import
-drush cache:warm                     # Drush 13+ adds this on Drupal 11.2+
+drush cache:warm                     # only on Drupal 11.2+
 
 # 4. Prove it landed.
 drush config:status                  # must report no differences
@@ -465,7 +465,7 @@ Skipped as already applied: 1
     "Config import only writes config objects. Tables, columns, data backfills and content transforms are update functions, and there is no automatic rollback for either.",
     "hook_update_N lives in MODULE.install, is tracked by an integer in the system.schema key-value collection, runs earliest, and should stay at the schema/raw-SQL level.",
     "hook_post_update_NAME lives in MODULE.post_update.php, is tracked by function name, runs after every module's hook_update_N with a full container — but still before drush config:import.",
-    "drush deploy (Drush 12/13) is: updatedb, config:import, cache:rebuild, deploy:hook, plus cache:warm on Drush 13 with Drupal 11.2+. Drush 11 and earlier instead passed --no-cache-clear to updatedb and rebuilt caches before the import too, so old runbooks look different. Either way, anything that needs newly imported config belongs in MODULE.deploy.php as hook_deploy_NAME.",
+    "drush deploy (Drush 13 and later) is: updatedb, config:import, cache:rebuild, deploy:hook, plus cache:warm on Drupal 11.2+. Drush 12 and earlier instead passed --no-cache-clear to updatedb and rebuilt caches before the import too, so old runbooks look different. Either way, anything that needs newly imported config belongs in MODULE.deploy.php as hook_deploy_NAME.",
     "Write every update to be idempotent (guard with tableExists/fieldExists) and free of your own module's classes and constants — it will run years later against code you have since refactored.",
     "Batch long updates with &$sandbox and $sandbox['#finished'], and rehearse drush deploy against a restored production database before it touches prod.",
   ],
@@ -473,7 +473,7 @@ Skipped as already applied: 1
   interview: [
     {
       q: "Walk me through your deploy sequence for a Drupal site, and justify the order.",
-      a: "New code first — `composer install --no-dev` — then a database dump as the rollback plan, because neither `updatedb` nor `cim` can be undone. Then `drush deploy`, which on Drush 12/13 is `updatedb`, `config:import`, `cache:rebuild`, `deploy:hook` — and on Drush 13 against Drupal 11.2+ a final `cache:warm`. Worth knowing that Drush 11 and earlier ran `updatedb --no-cache-clear` and rebuilt caches before the import as well, so an old runbook will not match. Update hooks run before config import because an update may create the schema that incoming config depends on — a new field storage config is meaningless if the table it describes does not exist. The trailing `deploy:hook` step exists precisely because the reverse dependency is also real: some data fixes need config that only exists *after* the import, and `hook_post_update_NAME` fires too early for that. I finish with `drush config:status` in CI and fail the pipeline if it reports any difference, which catches config that drifted on the server.",
+      a: "New code first — `composer install --no-dev` — then a database dump as the rollback plan, because neither `updatedb` nor `cim` can be undone. Then `drush deploy`, which on Drush 13 and later is `updatedb`, `config:import`, `cache:rebuild`, `deploy:hook` — and against Drupal 11.2+ a final `cache:warm`. Worth knowing that Drush 12 and earlier ran `updatedb --no-cache-clear` and rebuilt caches before the import as well, so an old runbook will not match. Update hooks run before config import because an update may create the schema that incoming config depends on — a new field storage config is meaningless if the table it describes does not exist. The trailing `deploy:hook` step exists precisely because the reverse dependency is also real: some data fixes need config that only exists *after* the import, and `hook_post_update_NAME` fires too early for that. I finish with `drush config:status` in CI and fail the pipeline if it reports any difference, which catches config that drifted on the server.",
     },
     {
       q: "You've written hook_update_N before in Drupal 7. What changed, and when would you reach for hook_post_update_NAME instead?",
@@ -501,7 +501,7 @@ Skipped as already applied: 1
       ],
       answerIndex: 1,
       explain:
-        "`drush deploy` (Drush 12/13) runs `updatedb`, `config:import`, `cache:rebuild`, `deploy:hook`, and on Drush 13 with Drupal 11.2+ a closing `cache:warm`. Post-updates run inside that first `updatedb` step, after every module's hook_update_N but before config is imported. Logic that depends on newly imported config must go in MODULE.deploy.php as hook_deploy_NAME, which `drush deploy:hook` runs last.",
+        "`drush deploy` (Drush 13 and later) runs `updatedb`, `config:import`, `cache:rebuild`, `deploy:hook`, and on Drupal 11.2+ a closing `cache:warm`. Post-updates run inside that first `updatedb` step, after every module's hook_update_N but before config is imported. Logic that depends on newly imported config must go in MODULE.deploy.php as hook_deploy_NAME, which `drush deploy:hook` runs last.",
     },
     {
       question:

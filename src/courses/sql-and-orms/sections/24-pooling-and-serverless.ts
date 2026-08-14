@@ -121,7 +121,8 @@ const adapter = new PrismaPg({
 });
 
 export const prisma = new PrismaClient({ adapter });
-// No adapter? P2038 — the TS query compiler needs a JS driver`,
+// No adapter? PrismaClient throws at construction —
+// the TS query compiler needs a JS driver`,
       note:
         "The Rust engine's connection_limit/pool_timeout URL parameters are gone in v7 — pooling is the pg driver's job, configured on PrismaPg, with different defaults (no acquire timeout) than v6 had.",
       leftLang: "bash",

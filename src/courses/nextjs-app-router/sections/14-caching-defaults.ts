@@ -163,7 +163,7 @@ export default async function Prices() {
 
 // Purging early, e.g. from a Server Action:
 //   import { revalidateTag } from 'next/cache';
-//   revalidateTag('rates');`,
+//   revalidateTag('rates', 'max');`,
       note: "revalidate is the setex TTL; tags are your Redis key-naming scheme; revalidateTag() is the targeted DEL — the whole Redis pattern as declarative options on the request.",
     },
     {
@@ -217,7 +217,7 @@ function dataCacheVerdict(opts: FetchOptions = {}): string {
   const revalidate = opts.next?.revalidate;
   const tags = opts.next?.tags ?? [];
   const tagNote = tags.length
-    ? \` + purgeable via revalidateTag('\${tags.join("','")}')\`
+    ? \` + purgeable via revalidateTag('\${tags.join("','")}', 'max')\`
     : '';
 
   if (revalidate !== undefined) {
@@ -268,7 +268,7 @@ for (const [label, opts] of cases) {
     },
     {
       q: "How do you cache an expensive external API call for an hour but bust it immediately when the underlying data changes?",
-      a: "Both controls go on the fetch: `fetch(url, { cache: 'force-cache', next: { revalidate: 3600, tags: ['rates'] } })`. The `revalidate` gives it an hour's freshness like a Redis `SETEX` TTL, and the tag labels the cache entry. When the data changes — say in the Server Action that updates it — I call `revalidateTag('rates')` and every entry with that tag is invalidated on the spot; `revalidatePath('/prices')` is the URL-based alternative. It's the Redis pattern — TTL plus targeted key deletion — expressed declaratively, with the framework owning the storage.",
+      a: "Both controls go on the fetch: `fetch(url, { cache: 'force-cache', next: { revalidate: 3600, tags: ['rates'] } })`. The `revalidate` gives it an hour's freshness like a Redis `SETEX` TTL, and the tag labels the cache entry. When the data changes — say in the Server Action that updates it — I call `revalidateTag('rates', 'max')`; Next 16 requires that second cacheLife argument, and `'max'` marks every entry with that tag stale so the next visitor gets stale-while-revalidate rather than a blocking cache miss. `revalidatePath('/prices')` is the URL-based alternative. It's the Redis pattern — TTL plus targeted key deletion — expressed declaratively, with the framework owning the storage.",
     },
     {
       q: "A teammate copies data-fetching code from a Next 14 blog post into your Next 16 app. What behavior changes silently?",
@@ -293,7 +293,7 @@ for (const [label, opts] of cases) {
       question: "Which option combination caches a fetch for an hour AND lets a mutation purge it immediately?",
       options: [
         "{ cache: 'no-store', next: { revalidate: 3600 } }",
-        "{ next: { revalidate: 3600, tags: ['rates'] } } — then revalidateTag('rates') on mutation",
+        "{ next: { revalidate: 3600, tags: ['rates'] } } — then revalidateTag('rates', 'max') on mutation",
         "{ cache: 'force-cache' } alone — force-cache implies a 1-hour TTL",
         "{ next: { tags: ['rates'] } } alone — tags imply caching with a default TTL",
       ],

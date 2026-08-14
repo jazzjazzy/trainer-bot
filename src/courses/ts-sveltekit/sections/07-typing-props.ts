@@ -154,7 +154,7 @@ code should never use \`export let\`.
 <button onclick={() => onchange?.(page + 1)}>
   Next (page {page}, {perPage}/page)
 </button>
-<!-- onchange is (page: number) => void | undefined:
+<!-- onchange is ((page: number) => void) | undefined:
      the compiler forces the ?. call -->`,
       note:
         "Typing the callback documents its argument and makes the optional call explicit — the compiler won't let you invoke a possibly-undefined prop bare.",
@@ -213,7 +213,7 @@ code should never use \`export let\`.
 <div class="stat">
   <strong>{label}:</strong> {value}{unit}
   {#if onreset}
-    <button onclick={() => onreset(label)}>reset</button>
+    <button onclick={() => onreset?.(label)}>reset</button>
   {/if}
 </div>
 

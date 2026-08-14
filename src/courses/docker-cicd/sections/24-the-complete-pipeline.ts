@@ -199,7 +199,7 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -272,7 +272,7 @@ Run C — push to main, but one test fails:
   interview: [
     {
       q: "Design a CI/CD workflow for a web app: PRs must be tested, but only main should publish an image.",
-      a: "Two jobs. The workflow triggers on `pull_request` and on `push` to main. The test job — checkout@v6, setup-node@v4 with `cache: npm`, `npm ci`, lint, tests — runs unconditionally, with a postgres:16 service container and health options if the suite needs a real database. The build-and-push job declares `needs: test`, so it only starts after a green test job, plus `if: github.ref == 'refs/heads/main'`, so it's skipped for PRs. Inside it: buildx setup, ghcr login with the run's GITHUB_TOKEN under `permissions: packages: write`, metadata-action for sha tags, and build-push-action with gha layer caching. The two gates compose: an image can only exist for a commit that is on main *and* passed tests.",
+      a: "Two jobs. The workflow triggers on `pull_request` and on `push` to main. The test job — checkout@v6, setup-node@v7 with `cache: npm`, `npm ci`, lint, tests — runs unconditionally, with a postgres:16 service container and health options if the suite needs a real database. The build-and-push job declares `needs: test`, so it only starts after a green test job, plus `if: github.ref == 'refs/heads/main'`, so it's skipped for PRs. Inside it: buildx setup, ghcr login with the run's GITHUB_TOKEN under `permissions: packages: write`, metadata-action for sha tags, and build-push-action with gha layer caching. The two gates compose: an image can only exist for a commit that is on main *and* passed tests.",
     },
     {
       q: "Two jobs in your workflow: one builds the image, one deploys it. How does the deploy job know the image tag?",

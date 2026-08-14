@@ -48,10 +48,10 @@ value *and* type with no coercion — the equivalent of always thinking in PHP's
 
 ### Truthiness & falsy values
 
-There are exactly **six falsy values** in JavaScript:
+The falsy values in JavaScript are:
 
 \`\`\`
-false   0   ""   null   undefined   NaN
+false   0   -0   0n   ""   null   undefined   NaN
 \`\`\`
 
 Everything else is truthy. The trap for a PHP dev: the string \`"0"\` is
@@ -103,7 +103,9 @@ var_dump("1" == 1);     // bool(true)
 var_dump(null == false);// bool(true)
 // Even PHP 8 still juggles — prefer ===
 var_dump("1" === 1);    // bool(false)`,
-      ts: `console.log(0 == "");        // true  ("" coerces to 0)
+      ts: `// TS flags the mismatched literals below ("no overlap"),
+// but this is what plain JavaScript does at runtime:
+console.log(0 == "");        // true  ("" coerces to 0)
 console.log("1" == 1);       // true  (string coerced to number)
 console.log(null == undefined); // true (special case)
 // Always use === — no coercion:
@@ -145,13 +147,20 @@ const display = name ?? "guest"; // ?? handles BOTH null and undefined`,
   playground: {
     intro:
       "Run this to feel the runtime that survives compilation: coercion, the falsy set, and reassignment. Try changing a const to see the editor complain before you run.",
-    code: `// 1. == vs === — coercion surprises
-console.log('0 == ""      ->', 0 == "");          // true ("" coerces to 0)
-console.log('"1" == 1     ->', "1" == 1);          // true (string -> number)
-console.log('null == undefined ->', null == undefined); // true
-console.log('"1" === 1    ->', "1" === 1);          // false — use === always
+    code: `// 1. == vs === — coercion surprises.
+// TypeScript itself refuses to compare unrelated types ("no overlap"),
+// so we widen through 'any' to observe plain JavaScript's coercion rules.
+const zero: any = 0;
+const emptyStr: any = "";
+const one: any = 1;
+const oneStr: any = "1";
 
-// 2. The six falsy values
+console.log('0 == ""      ->', zero == emptyStr);       // true ("" coerces to 0)
+console.log('"1" == 1     ->', oneStr == one);          // true (string -> number)
+console.log('null == undefined ->', null == undefined); // true
+console.log('"1" === 1    ->', oneStr === one);         // false — use === always
+
+// 2. The falsy values (0n and -0 are falsy too)
 const falsyValues = [false, 0, "", null, undefined, NaN];
 for (const v of falsyValues) {
   console.log("falsy:", JSON.stringify(v), "->", Boolean(v));
@@ -181,7 +190,7 @@ console.log("?? fallback:", assigned ?? "default"); // "default"`,
   keyPoints: [
     "TypeScript erases to plain JavaScript, so **every JS runtime gotcha still applies** — types don't change behaviour.",
     "Use `const` by default, `let` when reassigning, **never `var`**. `const`/`let` are block-scoped; PHP vars and `var` are function-scoped.",
-    "There are exactly **six falsy values**: `false`, `0`, `\"\"`, `null`, `undefined`, `NaN`. Everything else (including `\"0\"` and `[]`) is truthy.",
+    "The falsy values are: `false`, `0`, `-0`, `0n`, `\"\"`, `null`, `undefined`, `NaN`. Everything else (including `\"0\"` and `[]`) is truthy.",
     "`\"0\"` is **truthy** in JS but **falsy** in PHP — a real bug magnet when porting logic.",
     "**Always use `===`/`!==`** to avoid coercion, exactly like preferring PHP's `===`.",
     "JS has two empties: `undefined` (never assigned) and `null` (deliberately empty). `??` treats both as missing, like PHP's `??`.",
@@ -198,7 +207,7 @@ console.log("?? fallback:", assigned ?? "default"); // "default"`,
     },
     {
       q: "List the falsy values in JavaScript. What trips up a PHP developer?",
-      a: "JavaScript has exactly six falsy values: **`false`, `0`, `\"\"` (empty string), `null`, `undefined`, and `NaN`**. Everything else is truthy. The classic PHP trap is the string **`\"0\"`**: it is **falsy in PHP** but **truthy in JS** (it's a non-empty string). Likewise an **empty array `[]` is falsy in PHP but truthy in JS**. So a guard like `if (!$value)` ported straight across can behave differently.",
+      a: "JavaScript's falsy values are: **`false`, `0` (and `-0`), `0n`, `\"\"` (empty string), `null`, `undefined`, and `NaN`**. Everything else is truthy. The classic PHP trap is the string **`\"0\"`**: it is **falsy in PHP** but **truthy in JS** (it's a non-empty string). Likewise an **empty array `[]` is falsy in PHP but truthy in JS**. So a guard like `if (!$value)` ported straight across can behave differently.",
     },
     {
       q: "What's the difference between null and undefined?",

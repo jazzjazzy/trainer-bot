@@ -499,7 +499,7 @@ Applied 0 update(s) - each hook_update_N runs ONCE per site.`,
       options: [
         "Marks the update failed because it did not finish",
         "Records 10003 as done and moves on to the next update",
-        "Prints the message and calls incident_tracker_update_10003 again with the same $sandbox",
+        "Calls incident_tracker_update_10003 again with the same $sandbox; the returned string is not printed per pass",
         "Rolls back the changes made so far in this update",
       ],
       answerIndex: 2,

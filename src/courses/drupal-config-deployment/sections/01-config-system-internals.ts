@@ -261,13 +261,16 @@ composer install --no-dev --optimize-autoloader
 # See the plan before anything runs — this is the storage comparison.
 drush config:status
 
-# The supported sequence, as one command (Drush 10.3+). It runs:
-#   updatedb --no-cache-clear   hook_update_N + hook_post_update_N
-#   cache:rebuild
+# The supported sequence, as one command (added in Drush 10.3). On Drush 13
+# and later it runs:
+#   updatedb                    hook_update_N + hook_post_update_N
 #   config:import               active <- config/sync
 #   cache:rebuild
 #   deploy:hook                 hook_deploy_N, so it can rely on the
 #                               configuration that was just imported
+#   cache:warm                  Drupal 11.2+ only
+# (Drush 12 and earlier passed --no-cache-clear to updatedb and rebuilt
+#  caches before the import as well.)
 drush deploy -y
 
 # Spelled out, when you need to wrap or gate a step:

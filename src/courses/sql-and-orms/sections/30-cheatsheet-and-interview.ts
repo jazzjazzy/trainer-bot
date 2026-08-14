@@ -38,7 +38,7 @@ Prisma call, what SQL runs?" and "here's the SQL, write it in Drizzle."
 with a **required** explicit \`output\` path; the Rust query engine is gone —
 a TypeScript query compiler runs instead, so the client **requires a driver
 adapter** (\`new PrismaClient({ adapter: new PrismaPg({ connectionString }) })\`
-— constructing without one throws P2038); \`binaryTargets\` is replaced by a
+— constructing without one throws immediately); \`binaryTargets\` is replaced by a
 \`runtime\` generator option (nodejs, bun, workerd, vercel-edge, ...); project
 config lives in \`prisma.config.ts\`.
 
@@ -227,7 +227,7 @@ console.log("Drilled " + cards.length + " of " + cards.length + " topics.");`,
   },
 
   keyPoints: [
-    "Prisma 7 facts: `prisma-client` generator with required `output`, no Rust engine (TS query compiler), driver adapter mandatory (`new PrismaClient({ adapter })`, else P2038), `runtime` option instead of binaryTargets, config in `prisma.config.ts`.",
+    "Prisma 7 facts: `prisma-client` generator with required `output`, no Rust engine (TS query compiler), driver adapter mandatory (`new PrismaClient({ adapter })` — bare `new PrismaClient()` throws), `runtime` option instead of binaryTargets, config in `prisma.config.ts`.",
     "Drizzle facts: drizzle-orm 0.45.x / drizzle-kit 0.31.x (pre-1.0), schema as `pgTable` TypeScript, types via `$inferSelect`/`$inferInsert`, CLI verbs `generate | migrate | push | studio`, RQB via `relations()` + `with`.",
     "Production migration commands: `prisma migrate deploy` and `drizzle-kit migrate`; `db push`/`drizzle-kit push` are prototyping tools that leave no migration file.",
     "CRUD maps 1:1 to SQL in both ORMs — create/insert → `INSERT ... RETURNING`, upsert → `ON CONFLICT DO UPDATE`, `$transaction`/`db.transaction` callbacks → `BEGIN ... COMMIT/ROLLBACK`.",
@@ -266,7 +266,7 @@ console.log("Drilled " + cards.length + " of " + cards.length + " topics.");`,
       ],
       answerIndex: 1,
       explain:
-        "Prisma 7's headline changes: prisma-client generator (explicit output required), TS query compiler replacing the Rust engine, driver adapters mandatory (P2038 without one), runtime option, prisma.config.ts. Drizzle remains pre-1.0: drizzle-orm 0.45.x, drizzle-kit 0.31.x, no codegen — types are inferred.",
+        "Prisma 7's headline changes: prisma-client generator (explicit output required), TS query compiler replacing the Rust engine, driver adapters mandatory (bare `new PrismaClient()` throws), runtime option, prisma.config.ts. Drizzle remains pre-1.0: drizzle-orm 0.45.x, drizzle-kit 0.31.x, no codegen — types are inferred.",
     },
     {
       question:

@@ -180,7 +180,7 @@ export async function generateMetadata(
 
 export default async function PostPage(/* ... */) { /* render */ }`,
       note:
-        "generateMetadata awaits params exactly like the page does, and Next deduplicates the getPost call between metadata and render — the data is fetched once, unlike naively querying twice in PHP.",
+        "generateMetadata awaits params exactly like the page does, and the getPost call is deduplicated between metadata and render — automatically if it uses fetch, or by wrapping it in React's cache() when it queries the database directly — so the data is loaded once, unlike naively querying twice in PHP.",
     },
     {
       label: "sitemap.php vs a typed sitemap.ts",

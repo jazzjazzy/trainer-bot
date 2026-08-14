@@ -50,7 +50,8 @@ Four things get assumed to be config and are not:
 - **Recipe \`content/\` directory** — YAML files under
   \`content/<entity_type>/<name>.yml\`, applied when the recipe is applied. Core's
   Default Content API (\`Drupal\\Core\\DefaultContent\\Importer\`) landed in 10.3
-  alongside the recipe work; recipes themselves became stable in 11.1. Best for
+  alongside the recipe work; 11.1 is where recipes became practical, though both
+  APIs are still marked \`@internal\`/experimental in core. Best for
   seeding a *new* environment once.
 - **default_content module** — the same idea for modules and profiles. The 1.x
   branch exports HAL+JSON; 2.x uses a compact YAML format and can still import
@@ -410,7 +411,7 @@ foreach ($prod['taxonomy_term'] as $id => $entity) {
   keyPoints: [
     "Serial IDs (nid, tid, mid) are local to one database; UUIDs are the only content identifier that survives a trip between environments, which is why Drupal records config-to-content dependencies as ENTITY_TYPE_ID:BUNDLE:UUID.",
     "Menu links, custom block bodies, taxonomy terms and Layout Builder per-node overrides are content entities even though the surrounding structure (system.menu.*, block.block.*, the vocabulary, core.entity_view_display.*) is config.",
-    "A recipe's content/ directory holds YAML content files applied through core's Default Content API (Drupal\\Core\\DefaultContent\\Importer, added in 10.3); recipes went stable in 11.1. It seeds a new environment, it is not a sync mechanism.",
+    "A recipe's content/ directory holds YAML content files applied through core's Default Content API (Drupal\\Core\\DefaultContent\\Importer, added in 10.3); recipes became practical in 11.1, though core still marks both APIs @internal/experimental. It seeds a new environment, it is not a sync mechanism.",
     "default_content 1.x exports HAL+JSON, 2.x exports a compact YAML format and still imports the old one; drush dcer walks an entity's references so you do not export a node without its media.",
     "Migrate is the only listed option that is genuinely repeatable: migrate_map_* stores source-id to destination-id, giving you --update and a real migrate:rollback.",
     "Before building any of this, ask whether the thing should have been a config entity: if editors never touch it in production and code references it by name, config is the correct home and the deployment problem disappears.",

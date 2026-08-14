@@ -29,7 +29,12 @@ the compiler stays silent until production.
 ### The fix: a typed wrapper module
 
 Don't call \`setContext\`/\`getContext\` directly in components. Put one pair of
-helpers in a module, next to the interface they share:
+helpers in a module, next to the interface they share. (Since Svelte **5.40**
+the framework ships this pattern built in: \`createContext<T>()\` returns a
+\`[get, set]\` pair over a private key whose getter throws when no ancestor
+called the setter — \`export const [getCart, setCart] = createContext<Cart>();\`
+— and the docs now prefer it over raw \`setContext\`/\`getContext\`. Building the
+pair by hand once shows exactly what it buys you.)
 
 \`\`\`ts
 // src/lib/context/cart.ts

@@ -207,7 +207,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { verifyLogin, createSession } from '$lib/server/auth';
 import type { Actions } from './$types';
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ request, cookies }) => {
     const data = await request.formData();
     const email = data.get('email');
@@ -228,7 +228,7 @@ export const actions: Actions = {
     });
     redirect(303, '/app');
   }
-};`,
+} satisfies Actions;`,
       note:
         "cookies.set's options object is typed (and path is mandatory in Kit 2) — misspelled attributes like sameSit are compile errors instead of silently-insecure cookies.",
     },

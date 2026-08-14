@@ -217,15 +217,19 @@ Query B  ->  Index Scan using orders_user_recent
 
 Query C  ->  Seq Scan on orders   <-- the problem child
   No index on status, so this reads all ~50M rows to count.
-  A plain btree on status helps little — only ~3 values, so
-  low cardinality. The operator fix is a PARTIAL index:
+  A plain btree on status would work — the planner picks an
+  index scan from how rare the VALUE is, not how many distinct
+  values the column has, and 'pending' is rare. But that index
+  also carries the millions of 'paid'/'shipped' rows and pays
+  write cost on all of them. The operator fix is a PARTIAL index:
     CREATE INDEX orders_pending
       ON orders (id) WHERE status = 'pending';
   It indexes only the small, hot 'pending' subset, so the
   count becomes an index-only scan over a tiny fraction of
   the table. Follow-up an interviewer would ask: "why partial
-  and not a plain index on status?" -> because pending is rare
-  and the other statuses are noise you never query this way.
+  and not a plain index on status?" -> a fraction of the size
+  and cheaper to maintain, for the same plan on the one query
+  you care about.
 
 Takeaway: two of three queries were served by thinking about
 the access pattern BEFORE the schema. The scan was fixable with

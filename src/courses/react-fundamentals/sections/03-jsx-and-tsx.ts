@@ -58,9 +58,9 @@ JSX attributes are camelCase JavaScript properties, not HTML attributes:
 - Attribute values: strings in quotes (\`type="text"\`), everything else in
   braces (\`disabled={isSaving}\`, \`value={count}\`)
 
-TypeScript knows the full attribute schema per tag: \`<img>\` without \`src\`
-warns, \`onClick\` on a \`<div>\` gets a typed mouse event, and a typo like
-\`clasName\` is a compile error.
+TypeScript knows the full attribute schema per tag: \`<img src={123}>\` is a
+type error (\`src\` must be a string), \`onClick\` on a \`<div>\` gets a typed
+mouse event, and a typo like \`clasName\` is a compile error.
 
 ### One root, or a Fragment
 

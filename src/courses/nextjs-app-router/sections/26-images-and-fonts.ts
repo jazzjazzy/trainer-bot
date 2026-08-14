@@ -48,14 +48,17 @@ aspect-ratio box), or use \`fill\` to make the image absolutely fill a
 runtime error, not a silent layout shift.
 
 For the one image that IS above the fold — the LCP candidate — add
-\`priority\`: it switches off lazy loading and marks the request
-\`fetchpriority="high"\` so the browser fetches it first.
+\`preload\`: it switches off lazy loading and injects a
+\`<link rel="preload" as="image">\` into the \`<head>\`, so the browser starts
+fetching it immediately. (\`priority\` was the old name for this prop; Next 16
+deprecated it in favour of \`preload\`. Neither one puts \`fetchpriority="high"\`
+on the \`<img>\` — the hint lives in the preload link.)
 
 ### Static imports: dimensions for free
 
 \`\`\`tsx
 import hero from './hero.jpg';   // build-time: Next reads the file
-<Image src={hero} alt="Roastery" priority placeholder="blur" />
+<Image src={hero} alt="Roastery" preload placeholder="blur" />
 \`\`\`
 
 Because the file exists at build time, Next already knows its width and height
@@ -193,7 +196,7 @@ export default function RootLayout({
   playground: {
     lang: "tsx",
     intro:
-      "Read the page and predict the rendered HTML: which <img> gets loading=\"lazy\", which gets fetchpriority=\"high\", where the src URLs point, and what the font's className does. Then compare with the output.",
+      "Read the page and predict the rendered HTML: which <img> gets loading=\"lazy\", which one is preloaded instead, where the src URLs point, and what the font's className does. Then compare with the output.",
     code: `// app/page.tsx
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
@@ -207,7 +210,7 @@ export default function Page() {
       <h1>Fresh from the roastery</h1>
 
       {/* Above the fold — the LCP candidate */}
-      <Image src={hero} alt="Roastery floor" priority />
+      <Image src={hero} alt="Roastery floor" preload />
 
       {/* Below the fold */}
       <Image src="/beans.jpg" alt="House blend" width={400} height={300} />
@@ -218,11 +221,13 @@ export default function Page() {
 <main class="__className_a1b2c3">   <!-- next/font's generated class: font-family: Inter + tuned fallback -->
   <h1>Fresh from the roastery</h1>
 
-  <!-- static import: width/height inferred at build; priority => eager + high priority -->
-  <img alt="Roastery floor" fetchpriority="high" width="1600" height="900"
+  <!-- static import: width/height inferred at build;
+       preload => not lazy, plus a <link rel="preload" as="image"> in the <head> -->
+  <img alt="Roastery floor" width="1600" height="900"
        decoding="async"
-       srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.9f21c0.jpg&w=1920&q=75 1x"
-       src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.9f21c0.jpg&w=1920&q=75">
+       srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.9f21c0.jpg&w=1920&q=75 1x,
+               /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.9f21c0.jpg&w=3840&q=75 2x"
+       src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.9f21c0.jpg&w=3840&q=75">
 
   <!-- explicit width/height reserve a 4:3 box (no CLS); lazy is the default -->
   <img alt="House blend" loading="lazy" width="400" height="300"
@@ -241,7 +246,7 @@ export default function Page() {
     "`next/image` routes the `src` through `/_next/image`: on-demand resizing with `srcset`, WebP/AVIF via `Accept`-header negotiation, result caching, and `loading=\"lazy\"` by default.",
     "`width`/`height` (or `fill` inside a `position: relative` parent) are REQUIRED so the box is reserved before the bytes arrive — that's the CLS fix; omitting both is an error.",
     "Statically imported images (`import hero from './hero.jpg'`) get dimensions for free at build time and can use `placeholder=\"blur\"`; remote URLs need explicit dimensions AND a `remotePatterns` entry in `next.config.ts`.",
-    "Add `priority` to the above-the-fold LCP image: it disables lazy loading and sets `fetchpriority=\"high\"`.",
+    "Add `preload` — Next 16's rename of the now-deprecated `priority` — to the above-the-fold LCP image: it disables lazy loading and injects a `<link rel=\"preload\" as=\"image\">` into the head. It does NOT set `fetchpriority` on the `<img>`.",
     "`next/font/google` downloads font CSS and `.woff2` files at BUILD time and self-hosts them — zero runtime requests to Google (faster, and GDPR-safe), applied via `className` or a CSS `variable`.",
     "Interview framing: both components exist because Core Web Vitals (LCP, CLS) are Google ranking factors — images and fonts are the usual culprits.",
   ],
@@ -249,7 +254,7 @@ export default function Page() {
   interview: [
     {
       q: "What does next/image actually do, and why does it insist on width and height?",
-      a: "It renders an `<img>` whose src points at Next's image optimizer, which resizes the source to device-appropriate widths with a generated `srcset`, converts to WebP or AVIF based on the browser's `Accept` header, caches results, and lazy-loads by default. It's the thumbnail-script-plus-cache-directory every PHP shop has written, absorbed into the framework. Width and height are mandatory (or `fill` inside a sized relative parent) because that's how it prevents Cumulative Layout Shift — the browser reserves the correct aspect-ratio box before a single byte of image arrives. For the above-the-fold hero I'd add `priority` so it loads eagerly with high fetch priority, since that image is usually the LCP element.",
+      a: "It renders an `<img>` whose src points at Next's image optimizer, which resizes the source to device-appropriate widths with a generated `srcset`, converts to WebP or AVIF based on the browser's `Accept` header, caches results, and lazy-loads by default. It's the thumbnail-script-plus-cache-directory every PHP shop has written, absorbed into the framework. Width and height are mandatory (or `fill` inside a sized relative parent) because that's how it prevents Cumulative Layout Shift — the browser reserves the correct aspect-ratio box before a single byte of image arrives. For the above-the-fold hero I'd add `preload` — Next 16's rename of the old `priority` prop — so it skips lazy loading and gets a preload link in the head, since that image is usually the LCP element.",
     },
     {
       q: "Why does next/font exist when a <link> to Google Fonts is one line?",

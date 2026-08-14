@@ -391,7 +391,7 @@ final class ReportController extends ControllerBase {
       ],
       answerIndex: 1,
       explain:
-        "Attribute-based plugin discovery arrived in core 10.2, but the generated code follows the DCG version: Drush 13 pulls DCG 4, whose block template emits a `#[Block]` attribute; a Drupal 11 site still pinned to Drush 12 gets DCG 3 and the legacy `@Block` annotation — the output tracks the generator, not core. On Drupal 10 — even 10.2+ — composer can only resolve DCG 3 (DCG 4 needs symfony/console ^7.1, while D10 pins ^6.4), so you always get the annotation there.",
+        "Attribute-based plugin discovery arrived in core 10.2, but the generated code follows the DCG version: Drush 13 pulls DCG 4, whose block template emits a `#[Block]` attribute; a site still on Drush 12 gets DCG 3 and the legacy `@Block` annotation — the output tracks the generator, not core. On Drupal 10 — even 10.2+ — composer can only resolve DCG 3 (DCG 4 needs symfony/console ^7, while D10 pins ^6.4), so you always get the annotation there even on Drush 13; and Drush 12 can never reach a Drupal 11 site at all, since it pins symfony/* ^6 against core's ^7.",
     },
     {
       question:

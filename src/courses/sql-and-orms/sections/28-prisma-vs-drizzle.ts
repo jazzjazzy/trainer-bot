@@ -151,7 +151,8 @@ const rows = await db
 npx prisma migrate dev --name add_user_active
 # - diffs against a shadow database
 # - writes prisma/migrations/.../migration.sql
-# - applies it, re-runs prisma generate
+# - applies it (v7 does NOT re-run generate;
+#   run npx prisma generate yourself)
 
 # Production applies the same files with:
 npx prisma migrate deploy`,
@@ -165,7 +166,7 @@ npx drizzle-kit migrate
 
 # Prototyping only (no migration file):
 npx drizzle-kit push`,
-      note: "Prisma's loop is more automated (shadow DB, auto-generate); Drizzle's is more transparent (the .sql file is the deliverable). Your code-review habits decide which you'll trust more.",
+      note: "Prisma's loop is more automated (shadow DB, drift detection); Drizzle's is more transparent (the .sql file is the deliverable). Your code-review habits decide which you'll trust more.",
       leftLang: "bash",
       rightLang: "bash",
     },
@@ -251,7 +252,7 @@ console.log(
     },
     {
       q: "How do the two migration philosophies differ, and which do you trust more?",
-      a: "Prisma treats the schema as the artifact: `migrate dev` diffs against a shadow database, generates `migration.sql`, applies it, and regenerates the client — very automated, and the SQL is there if you look. Drizzle treats the SQL as the artifact: `drizzle-kit generate` writes a plain `.sql` file and the workflow assumes you'll read and possibly edit it before `drizzle-kit migrate` applies it. Given my background I trust the generate-and-read model more, because I *will* read the DDL and catch things like an implicit table rewrite. But I'd note Prisma's output is equally reviewable — the difference is which behaviour the tool encourages, not what it allows.",
+      a: "Prisma treats the schema as the artifact: `migrate dev` diffs against a shadow database, generates `migration.sql`, and applies it — quite automated, though in v7 it no longer regenerates the client, so `prisma generate` is an explicit follow-up. The SQL is there if you look. Drizzle treats the SQL as the artifact: `drizzle-kit generate` writes a plain `.sql` file and the workflow assumes you'll read and possibly edit it before `drizzle-kit migrate` applies it. Given my background I trust the generate-and-read model more, because I *will* read the DDL and catch things like an implicit table rewrite. But I'd note Prisma's output is equally reviewable — the difference is which behaviour the tool encourages, not what it allows.",
     },
     {
       q: "What changed architecturally in Prisma 7, and how does that compare to Drizzle's design?",

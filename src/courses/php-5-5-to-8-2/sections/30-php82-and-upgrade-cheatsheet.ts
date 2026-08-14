@@ -91,7 +91,7 @@ function login(string $user, #[\\SensitiveParameter] string $password): void { /
 | Change | Version | Impact |
 | --- | --- | --- |
 | Stricter type juggling; many warnings → \`TypeError\` | 7.0/8.0 | Sloppy coercions now throw |
-| \`"0" == "0.0"\` string-number rules changed | 8.0 | \`0 == "foo"\` is now \`false\` |
+| Number ↔ non-numeric string comparison changed | 8.0 | \`0 == "foo"\` is now \`false\`; numeric strings like \`"1" == "01"\` are unchanged |
 | Most internal warnings promoted to \`Error\` | 8.0 | Undefined-method etc. throw |
 | Dynamic properties deprecated | 8.2 | Declare props or add attribute |
 | \`utf8_encode\`/\`decode\` deprecated, \`\${}\` interpolation deprecated | 8.2 | Migrate string syntax |
@@ -125,7 +125,7 @@ class Money {
       ts: `<?php
 declare(strict_types=1);
 
-// PHP 8.2 — readonly class: promoted, typed, deeply immutable
+// PHP 8.2 — readonly class: promoted, typed, immutable after construction
 final readonly class Money {
     public function __construct(
         public int $amount,

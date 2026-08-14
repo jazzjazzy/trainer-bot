@@ -156,8 +156,8 @@ app.post("/users", {
       required: ["name", "email"],
       properties: {
         name: { type: "string" },
-        // format checks like 'email' need the ajv-formats plugin
-        email: { type: "string", minLength: 3 },
+        // Fastify 5 bundles ajv-formats, so format checks work out of the box
+        email: { type: "string", format: "email" },
       },
     },
   },

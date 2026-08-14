@@ -42,9 +42,11 @@ Forget to wrap one code path (\`return $user;\` in a quick fix) and the
 serialiser happily emits every attribute, remember-tokens and all. Laravel's
 \`$hidden\` array on the model is a *blacklist* — protection only for fields
 someone thought to list. FastAPI inverts the default: the response model is a
-**whitelist bound to the route declaration**. There is no code path around
-it, and a new column added to the users table changes nothing until you
-consciously add it to \`UserPublic\`.
+**whitelist bound to the route declaration**. Every value returned as data
+goes through it — the one bypass is returning a \`Response\` object directly,
+which FastAPI passes through unvalidated and unfiltered — and a new column
+added to the users table changes nothing until you consciously add it to
+\`UserPublic\`.
 
 ### When the annotation fights your type checker
 
@@ -132,9 +134,10 @@ async def read_user(user_id: int) -> UserPublic:
     # user has hashed_password, is_admin, mfa_secret...
     return user
     # Response: {"id": ..., "username": ..., "email": ...}
-    # There is no way to return this route's data
-    # WITHOUT it passing through UserPublic.`,
-      note: "Laravel's Resource is a wrapper you must remember on every return; the response model is part of the route declaration, so filtering applies to every code path through the handler.",
+    # Every value returned as DATA is filtered
+    # through UserPublic; returning a Response
+    # object directly is the one way around it.`,
+      note: "Laravel's Resource is a wrapper you must remember on every return; the response model is part of the route declaration, so filtering applies to every code path that returns data.",
     },
     {
       label: "Input and output as separate models",
@@ -268,7 +271,7 @@ is_admin leaked:        False`,
 
   keyPoints: [
     "A response model filters (whitelist), validates, and documents the endpoint's output — declare it as the return-type annotation (`-> UserPublic`) or with `response_model=`.",
-    "It's a security feature: unlike Laravel Resources (an opt-in wrapper) or `$hidden` (a blacklist), the model is bound to the route — no code path returns unfiltered data.",
+    "It's a security feature: unlike Laravel Resources (an opt-in wrapper) or `$hidden` (a blacklist), the model is bound to the route, so every value returned as data is filtered — the only bypass is returning a Response object directly.",
     "Use `response_model=` with a `-> Any` annotation when the handler deliberately returns a richer type (e.g. `UserInDB`) than the response schema — it overrides the return annotation and keeps type checkers quiet.",
     "The standard pattern is model pairs per direction: `UserCreate` (has `password`) in, `UserPublic` (no secrets) out, `UserInDB` (has `hashed_password`) internal only.",
     "`response_model_exclude_unset=True` omits fields the handler never explicitly set — ideal for PATCH-style responses; `exclude_none` and `exclude_defaults` are siblings.",
@@ -278,7 +281,7 @@ is_admin leaked:        False`,
   interview: [
     {
       q: "How do you make sure a FastAPI endpoint never leaks fields like a password hash?",
-      a: "I declare a response model on the route — either as the return-type annotation, `-> UserPublic`, or as `response_model=UserPublic` on the decorator. FastAPI then validates and filters whatever the handler returns through that model, so a full `UserInDB` record goes in and only `UserPublic`'s fields come out; serialisation runs through `model_dump` and unknown keys don't survive. The crucial property is that it's a whitelist bound to the route declaration: unlike a Laravel API Resource, which is a wrapper someone can forget on one return statement, there's no code path that bypasses it — and a new sensitive column added to the table stays private until it's consciously added to the public model.",
+      a: "I declare a response model on the route — either as the return-type annotation, `-> UserPublic`, or as `response_model=UserPublic` on the decorator. FastAPI then validates and filters whatever the handler returns through that model, so a full `UserInDB` record goes in and only `UserPublic`'s fields come out; serialisation runs through `model_dump` and unknown keys don't survive. The crucial property is that it's a whitelist bound to the route declaration: unlike a Laravel API Resource, which is a wrapper someone can forget on one return statement, the only way to bypass it is to return a Response object directly instead of data — and a new sensitive column added to the table stays private until it's consciously added to the public model.",
     },
     {
       q: "Why do FastAPI codebases define separate UserCreate, UserPublic, and UserInDB models rather than one User model?",

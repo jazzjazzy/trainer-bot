@@ -165,7 +165,7 @@ step_1_requirements:
     numbers_extracted_by_asking:
       dau: 2_000_000
       notes_created_per_user_per_day: 5     # write rate
-      reads_per_note: 20                     # read-heavy, ~4:1 overall
+      reads_per_note: 20                     # read-heavy, ~20:1 overall
     latency_target_ms: 200
     consistency: "read-your-own-writes; public links may lag a few seconds"
 

@@ -210,8 +210,8 @@ const renderB: Item[] = [
 
 console.log('--- reconciliation by key ---');
 for (const op of diffChildren(renderA, renderB)) console.log(op);
-// (Index keys would have "updated" all three — try renumbering
-// the keys to 0/1/2 in both arrays and re-running.)
+// (Index keys would have "updated" the first two rows and mounted a
+// third — try renumbering the keys to 0/1/2 in both arrays and re-running.)
 
 // ---- 2. useMemo by hand ------------------------------------------
 function createMemoCell<T>() {
@@ -284,7 +284,7 @@ console.log(\`expensive total() ran \${runs}x for 3 renders\`);
       options: ["useState", "useMemo", "useRef", "useReducer"],
       answerIndex: 2,
       explain:
-        "A ref is the render-surviving box that doesn't trigger re-renders — incrementing ref.current in the render (or an effect) records the count silently. useState would re-render on every increment, looping forever; useMemo caches computations, it doesn't persist counters.",
+        "A ref is the render-surviving box that doesn't trigger re-renders — incrementing ref.current inside an effect records the count silently (React's rules say not to write refs during render). useState would re-render on every increment, looping forever; useMemo caches computations, it doesn't persist counters.",
     },
     {
       question: "Which of these is a real React 19 change?",

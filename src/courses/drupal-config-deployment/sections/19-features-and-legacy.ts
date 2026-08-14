@@ -60,7 +60,8 @@ The escape hatch is newer than most people realise: **since Drupal 10.3 the
 install profile can be uninstalled like any module**, provided nothing on the
 site still depends on a module or theme living inside the profile directory.
 \`drush pm:uninstall acme_profile\` clears the \`profile\` key from
-\`core.extension\` entirely. Recipes (in core since 10.3, stable in 11.1) are the
+\`core.extension\` entirely. Recipes (in core since 10.3, practical from 11.1,
+though the Recipe API is still marked \`@internal\`/experimental in core) are the
 forward-looking answer — they apply once and leave nothing behind.
 
 ## Sites with nothing at all

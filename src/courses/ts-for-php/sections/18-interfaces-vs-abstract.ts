@@ -73,11 +73,13 @@ const stubLogger: Logger = {
 };
 \`\`\`
 
-That object *is a* \`Logger\` simply because it has the right shape. But an
-**abstract class can only be satisfied by \`extends\`** — there is no way for a
-loose object to "be" an abstract class. That is the practical reason interfaces
-dominate for typing dependencies, and abstract classes are reserved for genuine
-code-sharing hierarchies.
+That object *is a* \`Logger\` simply because it has the right shape. An
+**abstract class is compared structurally too** — an object literal with the right
+shape is assignable to it as well; only a \`private\`/\`protected\` member makes a
+class type nominal. What \`extends\` adds is the inherited implementation,
+\`instanceof\`, and access to protected members. That is the practical reason
+interfaces dominate for typing dependencies, and abstract classes are reserved for
+genuine code-sharing hierarchies.
 `,
 
   comparisons: [
@@ -227,7 +229,7 @@ console.log("smsNotifier is a class instance?", smsNotifier instanceof EmailNoti
     "**Interface** = pure shape, no implementation, erased at runtime. **Abstract class** = shareable concrete code + state, exists at runtime.",
     "Choose an interface to describe a shape with many implementers; choose an abstract class to share real code across a hierarchy.",
     "TS is **structural**: a plain object can satisfy an interface by shape alone — no `implements` required.",
-    "An abstract class can only be satisfied by `extends` — a loose object can never stand in for it.",
+    "Class types are structural too: a loose object can be assigned to an abstract class unless it declares `private`/`protected` members — `extends` is what gives you the implementation, `instanceof`, and protected access.",
   ],
 
   interview: [
@@ -237,7 +239,7 @@ console.log("smsNotifier is a class instance?", smsNotifier instanceof EmailNoti
     },
     {
       q: "Can something satisfy an interface without using `implements`? What about an abstract class?",
-      a: "Yes for interfaces — that is the big departure from PHP. TypeScript is **structural**, so any value with the right shape satisfies the interface, including a plain object literal or an instance of an unrelated class. The `implements` keyword is just an explicit, helpful assertion that triggers a check; it is not required. An **abstract class** is different: it exists at runtime and can only be satisfied by a class that `extends` it. There is no structural shortcut for an abstract class.",
+      a: "Yes for interfaces — that is the big departure from PHP. TypeScript is **structural**, so any value with the right shape satisfies the interface, including a plain object literal or an instance of an unrelated class. The `implements` keyword is just an explicit, helpful assertion that triggers a check; it is not required. An **abstract class** is only partly different: it exists at runtime, but its instance type is still compared structurally, so an object with the right shape is assignable to it — unless the class declares a `private` or `protected` member, which pins the type to that class's own hierarchy. What no object literal can fake is the rest: inherited implementation, `instanceof`, and `new`.",
     },
     {
       q: "What can an abstract class do that an interface cannot?",
@@ -255,13 +257,13 @@ console.log("smsNotifier is a class instance?", smsNotifier instanceof EmailNoti
         "Which is true about satisfying an interface vs an abstract class in TypeScript?",
       options: [
         "Both require the `implements` keyword",
-        "A plain object can satisfy an interface by shape, but an abstract class can only be satisfied via `extends`",
+        "An object with the right shape satisfies either one — unless the abstract class declares `private`/`protected` members",
         "Neither can be satisfied without a class",
-        "An abstract class can be satisfied by any object with the right shape",
+        "An abstract class can be instantiated directly with `new` once its abstract members are implemented",
       ],
       answerIndex: 1,
       explain:
-        "TypeScript is structural, so an object with the right shape satisfies an interface without `implements`. An abstract class exists at runtime and can only be satisfied by a subclass that `extends` it.",
+        "TypeScript compares class types structurally, so an object literal with the right shape is assignable to an abstract class too; a `private`/`protected` member is what makes a class type nominal. `extends` is still required to inherit the implementation, satisfy `instanceof`, or reach protected members.",
     },
     {
       question:

@@ -53,7 +53,8 @@ Reciting this dates any codebase — and any interviewer — on sight:
 | \`Column(String, nullable=True)\` | \`Mapped[str \\| None] = mapped_column()\` |
 
 (And say "current FastAPI" or "FastAPI 0.1xx" — the framework is still
-pre-1.0; the 0.12x releases are current.)
+pre-1.0 and the minor number moves fast, so quote the version you actually
+have pinned rather than one from memory.)
 
 ### The interview playbook
 
@@ -253,7 +254,7 @@ score: 6/6 — say each answer out loud before flipping`,
     "The route signature IS the framework: decorator (path, `response_model`, `status_code`) + typed parameters (Pydantic body, `Annotated[..., Depends(...)]` chain, `BackgroundTasks`) = routing, validation, auth, docs, and serialisation from one declaration.",
     "Version table, Pydantic: `.dict()`→`model_dump()`, `parse_obj()`→`model_validate()`, `class Config`/`orm_mode`→`ConfigDict(from_attributes=True)`, `@validator`→`@field_validator`; `BaseSettings` moved to `pydantic-settings`.",
     "Version table, the rest: `= Depends(...)` default-value style → `Annotated` (default since 0.95); `on_event`→`lifespan`; `declarative_base()`/`session.query()`→`DeclarativeBase`/`session.scalars(select(...))` with `Mapped`/`mapped_column`.",
-    "FastAPI is pre-1.0 — say 'current FastAPI' or 'FastAPI 0.1xx', never 'FastAPI 1.x'; naming the 0.12x line accurately is itself a credibility signal.",
+    "FastAPI is pre-1.0 — say 'current FastAPI' or 'FastAPI 0.1xx', never 'FastAPI 1.x'; the 0.1xx minor number advances fast (0.14x by mid-2026), so quote the version you have pinned rather than one from memory.",
     "The playbook's spine: async def vs def (event loop vs threadpool), Depends vs middleware (typed per-route vs route-blind global), 401 vs 403, response_model as output filter, Celery when you need retries/scheduling, dependency_overrides for testing auth.",
     "The elevator pitch: 25 years of routing/validation/auth/queues/FPM transfer one-to-one — FastAPI just makes the type system do the wiring; you've retrained on the current idioms (Pydantic v2, SQLAlchemy 2.0, Annotated, lifespan).",
   ],
@@ -308,13 +309,13 @@ score: 6/6 — say each answer out loud before flipping`,
       question: "Which claim about FastAPI's versioning is correct in an interview today?",
       options: [
         "FastAPI 1.0 introduced the Annotated dependency style",
-        "FastAPI is still pre-1.0; current releases are in the 0.12x line, and Annotated has been the documented default style since 0.95",
+        "FastAPI is still pre-1.0; releases are in the fast-moving 0.1xx line, and Annotated has been the documented default style since 0.95",
         "FastAPI 2.0 removed Depends in favour of middleware",
         "Versions below 1.0 mean the framework is not production-ready",
       ],
       answerIndex: 1,
       explain:
-        "FastAPI has stayed pre-1.0 while being thoroughly production-proven; the 0.12x releases are current and Annotated dependencies became the documented default in 0.95.0. Claiming 'FastAPI 1.x' experience is a red flag interviewers notice.",
+        "FastAPI has stayed pre-1.0 while being thoroughly production-proven; the 0.1xx line keeps advancing (0.14x by mid-2026) and Annotated dependencies became the documented default in 0.95.0. Claiming 'FastAPI 1.x' experience is a red flag interviewers notice.",
     },
     {
       question:

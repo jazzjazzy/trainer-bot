@@ -202,7 +202,7 @@ MAX_RETRIES = 5          # ...but nothing stops this
   playground: {
     lang: "python",
     intro:
-      "Rebinding, swapping, None, capitalised booleans and a fake constant. Predict all nine printed lines — watch the swap and the type of None.",
+      "Rebinding, swapping, None, capitalised booleans and a fake constant. Predict all eight printed lines — watch the swap and the type of None.",
     code: `# rebinding.py — variables are names bound to objects
 count = 1            # no $, no 'var', no type keyword
 count = "one"        # rebinding to a different type is legal (same as PHP)

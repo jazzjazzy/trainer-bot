@@ -65,7 +65,9 @@ for every falsy value. This is the exact same operator (and semantics) as PHP's
 ### Short-circuit evaluation
 
 \`&&\` returns the first falsy operand (or the last value); \`||\` returns the first
-truthy one. Identical to PHP. The key gotcha: \`||\` treats \`0\`, \`""\` and
+truthy one. This is **not** PHP: there \`&&\`/\`||\` always return a plain \`bool\`
+(\`0 || 'x'\` is \`true\`, not \`'x'\`) — PHP's value-returning equivalent is \`?:\`.
+The key gotcha: \`||\` treats \`0\`, \`""\` and
 \`false\` as "missing", whereas \`??\` does not — reach for \`??\` when \`0\` or \`""\`
 are legitimate values.
 `,
@@ -79,15 +81,15 @@ are legitimate values.
 // Array, positional:
 [$first, $second] = [10, 20];
 
-// Object/array values by key (no rename/default sugar):
-['name' => $name, 'role' => $role] = $user;`,
+// By key — the target variable can be renamed, but no defaults:
+['name' => $userName, 'role' => $role] = $user;`,
       ts: `// Array, positional:
 const [first, second] = [10, 20];
 
 // Object: by key, with rename + default:
 const { name: userName, role = "guest" } = user;`,
       note:
-        "TS object destructuring supports renaming (name: userName) and per-field defaults; PHP's list destructuring has neither.",
+        "TS object destructuring supports renaming (name: userName) and per-field defaults; PHP's keyed destructuring can rename ('name' => $userName) but has no defaults.",
     },
     {
       label: "Spread / rest with ...",

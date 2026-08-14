@@ -48,7 +48,8 @@ Both are needed. \`auto_reload\` recompiles the template; the **render cache** s
 holds the HTML that template produced last time, so without the null backend your
 edit is invisible until a rebuild. Drupal 10.1+ adds a UI shortcut at
 **/admin/config/development/settings** ("Development settings") that toggles Twig
-development mode and rendered-output caching in State — handy, but the YAML is what
+development mode and rendered-output caching in the \`development_settings\`
+key/value collection (it was State before 10.3) — handy, but the YAML is what
 you commit to the repo, and only the YAML gives you the cacheability headers.
 
 ## Read the comment block
@@ -70,10 +71,10 @@ Three separate facts. **THEME HOOK** is the registry key — that is what you pa
 named after. **SUGGESTIONS** are listed most specific first; \`✅\` marks the file
 actually used, and \`▪️\` marks the other names that would have been accepted. If the
 name you invented is not in that list, no amount of cache clearing will help.
-(The \`x\` / \`*\` markers and the plain \`BEGIN OUTPUT\` line are the pre-10.1 format —
-if that is what you see, you are on Drupal ≤10.0.) The **BEGIN … OUTPUT** line gives
+(The \`x\` / \`*\` markers and the plain \`BEGIN OUTPUT\` line are the pre-10.3 format —
+if that is what you see, you are on Drupal ≤10.2.) The **BEGIN … OUTPUT** line gives
 you the real path, which instantly settles "am I editing the file that is running?"
-— and when the winning file lives inside the active theme, Drupal 10.1+ labels it
+— and when the winning file lives inside the active theme, Drupal 10.3+ labels it
 \`💡 BEGIN CUSTOM TEMPLATE OUTPUT\`. No comments at all means no Twig template
 ran — you are looking at \`#markup\`, a \`#type\` element rendered by a function, or
 markup produced above the theme layer.
@@ -198,7 +199,7 @@ drush ev "\\$b = ['#type' => 'html_tag', '#tag' => 'p', '#value' => 'hi']; print
 {# Symfony has one answer per template: the path you wrote in
    render('...'). There is no suggestion list, because there is no
    registry deciding between candidates. #}`,
-      ts: `{# Drupal 10.1+/11, with twig.config.debug: true — appears in view-source #}
+      ts: `{# Drupal 10.3+/11, with twig.config.debug: true — appears in view-source #}
 <!-- THEME DEBUG -->
 <!-- THEME HOOK: 'node' -->
 <!-- FILE NAME SUGGESTIONS:
@@ -219,7 +220,7 @@ drush ev "\\$b = ['#type' => 'html_tag', '#tag' => 'p', '#value' => 'hi']; print
    ▪️          -> a name you MAY create; anything not listed will be ignored
    💡 CUSTOM   -> the winning file lives in the ACTIVE THEME, not core/a module
    BEGIN ...   -> the file on disk, so you know you are editing the right one
-   On Drupal <=10.0 the same block uses 'x' / '*' and a plain BEGIN OUTPUT. #}`,
+   On Drupal <=10.2 the same block uses 'x' / '*' and a plain BEGIN OUTPUT. #}`,
       note: "No THEME DEBUG comment around your markup means no Twig template rendered it — it came from #markup, a theme function, or a preprocessed string. Chasing a template that never ran is the classic time sink.",
     },
     {
@@ -268,7 +269,7 @@ drush ev "\\$b = ['#type' => 'html_tag', '#tag' => 'p', '#value' => 'hi']; print
 
   playground: {
     intro:
-      "Two things you do by hand on every theming bug, in plain PHP. First, build the FILE NAME SUGGESTIONS block: given the suggestions the theme system produced (least specific first) and the templates that actually exist, print the list the way Drupal 10.1+/11 does — most specific first, with ✅ on the winner and ▪️ on the rest. Then run the 'my template isn't updating' checklist over six scenarios. Predict which line each scenario stops on before you reveal.",
+      "Two things you do by hand on every theming bug, in plain PHP. First, build the FILE NAME SUGGESTIONS block: given the suggestions the theme system produced (least specific first) and the templates that actually exist, print the list the way Drupal 10.3+/11 does — most specific first, with ✅ on the winner and ▪️ on the rest. Then run the 'my template isn't updating' checklist over six scenarios. Predict which line each scenario stops on before you reveal.",
     lang: "php",
     code: `<?php
 // Two debugging tools, simulated with no Drupal in sight:
@@ -293,8 +294,8 @@ $registry = [
   'node' => 'core/themes/olivero/templates/content/node.html.twig',
 ];
 
-// Drupal 10.1+/11 prints the list MOST specific first, marks the winner with
-// '✅' and every other accepted name with '▪️'. (Drupal <= 10.0 used 'x' / '*'.)
+// Drupal 10.3+/11 prints the list MOST specific first, marks the winner with
+// '✅' and every other accepted name with '▪️'. (Drupal <= 10.2 used 'x' / '*'.)
 $active_theme_path = 'themes/custom/incident_theme';
 $display = array_reverse($suggestions);
 $winner = NULL;
@@ -392,7 +393,7 @@ Everything wired correctly
   keyPoints: [
     "Twig debug lives in the container, not in config: put twig.config debug/auto_reload/cache in sites/development.services.yml, and load it from settings.local.php via $settings['container_yamls'][].",
     "auto_reload alone is not enough — the render, page and dynamic_page_cache bins must point at cache.backend.null, or you keep serving HTML the old template produced.",
-    "Read the THEME DEBUG block as three facts: THEME HOOK (the registry key you hook into), the suggestion list (✅ = the file actually used, ▪️ = the other names that would have been accepted), and the BEGIN line (the file actually on disk — labelled 💡 BEGIN CUSTOM TEMPLATE OUTPUT when the winner lives in the active theme). The x / * markers and the plain BEGIN OUTPUT line are the pre-10.1 format.",
+    "Read the THEME DEBUG block as three facts: THEME HOOK (the registry key you hook into), the suggestion list (✅ = the file actually used, ▪️ = the other names that would have been accepted), and the BEGIN line (the file actually on disk — labelled 💡 BEGIN CUSTOM TEMPLATE OUTPUT when the winner lives in the active theme). The x / * markers and the plain BEGIN OUTPUT line are the pre-10.3 format.",
     "No THEME DEBUG comment means no Twig template rendered that markup — stop looking for a template and go find the #markup or theme function.",
     "Devel 5.x gives you devel_dump/dpm/devel_breakpoint in Twig (functions only — there is no devel_dump filter); Kint is no longer part of Devel at all since 5.4.0, so install the standalone drupal/kint module for {{ kint() }}. Never core-dump a whole entity — dump array_keys() first.",
     "Registry changes (hook_theme, new template file, .info.yml, libraries.yml) need drush cr; drush ev + theme.registry tells you what Drupal actually registered.",

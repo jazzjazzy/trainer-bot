@@ -59,8 +59,9 @@ class Config {
 
 ### Symmetric array destructuring with \`[]\`
 
-5.5 unpacked arrays only with \`list()\`. PHP 7.1 added \`[]\` on the **left** of
-\`=\`, and — crucially — **keyed** destructuring, which \`list()\` couldn't do:
+5.5 unpacked arrays only with \`list()\`, and only positionally. PHP 7.1 added
+\`[]\` on the **left** of \`=\` and — crucially — **keyed** destructuring, which
+the same release gave to \`list()\` as well:
 
 - \`[$a, $b] = [1, 2];\` — positional, mirrors how you'd *write* the array.
 - \`['id' => $id, 'name' => $name] = $row;\` — pull values by key, any order.
@@ -70,7 +71,8 @@ class Config {
 ['x' => $x, 'y' => $y] = ['y' => 2, 'x' => 1];  // $x = 1, $y = 2
 \`\`\`
 
-The old \`list()\` still works; \`[]\` is just the symmetric, key-aware upgrade.
+The old \`list()\` still works; \`[]\` is just the symmetric, array-literal-shaped
+upgrade.
 `,
 
   comparisons: [
@@ -164,7 +166,7 @@ $row = ['id' => 7, 'name' => 'Ada'];
 // positional still works, now with [] too
 [$a, $b] = [1, 2];`,
       note:
-        "Symmetric array destructuring with [] (PHP 7.1) added keyed unpacking (['key' => $var] = ...), something list() never supported.",
+        "Symmetric array destructuring with [] (PHP 7.1) added keyed unpacking (['key' => $var] = ...); the same release gave list() keys too, so 5.5's positional-only limitation is what went away.",
     },
   ],
 
@@ -218,9 +220,9 @@ caught: boom`,
     "`iterable` (7.1) = `array | Traversable` — type-hint sequences without rejecting Generators.",
     "Multi-catch `catch (A | B $e)` (7.1) replaces duplicated catch bodies and over-broad base catches.",
     "Class constants can now be `private`/`protected`/`public const` (7.1); before, all were implicitly public.",
-    "`[]` array destructuring (7.1) is symmetric with array *creation* and supports **keyed** unpacking — `list()` can't.",
+    "`[]` array destructuring (7.1) is symmetric with array *creation* — the same syntax also builds an array on the right of `=`, which `list()` can't; 7.1 gave **keyed** unpacking to both forms.",
     "`['key' => $var] = $arr` pulls by key in any order, and works directly in `foreach`.",
-    "`list()` still works; `[]` is the modern, key-aware spelling — no upgrade pressure, just nicer code.",
+    "`list()` still works; `[]` is the modern, array-literal-shaped spelling — no upgrade pressure, just nicer code.",
   ],
 
   interview: [
@@ -234,7 +236,7 @@ caught: boom`,
     },
     {
       q: "What's the difference between `list()` and `[]` destructuring?",
-      a: "Both unpack an array into variables. `list()` exists since forever but is **positional only**. The `[]` form (PHP 7.1) is *symmetric* with array literals and, crucially, supports **keyed** destructuring: `['id' => $id, 'name' => $name] = $row;` pulls values by key in any order — something `list()` can't express. `[]` also reads cleanly inside `foreach`: `foreach ($rows as ['id' => $id]) {}`.",
+      a: "Since **PHP 7.1** they are equivalent in power: that release added the `[]` form *and* gave **keyed** destructuring to both, so `['id' => $id, 'name' => $name] = $row;` and `list('id' => $id, 'name' => $name) = $row;` both work — before 7.1, `list()` was **positional only**. What is still unique to `[]` is that it is *symmetric* with array literals: the same syntax creates an array on the right-hand side of `=`, whereas `list()` may only appear on the left. `[]` also reads cleanly inside `foreach`: `foreach ($rows as ['id' => $id]) {}`.",
     },
     {
       q: "Before 7.1, how would you stop a class constant from being part of your public API?",
@@ -260,12 +262,12 @@ caught: boom`,
       options: [
         "Unpack into more than two variables",
         "Destructure by key, e.g. `['id' => $id] = $row`",
-        "Be used on the right-hand side of `=`",
+        "Double as array *creation* on the right-hand side of `=`",
         "Skip elements with empty slots",
       ],
-      answerIndex: 1,
+      answerIndex: 2,
       explain:
-        "Both forms are positional, but only the `[]` form (PHP 7.1) supports keyed destructuring like `['id' => $id] = $row`. `list()` is positional only. (Both can skip slots and unpack many variables.)",
+        "PHP 7.1 added the `[]` form and gave keyed destructuring to `list()` at the same time, so `list('id' => $id) = $row` works too — keys are not the difference. What only `[]` can do is double as array *creation*: the identical syntax builds an array on the right-hand side of `=`, while `list()` is left-hand-side only.",
     },
     {
       question: "In PHP 5.5, what is the visibility of a class constant declared with `const FOO = 1;`?",

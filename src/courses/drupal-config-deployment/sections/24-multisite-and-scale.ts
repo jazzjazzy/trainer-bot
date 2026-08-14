@@ -171,7 +171,7 @@ FAILED=()
 
 for URI in "\${SITES[@]}"; do
   echo "--- $URI ---"
-  # drush deploy = updatedb, cache:rebuild, config:import, deploy hooks.
+  # drush deploy = updatedb, config:import, cache:rebuild, deploy hooks.
   if ! drush --uri="https://$URI" --yes deploy; then
     echo "!! $URI failed - continuing so one site cannot block the rest"
     FAILED+=("$URI")

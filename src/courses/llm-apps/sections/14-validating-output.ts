@@ -26,10 +26,12 @@ Split validation into what the schema *can* express and what it can't:
 
 - **Structural** — types, required fields, enums, "no extra keys". The API
   enforces most of this when you pass a JSON schema. One gap worth
-  remembering: **numeric \`minimum\`/\`maximum\` are not enforced
-  server-side**, so a \`severity\` of 47 can still come back from a raw
-  \`json_schema\`. (In TypeScript, \`zodOutputFormat\` re-checks ranges
-  client-side; a hand-written schema won't.)
+  remembering: **numeric \`minimum\`/\`maximum\` are not part of the supported
+  schema subset** — a raw \`json_schema\` containing them is rejected with a
+  400, and nothing in generation stops a \`severity\` of 47 coming back. (In
+  TypeScript, \`zodOutputFormat\` strips the range keywords from the wire
+  schema and re-checks them locally after the response; a hand-written schema
+  gets no range checking at all.)
 - **Semantic** — the rules only your system knows: this SKU exists, this
   date is in the future, this enum value maps to a real workflow state,
   these two fields agree with each other. No schema expresses "the ID
@@ -120,7 +122,7 @@ if (!(await skuExists(parsed.data.sku))) {
 }
 
 await insertTicket(parsed.data); // nothing unvalidated reaches here`,
-      note: "Zod re-checks the enum and the 1-5 range (which the API doesn't enforce server-side); the SKU lookup is a rule no schema can express. The boundary, not the INSERT, is where bad data stops.",
+      note: "Zod re-checks the enum and the 1-5 range (numeric ranges aren't part of the schema subset the API constrains generation with, so they never reach the wire); the SKU lookup is a rule no schema can express. The boundary, not the INSERT, is where bad data stops.",
     },
     {
       label: "Crash on first bad output vs one guided retry",
@@ -242,7 +244,7 @@ console.log("final: " + (row ? JSON.stringify(row) : "null (nothing written)"));
 
   keyPoints: [
     "Structured output guarantees shape (types, required fields, enums); it does not guarantee meaning — treat model output like an untrusted form POST and validate before it touches your DB or UI.",
-    "Numeric `minimum`/`maximum` are not enforced server-side; in TypeScript `zodOutputFormat` re-checks ranges client-side, but a raw `json_schema` won't — so range checks stay your responsibility.",
+    "Numeric `minimum`/`maximum` are outside the supported JSON Schema subset — a raw `json_schema` containing them returns a 400, while `zodOutputFormat` strips them from the wire schema and re-checks locally after the response — so range checks stay your responsibility.",
     "Semantic rules — this ID exists, this date is in range, these fields agree — are lookups no schema can express. They are always yours to run.",
     "The production pattern is validate-or-retry: parse, validate, and on failure re-prompt ONCE with the concrete error appended, then stop.",
     "When the retry also fails, fail closed — error out or queue for a human; never write half-valid data or loop forever.",
@@ -252,7 +254,7 @@ console.log("final: " + (row ? JSON.stringify(row) : "null (nothing written)"));
   interview: [
     {
       q: "You're using the API's structured output, so the JSON always parses. Why still validate it?",
-      a: "Because structured output guarantees shape, not meaning. It enforces types, required fields, and enums, and blocks invented keys — but it doesn't enforce numeric ranges server-side, and it can't know that a `sku` refers to a real product, that an `assignee` is a real user, or that two fields agree. That's semantic validation, and it's the same reason I never trust a `$_POST` straight into an `INSERT` in PHP: the data came from outside my system. So I validate at the boundary in two layers — structural with a schema like Zod or Pydantic, then semantic with the lookups and cross-field checks only my system can do — before anything reaches the database or the UI.",
+      a: "Because structured output guarantees shape, not meaning. It enforces types, required fields, and enums, and blocks invented keys — but numeric ranges aren't part of the schema subset it can constrain generation with, and it can't know that a `sku` refers to a real product, that an `assignee` is a real user, or that two fields agree. That's semantic validation, and it's the same reason I never trust a `$_POST` straight into an `INSERT` in PHP: the data came from outside my system. So I validate at the boundary in two layers — structural with a schema like Zod or Pydantic, then semantic with the lookups and cross-field checks only my system can do — before anything reaches the database or the UI.",
     },
     {
       q: "How do you handle a model that returns output failing your validation?",
@@ -260,23 +262,23 @@ console.log("final: " + (row ? JSON.stringify(row) : "null (nothing written)"));
     },
     {
       q: "What kinds of validation can a JSON schema never do for you?",
-      a: "Anything that depends on the state of my system rather than the structure of the payload. Referential integrity — does this order ID, SKU, or user ID actually exist — is a database lookup, not a schema constraint. Cross-field logic — end date after start date, total equals the sum of line items — the schema can't express. Business-state rules — is 'refunded' a legal next status from 'pending' — live in my domain logic. And even some structural-looking constraints, like numeric min/max, aren't enforced server-side. So the schema does the cheap, universal checks and I layer my own validation on top for everything that requires knowing what the data means.",
+      a: "Anything that depends on the state of my system rather than the structure of the payload. Referential integrity — does this order ID, SKU, or user ID actually exist — is a database lookup, not a schema constraint. Cross-field logic — end date after start date, total equals the sum of line items — the schema can't express. Business-state rules — is 'refunded' a legal next status from 'pending' — live in my domain logic. And even some structural-looking constraints, like numeric min/max, aren't in the supported schema subset at all — a raw schema containing them is rejected with a 400. So the schema does the cheap, universal checks and I layer my own validation on top for everything that requires knowing what the data means.",
     },
   ],
 
   quiz: [
     {
       question:
-        "Your response uses output_config with a JSON schema that declares severity as an integer with minimum 1 and maximum 5. Which is true?",
+        "You hand-write a raw JSON schema for output_config that declares severity as an integer with minimum 1 and maximum 5. What happens?",
       options: [
         "The API rejects any response where severity is outside 1-5",
-        "The API guarantees severity is an integer, but the 1-5 range is not enforced server-side — you must check it yourself",
+        "The request is rejected with a 400: numeric constraints are outside the JSON Schema subset structured outputs supports, so range checks belong in your own code",
         "The schema's minimum/maximum are enforced only for the first request, then cached",
         "Numeric ranges are enforced, but only when strict: true is set",
       ],
       answerIndex: 1,
       explain:
-        "Structured output enforces types, required fields, and enums, but numeric minimum/maximum are not enforced server-side — a severity of 47 can still come back. In TypeScript zodOutputFormat re-checks ranges client-side; a raw json_schema does not. Range validation belongs in your own boundary layer.",
+        "Structured outputs support a subset of JSON Schema — basic types, enums, const, some string formats — and using an unsupported feature returns a 400. minimum/maximum/multipleOf are unsupported, so a hand-written schema containing them is rejected outright. The SDK helpers hide this: zodOutputFormat strips the range keywords from the wire schema and re-checks them locally after the response. Either way generation never guarantees the range — that check belongs in your own boundary layer.",
     },
     {
       question: "What is the recommended response to model output that fails validation?",

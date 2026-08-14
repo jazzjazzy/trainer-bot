@@ -43,8 +43,10 @@ The pieces that carry the weight:
 
 Teach yourself **OpenAPI 3.1** as the working baseline: it aligned schemas with standard JSON
 Schema, and it is what the tooling ecosystem targets. The newest spec is **3.2.0**
-(September 2025) — structured tags, streaming media types, and support for the new \`QUERY\`
-method via \`additionalOperations\` — worth name-dropping, but 3.1 is what you will write today.
+(September 2025) — structured tags, streaming media types, and a dedicated \`query\` field on the
+Path Item Object for the new \`QUERY\` method (\`additionalOperations\` is the map for *other*
+methods such as COPY, and must not repeat one that already has a fixed field) — worth
+name-dropping, but 3.1 is what you will write today.
 
 ### Spec-first or code-first?
 

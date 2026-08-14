@@ -94,6 +94,9 @@ may need gcc) in a builder stage, install them in a slim runtime:
 # Dockerfile
 FROM python:3.12-slim AS builder
 WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends \\
+    gcc python3-dev \\
+    && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
 

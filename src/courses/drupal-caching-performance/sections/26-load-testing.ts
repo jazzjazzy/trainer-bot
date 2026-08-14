@@ -117,7 +117,7 @@ curl -sSI -b cookies.txt https://incidents.example.com/ \\
 # x-drupal-dynamic-cache: UNCACHEABLE (poor cacheability)
 
 ab -n 500 -c 20 https://incidents.example.com/   # measures Varnish. Not Drupal.`,
-      note: "X-Drupal-Cache comes from the internal page cache module (anonymous only); X-Drupal-Dynamic-Cache reports HIT/MISS/UNCACHEABLE from dynamic page cache. Drupal 10.4 / 11.1 (change record 2958442) added the parenthesised reason to both headers - before that both were a bare UNCACHEABLE, so match on the prefix, not the whole value. If your test only ever sees HIT, you are load-testing your proxy.",
+      note: "X-Drupal-Cache comes from the internal page cache module (anonymous only); X-Drupal-Dynamic-Cache reports HIT/MISS/UNCACHEABLE from dynamic page cache. Drupal 10.4 / 11.1 (change record 2958442) added the parenthesised reason - before that X-Drupal-Dynamic-Cache emitted a bare UNCACHEABLE and X-Drupal-Cache only ever said HIT or MISS (it was absent altogether when the page cache passed the request straight through), so match on the prefix, not the whole value. If your test only ever sees HIT, you are load-testing your proxy.",
       leftLang: "bash",
       rightLang: "bash",
     },

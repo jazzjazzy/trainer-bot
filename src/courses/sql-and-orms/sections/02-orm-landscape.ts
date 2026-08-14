@@ -43,8 +43,10 @@ Your PHP frameworks sit on the same two axes interviewers ask about:
   objects and the EntityManager moves them in and out of the database.
   **Prisma and Drizzle are both on the data-mapper side** — queries return
   plain typed objects with no \`save()\` method, and all persistence goes
-  through the client. There is no mainstream active-record ORM in the
-  modern TS world; the pattern fights the type system.
+  through the client. TypeORM still offers an active-record mode (entities
+  extending \`BaseEntity\`, with \`save()\` and static finders), but the
+  pattern fights the type system, and the leading typed ORMs have all
+  chosen the data-mapper side.
 - **Code-first vs schema-first.** Drizzle is code-first: TypeScript table
   definitions are the source of truth and types fall out of the compiler.
   Prisma is schema-first: a \`.prisma\` DSL file is the source of truth and
@@ -240,7 +242,7 @@ console.log('table:', usersTable.map((u) => u.email).join(', '));`,
       a: "I'd weigh three things. First, how close the team wants to stay to SQL: Drizzle's API is nearly one-to-one with SQL clauses, so a SQL-strong team is instantly productive and can predict the generated query; Prisma's higher-level API is more approachable for developers who don't think in SQL. Second, tooling and workflow: Prisma brings polished migrations, Studio, and a mature ecosystem, at the cost of a DSL and a generate step; Drizzle has no codegen and lean bundles, which matters in serverless and edge runtimes. Third, team profile and existing conventions. Coming from 25 years of SQL, I'm equally comfortable in either — the important skill is reading what each one emits and knowing when to drop to raw SQL.",
     },
     {
-      q: "Why did active record never take hold in the TypeScript ecosystem?",
+      q: "TypeORM supports active record, yet Prisma and Drizzle both chose data mapper. Why does the TypeScript ecosystem lean that way?",
       a: "Active record fuses data and persistence into one mutable object, and that fights TypeScript's strengths. The type system shines when query results are plain, precisely-shaped values — a projection can be typed as exactly `{ author: string; title: string }[]`. An active-record model with magic properties, partially-loaded state, and a `save()` method is much harder to type honestly: is that relation loaded? Is this field selected? Eloquent papers over that with runtime magic (`__get`), which PHP tolerates but TS can't verify. Data mappers also keep serialisation trivial — rows are already plain objects — which suits API-centric and serverless architectures where you fetch, transform, and return JSON.",
     },
   ],

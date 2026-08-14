@@ -7,7 +7,7 @@ const lesson: Lesson = {
   part: "The Mental Model",
   estMinutes: 10,
   summary:
-    "Identity, rules, and output contracts live in the top-level system parameter — and on 5-family models with no temperature knob, the system prompt IS the steering wheel.",
+    "Identity, rules, and output contracts live in the top-level system parameter — and on current frontier models with no temperature knob, the system prompt IS the steering wheel.",
 
   concept: `
 The most common early mistake with the Anthropic API is treating the system
@@ -27,9 +27,10 @@ If you learned from OpenAI-flavoured tutorials you'll expect a
 \`{ role: "system" }\` message at the top of the array. Send that to the
 Anthropic API and you get a 400: \`messages\` carries only \`user\` and
 \`assistant\` roles, and the first message must be \`user\`. (One current
-exception: Claude Opus 4.8 accepts mid-conversation \`role: "system"\` entries
-for operator instructions — a model-specific feature, not how you set the
-system prompt.)
+exception: Claude Opus 5, Opus 4.8, Fable 5 and Mythos 5 accept
+mid-conversation \`role: "system"\` entries for operator instructions —
+Sonnet 5 does not — a model-gated feature, not how you set the system
+prompt.)
 
 ### Anatomy of a production system prompt
 
@@ -62,7 +63,7 @@ injection: instructions that arrive in user content are data, not policy.
 ### No temperature knob: prompting IS the steering wheel
 
 Older tutorials spend pages on tuning \`temperature\`. On the current
-5-family models (Claude Sonnet 5, Opus 4.8, Fable 5) the sampling parameters
+frontier models (Claude Opus 5, Sonnet 5, Opus 4.8, Fable 5) the sampling parameters
 \`temperature\`, \`top_p\`, and \`top_k\` are **rejected with a 400**. Want
 terser answers? Say so in the system prompt. Want stylistic variety? Ask for
 it ("vary your phrasing across responses"). The prompt is not a workaround —
@@ -106,7 +107,7 @@ const response = await client.messages.create({
   ],
 });`,
       note:
-        "Anthropic messages carry only user/assistant roles; identity and rules travel in the top-level system param (mid-conversation role:\"system\" exists only on Opus 4.8).",
+        "Anthropic messages carry only user/assistant roles; identity and rules travel in the top-level system param (mid-conversation role:\"system\" is model-gated: Opus 5, Opus 4.8, Fable 5 and Mythos 5 — not Sonnet 5).",
     },
     {
       label: "Rules buried in the user message",
@@ -233,14 +234,14 @@ console.log(
     "The system prompt is the top-level `system` parameter — not a message role. `messages` holds only `user`/`assistant`, starting with `user`.",
     "A production system prompt has anatomy: role/identity, capabilities, concrete constraints, an output format contract, and refusal behaviour.",
     "Instructions in `system` carry more authority than pleading inside user turns — which is also your first defence against prompt injection.",
-    "On 5-family models (Sonnet 5, Opus 4.8, Fable 5), `temperature`/`top_p`/`top_k` return a 400 — prompting is the supported way to steer style and variability.",
+    "On current frontier models (Opus 5, Sonnet 5, Opus 4.8, Fable 5), `temperature`/`top_p`/`top_k` return a 400 — prompting is the supported way to steer style and variability.",
     "Keep `system` static and put per-request data in `messages`: prepared-statement discipline, and a stable prefix is what makes prompt caching (~0.1x reads) work.",
   ],
 
   interview: [
     {
       q: "Where do system-level instructions go in an Anthropic API request, and why does the placement matter?",
-      a: "They go in the top-level `system` parameter, not as a `role: \"system\"` message — the messages array only accepts user and assistant roles and must start with a user turn, so the OpenAI-style shape returns a 400. Placement matters for three reasons: the model treats `system` as higher authority than user content, so rules stated there hold up against users trying to argue them away; it cleanly separates trusted instructions from untrusted input, like a prepared statement separates SQL from bound data; and because it renders at the front of the prompt, a stable system prompt is what makes prompt caching effective. There is one current exception worth knowing: Opus 4.8 accepts mid-conversation `role: \"system\"` messages for operator instructions, but that's a model-specific feature, not the general pattern.",
+      a: "They go in the top-level `system` parameter, not as a `role: \"system\"` message — the messages array only accepts user and assistant roles and must start with a user turn, so the OpenAI-style shape returns a 400. Placement matters for three reasons: the model treats `system` as higher authority than user content, so rules stated there hold up against users trying to argue them away; it cleanly separates trusted instructions from untrusted input, like a prepared statement separates SQL from bound data; and because it renders at the front of the prompt, a stable system prompt is what makes prompt caching effective. There is one current exception worth knowing: Opus 5, Opus 4.8, Fable 5 and Mythos 5 accept mid-conversation `role: \"system\"` messages for operator instructions — Sonnet 5 does not — but that's a model-gated feature, not the general pattern.",
     },
     {
       q: "What does a production-quality system prompt contain beyond 'you are a helpful assistant'?",
@@ -248,7 +249,7 @@ console.log(
     },
     {
       q: "Temperature tuning shows up in a lot of LLM guides. How do you control output style on current Claude models?",
-      a: "On the current 5-family models — Sonnet 5, Opus 4.8, Fable 5 — `temperature`, `top_p`, and `top_k` are rejected with a 400, so there's nothing to tune. Style is controlled through the prompt: concision rules and length limits in the system prompt for terse output, explicit instructions like 'vary your phrasing across responses' where you'd previously have raised temperature, and an output format section for structural consistency. That's not a downgrade — prompt-level steering is more predictable and reviewable than a sampling knob, and it's the officially supported mechanism.",
+      a: "On the current frontier models — Opus 5, Sonnet 5, Opus 4.8, Fable 5 — `temperature`, `top_p`, and `top_k` are rejected with a 400, so there's nothing to tune. Style is controlled through the prompt: concision rules and length limits in the system prompt for terse output, explicit instructions like 'vary your phrasing across responses' where you'd previously have raised temperature, and an output format section for structural consistency. That's not a downgrade — prompt-level steering is more predictable and reviewable than a sampling knob, and it's the officially supported mechanism.",
     },
   ],
 
@@ -264,20 +265,20 @@ console.log(
       ],
       answerIndex: 2,
       explain:
-        "The Anthropic Messages API takes the system prompt as a top-level `system` parameter. A role:\"system\" entry in messages is invalid (Opus 4.8's mid-conversation system messages are a narrow model-specific exception, and even there the first message must be user).",
+        "The Anthropic Messages API takes the system prompt as a top-level `system` parameter. A role:\"system\" entry in messages is invalid (mid-conversation system messages on Opus 5, Opus 4.8, Fable 5 and Mythos 5 are a narrow model-gated exception — Sonnet 5 has none — and even there the first message must be user).",
     },
     {
       question:
         "On claude-sonnet-5, your request sets temperature: 0.2 to make output more deterministic. What is the result?",
       options: [
         "Lower-variance output, as documented",
-        "A 400 error — sampling parameters are rejected on 5-family models; steer behaviour through the prompt instead",
+        "A 400 error — sampling parameters are rejected on current frontier models; steer behaviour through the prompt instead",
         "The parameter is accepted but ignored",
         "It only works if top_p is also set",
       ],
       answerIndex: 1,
       explain:
-        "Sonnet 5, Opus 4.8, and Fable 5 reject temperature/top_p/top_k with a 400. Style, length, and variability are controlled through prompting — which is why the system prompt matters more than ever.",
+        "Opus 5, Sonnet 5, Opus 4.8, and Fable 5 reject temperature/top_p/top_k with a 400. Style, length, and variability are controlled through prompting — which is why the system prompt matters more than ever.",
     },
     {
       question:

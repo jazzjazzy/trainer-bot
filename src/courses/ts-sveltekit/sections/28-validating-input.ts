@@ -49,7 +49,7 @@ also read:
 import { z } from 'zod';
 
 const signupSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   age: z.coerce.number().min(18),
 });
 
@@ -67,14 +67,16 @@ Three things matter here:
 \`\`\`ts
 const parsed = signupSchema.safeParse(Object.fromEntries(await request.formData()));
 if (!parsed.success) {
-  return fail(400, { errors: parsed.error.flatten().fieldErrors });
+  return fail(400, { errors: z.flattenError(parsed.error).fieldErrors });
 }
 // parsed.data is Signup — fully typed from here on
 \`\`\`
 
-\`flatten()\` produces \`{ formErrors, fieldErrors }\` — per-field message arrays
-your page can render next to each input (Zod 4 also offers a top-level
-\`z.flattenError()\`, but \`.flatten()\` remains the widely used form).
+\`z.flattenError(error)\` produces \`{ formErrors, fieldErrors }\` — per-field
+message arrays your page can render next to each input. (Zod 4 **deprecated**
+the older \`.flatten()\` method on \`ZodError\` in favour of this tree-shakeable
+top-level helper; \`.flatten()\` still runs, but new code should use
+\`z.flattenError\`.)
 
 ### The PHP mapping
 
@@ -116,7 +118,7 @@ function asString(v: FormDataEntryValue | null): string | undefined {
   return typeof v === 'string' && v.length > 0 ? v : undefined;
 }
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ request }) => {
     const data = await request.formData();
 
@@ -130,7 +132,7 @@ export const actions: Actions = {
     await createUser(email.toLowerCase(), age); // email: string here
     return { success: true };
   },
-};`,
+} satisfies Actions;`,
       note:
         "FormData.get() is typed string | File | null for a reason — the narrowing helper forces you to handle the null/File cases the JS version crashes on.",
       leftLang: "js",
@@ -160,7 +162,7 @@ export function validateSignup(input) {
 import { z } from 'zod';
 
 export const signupSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   age: z.coerce.number().min(18), // forms send strings — coerce
 });
 
@@ -202,25 +204,26 @@ export const actions = {
 };`,
       ts: `// src/routes/signup/+page.server.ts
 import { fail } from '@sveltejs/kit';
+import { z } from 'zod';
 import { createUser } from '$lib/server/users';
 import { signupSchema } from '$lib/validation/signup';
 import type { Actions } from './$types';
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ request }) => {
     const raw = Object.fromEntries(await request.formData());
     const parsed = signupSchema.safeParse(raw);
 
     if (!parsed.success) {
       // { email?: string[]; age?: string[] } — render next to inputs
-      return fail(400, { errors: parsed.error.flatten().fieldErrors });
+      return fail(400, { errors: z.flattenError(parsed.error).fieldErrors });
     }
 
     // narrowing on success: parsed.data is Signup — typed, coerced
     await createUser(parsed.data.email, parsed.data.age);
     return { success: true };
   },
-};`,
+} satisfies Actions;`,
       note:
         "safeParse returns a discriminated union, so one if-statement both handles the failure path (structured fieldErrors for the UI) and narrows parsed.data to the schema's inferred type.",
       leftLang: "js",
@@ -306,7 +309,7 @@ if (!bad.success) {
     "The blind spots: `FormData.get()` is `string | File | null`, `request.json()` is `Promise<any>`, and URL params/search params are always strings.",
     "`safeParse` returns a discriminated union — `{ success: true; data: T } | { success: false; error }` — so one `if` handles errors and narrows `data` to the validated type.",
     "`z.infer<typeof schema>` derives the static type from the runtime schema: one source of truth, so rules and types can never drift apart.",
-    "In a form action: `safeParse(Object.fromEntries(await request.formData()))`, then `fail(400, { errors: parsed.error.flatten().fieldErrors })` gives the page per-field errors to render.",
+    "In a form action: `safeParse(Object.fromEntries(await request.formData()))`, then `fail(400, { errors: z.flattenError(parsed.error).fieldErrors })` gives the page per-field errors to render (Zod 4 deprecated the `.flatten()` method in favour of this top-level helper).",
     "PHP mapping: this is Laravel's `$request->validate([...])` — declarative runtime rules at the boundary — except the schema also feeds the type checker.",
   ],
 
@@ -317,7 +320,7 @@ if (!bad.success) {
     },
     {
       q: "Why use a schema library like Zod instead of hand-written checks?",
-      a: "Three reasons. First, `z.infer<typeof schema>` derives the TypeScript type from the schema, so the rules and the type are a single source of truth that can't drift — with manual checks I'd maintain an interface and an if-chain separately. Second, `safeParse` returns a discriminated union rather than throwing, which composes perfectly with SvelteKit's `fail()`: one branch returns `fail(400, { errors: parsed.error.flatten().fieldErrors })`, the other proceeds with typed data. Third, coercion — `z.coerce.number()` handles the fact that forms and URLs only ever transmit strings. It's the same idea as Laravel's request validation rules, but the declaration also generates the static type.",
+      a: "Three reasons. First, `z.infer<typeof schema>` derives the TypeScript type from the schema, so the rules and the type are a single source of truth that can't drift — with manual checks I'd maintain an interface and an if-chain separately. Second, `safeParse` returns a discriminated union rather than throwing, which composes perfectly with SvelteKit's `fail()`: one branch returns `fail(400, { errors: z.flattenError(parsed.error).fieldErrors })`, the other proceeds with typed data. Third, coercion — `z.coerce.number()` handles the fact that forms and URLs only ever transmit strings. It's the same idea as Laravel's request validation rules, but the declaration also generates the static type.",
     },
     {
       q: "Where exactly do you put validation in a SvelteKit app?",
@@ -360,7 +363,7 @@ if (!bad.success) {
       ],
       answerIndex: 3,
       explain:
-        "Unlike parse() (which throws), safeParse returns a result object. Narrowing on the success discriminant gives you typed data in one branch and a structured error — e.g. error.flatten().fieldErrors for fail(400, ...) — in the other.",
+        "Unlike parse() (which throws), safeParse returns a result object. Narrowing on the success discriminant gives you typed data in one branch and a structured error — e.g. z.flattenError(error).fieldErrors for fail(400, ...) — in the other.",
     },
     {
       question: "What is the main benefit of `z.infer<typeof signupSchema>` over writing an interface by hand?",

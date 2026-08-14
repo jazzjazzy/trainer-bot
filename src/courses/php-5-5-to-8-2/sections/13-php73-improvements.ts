@@ -227,7 +227,7 @@ bool(true)`,
     },
     {
       q: "Trailing comma support has expanded over several versions — what's the timeline?",
-      a: "Array literals allowed a trailing comma all the way back (including 5.5). **PHP 7.3** added trailing commas in **function and method calls**. **PHP 8.0** added them in **parameter list declarations**, and **8.1** in closure `use` lists. So if you put a trailing comma in a function *definition* it'll parse on 8.0+ but fail on 7.3.",
+      a: "Array literals allowed a trailing comma all the way back (including 5.5). **PHP 7.3** added trailing commas in **function and method calls**. **PHP 8.0** added them in **parameter list declarations** and in closure `use` lists. So if you put a trailing comma in a function *definition* it'll parse on 8.0+ but fail on 7.3.",
     },
   ],
 

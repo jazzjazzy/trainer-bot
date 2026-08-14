@@ -197,7 +197,7 @@ console.log(\`Strict mode is \${config.strict ? "ON" : "off"} (target \${config.
     "**Node.js** is the runtime (like the `php` binary); **npm** is the package manager (like Composer).",
     "`package.json` ≈ `composer.json`; `package-lock.json` ≈ `composer.lock`; `node_modules/` ≈ `vendor/`.",
     "`tsc` is the compiler and `tsconfig.json` is its project-wide config — there is no PHP equivalent for the config file.",
-    "You can't run `.ts` files directly. Use **`tsx`/`ts-node`** for scripts or **Vite** for apps.",
+    "Node v22.18+/v23.6+ runs `node app.ts` by **stripping** types — no type-checking, erasable syntax only. Use **`tsx`/`ts-node`** for scripts or **Vite** for apps when you want the types actually checked.",
     "**npm scripts** are Composer's `scripts` block: `npm run <name>` runs a named command.",
     "Commit the lock file; git-ignore `node_modules/` and rebuild it with `npm install`.",
   ],

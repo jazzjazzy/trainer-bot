@@ -50,8 +50,8 @@ recognize as *compiler passes with a different name*:
 
 Symfony dumps a compiled container to \`var/cache/\${env}/App_KernelProdContainer.php\`
 and reuses it until you clear the cache. Drupal does the equivalent, but stores the
-dumped container in the \`cache_container\` cache bin (the database by default) plus a
-PHP file. Because the container depends on *which modules are on*, Drupal rebuilds it
+dumped container in the \`cache_container\` cache bin (database-backed by
+default). Because the container depends on *which modules are on*, Drupal rebuilds it
 when you install/uninstall a module or run \`drush cache:rebuild\` (\`drush cr\`). In
 Symfony you rarely think about the container after \`cache:clear\`; in Drupal
 "rebuild the container" (\`drush cr\`) is the single most-run command you will type.

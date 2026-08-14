@@ -31,9 +31,11 @@ per parent.
 ### Each ORM's answer
 
 **Prisma — ask for the relation up front.** \`include\` (or a relation inside
-\`select\`) loads users and posts in **one SQL statement** on Postgres — a
-\`LEFT JOIN LATERAL\` with JSON aggregation. Even the fallback
-\`relationLoadStrategy: "query"\` is one query *per table*, never per row.
+\`select\`) loads users and posts in a **constant number of statements**,
+never one per row: the stock \`query\` strategy issues one statement per
+relation level and merges client-side, and with the \`relationJoins\` preview
+feature enabled the default \`join\` strategy collapses that into a single
+\`LEFT JOIN LATERAL\` with JSON aggregation.
 Prisma also has a historical trick worth naming in interviews: the fluent
 API \`prisma.user.findUnique({ where: { id } }).posts()\` is batched by a
 **dataloader** — identical \`findUnique\` calls issued in the same tick are
@@ -114,10 +116,12 @@ const users = await prisma.user.findMany({
   },
 });
 
-// ONE statement on Postgres: LEFT JOIN LATERAL
-// + json_agg builds users[i].posts in-database.
-// Even relationLoadStrategy: "query" would be
-// one query per TABLE (2 here) — never per row.
+// Default (query strategy): one statement per
+// TABLE (2 here) — never per row.
+// With previewFeatures = ["relationJoins"] the
+// default becomes join: ONE statement using
+// LEFT JOIN LATERAL + json_agg, building
+// users[i].posts inside the database.
 
 console.log(users[0].posts);`,
       note:
@@ -215,7 +219,7 @@ console.log('identical results:', JSON.stringify(naive) === JSON.stringify(batch
   keyPoints: [
     "N+1 = one query for the parents plus one per parent — 100 users means 101 sequential round trips; the cost is latency multiplied, not any single slow query.",
     "In TS it hides in `for...of` loops with `await` inside and in per-parent GraphQL resolvers — the same foreach bug from PHP.",
-    "Prisma's `include`/relation-`select` compiles to one statement on Postgres (LATERAL join + JSON aggregation); `relationLoadStrategy: \"query\"` is still one query per table, never per row.",
+    "Prisma's `include`/relation-`select` is one query per table by default (the `query` strategy) and one statement total when the `relationJoins` preview feature is on (LATERAL join + JSON aggregation) — never one query per row either way.",
     "Prisma's dataloader batches identical same-tick `findUnique(...).posts()` fluent calls into a single `WHERE id IN (...)` — the classic GraphQL resolver rescue.",
     "Drizzle relational queries (`with`) always emit exactly one SQL statement; the universal manual fix is one `IN (...)` query plus Map grouping — 2 queries for any N.",
     "Detect by counting, not guessing: Prisma `log: [{ emit: \"event\", level: \"query\" }]` + `$on(\"query\")`, Drizzle `{ logger: true }` — or `pg_stat_statements` showing one normalized statement with a huge calls count.",
@@ -228,7 +232,7 @@ console.log('identical results:', JSON.stringify(naive) === JSON.stringify(batch
     },
     {
       q: "How do Prisma and Drizzle each prevent N+1 when loading relations?",
-      a: "Both make the efficient path the declarative one. Prisma's `include` — or a relation inside `select` — states the whole shape up front, and on Postgres compiles to a single statement using a lateral join with JSON aggregation; even the `query` load strategy is one query per table, never per row. Prisma additionally runs a dataloader that coalesces identical `findUnique` fluent calls (`findUnique({ where: { id } }).posts()`) issued in the same tick into one `IN (...)` query — that's what rescues per-parent GraphQL resolvers. Drizzle's relational API, `db.query.users.findMany({ with: { posts: true } })`, is immune by construction: it always generates exactly one SQL statement. The bug survives only when you hand-roll the loop — an `await` per row inside `for...of` — which no ORM can see across statements.",
+      a: "Both make the efficient path the declarative one. Prisma's `include` — or a relation inside `select` — states the whole shape up front; by default that is the `query` load strategy, one statement per table merged client-side, and with the `relationJoins` preview feature enabled it becomes a single statement using a lateral join with JSON aggregation. Either way it is a constant number of queries, never one per row. Prisma additionally runs a dataloader that coalesces identical `findUnique` fluent calls (`findUnique({ where: { id } }).posts()`) issued in the same tick into one `IN (...)` query — that's what rescues per-parent GraphQL resolvers. Drizzle's relational API, `db.query.users.findMany({ with: { posts: true } })`, is immune by construction: it always generates exactly one SQL statement. The bug survives only when you hand-roll the loop — an `await` per row inside `for...of` — which no ORM can see across statements.",
     },
     {
       q: "An endpoint is slow and you suspect query count. How do you confirm it?",

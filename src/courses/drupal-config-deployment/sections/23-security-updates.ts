@@ -165,7 +165,7 @@ composer audit --locked            # confirm the advisory is cleared
 
 # Patch releases (10.3.9 -> 10.3.14) carry no API breaks and no new
 # config, so the risk here is small and the pipeline can be short.
-drush --yes deploy                 # updatedb, cache:rebuild, cim, deploy:hook
+drush --yes deploy                 # updatedb, cim, cache:rebuild, deploy:hook
 
 # Skip: staging soak, visual regression, the release notes.
 # Do NOT skip: the database backup, config:status after import,

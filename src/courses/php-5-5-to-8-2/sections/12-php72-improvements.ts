@@ -207,7 +207,7 @@ not an object`,
     },
     {
       q: "Where are trailing commas allowed, and how has that changed since 5.5?",
-      a: "In 5.5, trailing commas were only allowed in **array literals**. PHP 7.2 added them to the last item of a **grouped `use`** declaration. PHP 7.3 added them to **function and method calls**, and PHP 8.0 added them to **parameter lists** (and closure `use` lists). By 8.0 trailing commas are nearly universal — the few places they still aren't accepted are empty lists (`foo(,)`) and `list()`/array-destructuring targets.",
+      a: "In 5.5, trailing commas were allowed in **array literals** (and in `list()` targets). PHP 7.2 added them to the last item of a **grouped `use`** declaration. PHP 7.3 added them to **function and method calls**, and PHP 8.0 added them to **parameter lists** (and closure `use` lists). By 8.0 trailing commas are nearly universal — the main place they're still rejected is an otherwise-empty list, e.g. `foo(,)` or `function f(,)`.",
     },
     {
       q: "You're on 5.5 hashing passwords with `PASSWORD_DEFAULT`. What changes when you move to 7.2 and want Argon2?",

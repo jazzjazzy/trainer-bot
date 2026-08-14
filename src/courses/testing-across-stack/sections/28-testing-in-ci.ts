@@ -30,8 +30,8 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6          # get the code
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7          # get the code
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: npm }
       - run: npm ci                         # exact lockfile install
       - run: npx vitest run --coverage
@@ -68,13 +68,13 @@ E2E needs real browsers, which a fresh VM doesn't have:
   e2e:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npx playwright install --with-deps   # browsers + OS libs
       - run: npx playwright test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()                              # only on red runs
         with:
           name: playwright-report
@@ -126,8 +126,8 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npx vitest run --coverage
@@ -135,13 +135,13 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npx playwright install --with-deps
       - run: npx playwright test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with: { name: playwright-report, path: playwright-report/ }`,
       note: "The checklist depends on discipline under deadline pressure — the workflow runs identically on every PR, and with branch protection its jobs become required checks that physically lock the merge.",
@@ -225,8 +225,8 @@ jobs:
       matrix:
         node: [20, 22]
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: \${{ matrix.node }}
           cache: npm
@@ -239,8 +239,8 @@ jobs:
       matrix:
         python: ["3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
         with:
           python-version: \${{ matrix.python }}
           cache: pip
@@ -249,8 +249,8 @@ jobs:
     output: `tests · run #214 · triggered by pull_request
 
 node (20)                                  ubuntu-latest
-  ✓ actions/checkout@v6
-  ✓ actions/setup-node@v4 — node 20, npm cache restored
+  ✓ actions/checkout@v7
+  ✓ actions/setup-node@v7 — node 20, npm cache restored
   ✓ npm ci
   ✓ npx vitest run --coverage
       Test Files  12 passed (12)
@@ -261,8 +261,8 @@ node (22)                                  ubuntu-latest
   ✓ same steps on node 22 — 87 passed
 
 python (3.11)                              ubuntu-latest
-  ✓ actions/checkout@v6
-  ✓ actions/setup-python@v5 — 3.11, pip cache restored
+  ✓ actions/checkout@v7
+  ✓ actions/setup-python@v6 — 3.11, pip cache restored
   ✓ pip install -r requirements.txt
   ✓ pytest -q
       53 passed in 1.84s
@@ -277,7 +277,7 @@ merge button unlocked.`,
   keyPoints: [
     "Tests become a contract only when wired to `on: [pull_request]` and made *required status checks* under branch protection — red physically locks the merge button.",
     "CI commands are non-interactive single shots: `vitest run --coverage` (never watch mode), `npm ci` (never `npm install`), `pytest -q`, headless `npx playwright test`.",
-    "The Playwright job needs `npx playwright install --with-deps` for browsers, and `actions/upload-artifact@v4` with `if: failure()` to preserve reports and traces from red runs.",
+    "The Playwright job needs `npx playwright install --with-deps` for browsers, and `actions/upload-artifact@v7` with `if: failure()` to preserve reports and traces from red runs.",
     "Cache dependencies, never results: `cache: npm` on setup-node and `cache: pip` on setup-python keep installs fast.",
     "`coverage.thresholds` in vitest.config.ts makes a coverage regression exit non-zero — a gate, not a decoration; Vitest 4 removed `coverage.all`/`extensions`, so scope with `include`/`exclude`.",
     "pytest 9 activates CI mode only when `$CI` (or `$BUILD_NUMBER`) is non-empty; a matrix `strategy` fans one job definition out across versions.",
@@ -294,7 +294,7 @@ merge button unlocked.`,
     },
     {
       q: "A Playwright test failed in CI but passes locally. What does your pipeline give you to debug it?",
-      a: "Artifacts. The e2e job uploads the HTML report and traces on failure — `actions/upload-artifact@v4` guarded by `if: failure()` — and the Playwright config records traces with `trace: 'on-first-retry'`. I download the artifact and open the trace with `npx playwright show-trace`: it's a full recording of the failed run — DOM snapshots before and after every action, console output, and network calls — so I can see exactly what the page looked like when the locator missed. That usually reveals the classic CI-only causes: a slower runner exposing a race, a missing await, or an animation the local machine finishes faster. Without artifacts, a CI-only e2e failure is close to undebuggable.",
+      a: "Artifacts. The e2e job uploads the HTML report and traces on failure — `actions/upload-artifact@v7` guarded by `if: failure()` — and the Playwright config records traces with `trace: 'on-first-retry'`. I download the artifact and open the trace with `npx playwright show-trace`: it's a full recording of the failed run — DOM snapshots before and after every action, console output, and network calls — so I can see exactly what the page looked like when the locator missed. That usually reveals the classic CI-only causes: a slower runner exposing a race, a missing await, or an animation the local machine finishes faster. Without artifacts, a CI-only e2e failure is close to undebuggable.",
     },
   ],
 

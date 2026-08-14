@@ -56,9 +56,10 @@ Mis-indent a line and you haven't written ugly code — you've written
 
 ### Which Python?
 
-**Python 3.12/3.13** is the modern era and what this course targets. Python 2
-died on 1 January 2020 — if you ever meet \`print "hello"\` without parentheses,
-you're looking at a corpse; never write it, never install it.
+**Python 3.12+** is the modern era — 3.14 is the current release, and this
+course targets 3.12 or newer. Python 2 died on 1 January 2020 — if you ever
+meet \`print "hello"\` without parentheses, you're looking at a corpse; never
+write it, never install it.
 
 ### The execution-model headline
 
@@ -184,7 +185,7 @@ python is dynamically typed: list of dict`,
     "Python is general-purpose: scripting, data/AI, automation, and web (Django ≈ Laravel, FastAPI ≈ a typed Slim) — PHP is web-first.",
     "Indentation replaces braces and there are no semicolons — block structure IS whitespace.",
     "No `$` sigils; snake_case for functions/variables, PascalCase for classes, UPPER_CASE for constants (PEP 8).",
-    "Target Python 3.12/3.13. Python 2 has been dead since 1 January 2020 — never touch it.",
+    "Target Python 3.12 or newer — 3.14 is the current release. Python 2 has been dead since 1 January 2020 — never touch it.",
     "The big model shift: PHP dies after every request; Python app servers are long-running processes where module state persists.",
     "Every lesson here pairs the PHP you know (left) with the Python spelling (right) and flags where the mapping breaks.",
   ],
@@ -200,7 +201,7 @@ python is dynamically typed: list of dict`,
     },
     {
       q: "Python 2 vs Python 3 — does it matter in 2026?",
-      a: "Only as history. Python 2 reached end-of-life on 1 January 2020; no supported library targets it and modern tooling won't install on it. Everything today is Python 3 — realistically 3.10+ in production and 3.12/3.13 for new work. If a codebase or tutorial shows `print \"hello\"` without parentheses, it's Python 2 material and should be treated the way you'd treat a PHP 4 tutorial: closed immediately.",
+      a: "Only as history. Python 2 reached end-of-life on 1 January 2020; no supported library targets it and modern tooling won't install on it. Everything today is Python 3 — realistically 3.10+ in production and 3.12 or newer for new work. If a codebase or tutorial shows `print \"hello\"` without parentheses, it's Python 2 material and should be treated the way you'd treat a PHP 4 tutorial: closed immediately.",
     },
   ],
 

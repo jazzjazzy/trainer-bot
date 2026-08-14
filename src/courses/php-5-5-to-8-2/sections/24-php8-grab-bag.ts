@@ -21,7 +21,7 @@ an arrow function. Now it can:
 
 \`\`\`php
 $id = $request['id'] ?? throw new InvalidArgumentException('id required');
-$fn = fn($x) => $x > 0 ? $x : throw new RangeError('must be positive');
+$fn = fn($x) => $x > 0 ? $x : throw new RangeException('must be positive');
 \`\`\`
 
 ### The string-search trio
@@ -135,6 +135,8 @@ class Money {
       ts: `<?php
 // PHP 8.0 — 'static' return type respects late static binding
 class Money {
+    public function __construct(private int $cents = 0) {}
+
     public function withCents(int $c): static {
         $clone = clone $this;
         $clone->cents = $c;

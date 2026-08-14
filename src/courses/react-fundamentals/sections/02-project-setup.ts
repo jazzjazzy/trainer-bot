@@ -162,7 +162,7 @@ export function Hello() {
     lang: "bash",
     intro:
       "The full scaffold-to-dev-server transcript. Read each command and predict what it produces before checking the output.",
-    code: `# 1. Scaffold — the template flag means zero interactive prompts
+    code: `# 1. Scaffold — --template picks the framework; the CLI still prompts for a linter
 npm create vite@latest my-app -- --template react-ts
 
 # 2. Install dependencies and start the dev server
@@ -173,6 +173,12 @@ npm run dev
 # 3. In a second terminal: what did we actually get?
 ls my-app/ my-app/src/`,
     output: `$ npm create vite@latest my-app -- --template react-ts
+
+◇  Which linter to use?
+│  Oxlint
+│
+◇  Install with npm and start now?
+│  No
 
 Scaffolding project in /home/jason/my-app...
 
@@ -194,11 +200,11 @@ $ npm run dev
 
 $ ls my-app/ my-app/src/
 my-app/:
-eslint.config.js  index.html  package.json  public  README.md
-src  tsconfig.app.json  tsconfig.json  tsconfig.node.json  vite.config.ts
+index.html  package.json  public  README.md  src
+tsconfig.app.json  tsconfig.json  tsconfig.node.json  vite.config.ts
 
 my-app/src/:
-App.css  App.tsx  assets  index.css  main.tsx  vite-env.d.ts
+App.css  App.tsx  assets  index.css  main.tsx
 
 # index.html is the single entry (front controller);
 # main.tsx mounts <App /> into <div id="root"> exactly once.`,
@@ -216,7 +222,7 @@ App.css  App.tsx  assets  index.css  main.tsx  vite-env.d.ts
   interview: [
     {
       q: "How would you start a new React project today, and why not Create React App?",
-      a: "For a client-rendered app I'd scaffold with Vite: `npm create vite@latest my-app -- --template react-ts`, which gives me React 19, TypeScript, and a fast dev server out of the box. Create React App is deprecated and unmaintained — it was built on webpack with slow cold starts and rebuilds, and the React team no longer recommends it. Vite serves source files as native ES modules in dev with esbuild transpilation, so startup is near-instant and HMR is fast regardless of app size. If the project needed server rendering or file-based routing from day one, I'd reach for a framework like Next.js instead, but Vite is the right default for learning and for SPAs.",
+      a: "For a client-rendered app I'd scaffold with Vite: `npm create vite@latest my-app -- --template react-ts`, which gives me React 19, TypeScript, and a fast dev server out of the box. Create React App is deprecated and unmaintained — it was built on webpack with slow cold starts and rebuilds, and the React team no longer recommends it. Vite serves source files as native ES modules in dev and transpiles them with the Oxc transformer, so startup is near-instant and HMR is fast regardless of app size. If the project needed server rendering or file-based routing from day one, I'd reach for a framework like Next.js instead, but Vite is the right default for learning and for SPAs.",
     },
     {
       q: "What does StrictMode do, and why does my component log twice in development?",
@@ -224,7 +230,7 @@ App.css  App.tsx  assets  index.css  main.tsx  vite-env.d.ts
     },
     {
       q: "Does Vite type-check your TypeScript? Walk me through where types are enforced.",
-      a: "No — in dev Vite only strips types using esbuild, because transpile-only is what makes it fast. Type errors surface in two places: the editor's TypeScript language server as you type, and `tsc` run as part of `npm run build`, so a type error fails the production build rather than the dev loop. That separation is deliberate: checking is a whole-program analysis and would slow HMR down. In CI you'd typically run `tsc --noEmit` (or the build) so nothing unchecked ships. Coming from PHP it's the biggest workflow change: there's a compile gate between saving a file and shipping it.",
+      a: "No — in dev Vite only strips types (with its Oxc transformer), because transpile-only is what makes it fast. Type errors surface in two places: the editor's TypeScript language server as you type, and `tsc` run as part of `npm run build`, so a type error fails the production build rather than the dev loop. That separation is deliberate: checking is a whole-program analysis and would slow HMR down. In CI you'd typically run `tsc --noEmit` (or the build) so nothing unchecked ships. Coming from PHP it's the biggest workflow change: there's a compile gate between saving a file and shipping it.",
     },
   ],
 
@@ -263,7 +269,7 @@ App.css  App.tsx  assets  index.css  main.tsx  vite-env.d.ts
       ],
       answerIndex: 1,
       explain:
-        "Vite serves modules on demand and strips types with esbuild for speed — no checking, no full rebundles. Type enforcement happens in the editor and via tsc during `npm run build`.",
+        "Vite serves modules on demand and strips types with the Oxc transformer for speed — no checking, no full rebundles. Type enforcement happens in the editor and via tsc during `npm run build`.",
     },
     {
       question: "How does a Vite React SPA's entry model differ from a classic PHP site?",

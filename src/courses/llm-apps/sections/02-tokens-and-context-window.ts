@@ -274,14 +274,14 @@ for (const w of workloads) {
       question:
         "You're sending a 950K-token document to claude-sonnet-5 (1M context window) with max_tokens: 128000. What happens?",
       options: [
-        "It works — the document fits inside 1M",
-        "The request fails or must be reduced: input plus max_tokens exceeds the shared context window",
+        "It works and you get the full 128K of output — the document fits inside 1M",
+        "The call succeeds but generation stops early with stop_reason 'model_context_window_exceeded' — input and output share the window, so only ~50K is left for output",
         "The API automatically trims the document to fit",
         "Output streams to a separate window, so there is no conflict",
       ],
       answerIndex: 1,
       explain:
-        "Input and output share one context window. 950K in + 128K reserved out = 1,078K > 1M. You'd need to shrink the input or lower max_tokens — the API won't silently trim for you.",
+        "Input and output share one context window: 950K in leaves ~50K of the 1M for output, not the 128K you asked for. On Claude 4.5-and-newer models the request is not rejected — the model generates until it hits the window and returns stop_reason: 'model_context_window_exceeded'. (Input that on its own exceeds the window is the different case: that's a 400 invalid_request_error.)",
     },
     {
       question:

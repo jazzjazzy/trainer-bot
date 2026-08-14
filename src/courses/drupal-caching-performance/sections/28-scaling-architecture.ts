@@ -157,7 +157,7 @@ $settings['file_temp_path'] = '/tmp';
 // s3fs can take over public://, or flysystem adds its own scheme:
 $settings['flysystem'] = [
   'incidents' => [
-    'driver' => 's3v2',
+    'driver' => 's3',
     'config' => ['bucket' => 'news-uploads', 'region' => 'ap-southeast-2'],
   ],
 ];

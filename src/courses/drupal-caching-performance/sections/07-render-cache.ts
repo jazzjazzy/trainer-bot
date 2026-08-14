@@ -414,7 +414,7 @@ cache_render bin:
     },
     {
       q: "A colleague sets '#cache' => ['keys' => ['my_block'], 'max-age' => 0] and wonders why nothing is cached. What is happening?",
-      a: "Two things, and the second is the dangerous one. First, `isElementCacheable()` short-circuits on `max-age === 0`, so the element is never read from or written to the render bin — the keys are inert. Second, that zero does not stay local: max-age bubbles as the *minimum* across the tree, so it propagates to the page and makes the whole response uncacheable in Dynamic Page Cache and in any reverse proxy. One block written that way can cost you the entire page cache. The fix is almost always a cache *context* (vary correctly) or a cache *tag* (invalidate precisely), not max-age 0; reach for a `#lazy_builder` placeholder if the fragment genuinely cannot be cached.",
+      a: "Two things, and the second is the dangerous one. First, `isElementCacheable()` short-circuits on `max-age === 0`, so the element is never read from or written to the render bin — the keys are inert. Second, that zero does not stay local: max-age bubbles as the *minimum* across the tree, so it propagates to the page and makes the whole response uncacheable in Dynamic Page Cache. It never reaches the wire — core builds `Cache-Control` from `system.performance:cache.page.max_age`, and the Internal Page Cache ignores max-age altogether — but one block written that way still costs you every authenticated page view. The fix is almost always a cache *context* (vary correctly) or a cache *tag* (invalidate precisely), not max-age 0; reach for a `#lazy_builder` placeholder if the fragment genuinely cannot be cached.",
     },
   ],
 

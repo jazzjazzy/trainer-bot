@@ -54,8 +54,10 @@ Three design details interviewers probe:
 - **Scope the key** to the authenticated caller and endpoint — two customers
   using the same UUID must not collide.
 - **Reject key reuse with a different body** — same key + different payload
-  is a client bug; Stripe returns 422 for it. Store a hash of the request
-  body to detect this.
+  is a client bug; Stripe rejects it with an \`idempotency_error\` (422 isn't
+  a status Stripe uses at all — its table maps key reuse to 409). Store a
+  hash of the request body to detect this; 400 or 422 are both defensible
+  codes in your own API.
 - **Expire keys.** The store can't grow forever; keys need a TTL comfortably
   longer than any realistic retry window (Stripe prunes after 24 hours).
 
@@ -275,7 +277,7 @@ console.log(\`retry got the original charge id: \${r1.body.chargeId === r2.body.
     "GET, HEAD, OPTIONS, PUT, and DELETE are idempotent by definition and safe to blindly retry; POST is not — and POST guards the highest-stakes operations.",
     "Idempotency-Key pattern (Stripe; IETF httpapi draft): client generates one key per logical operation and reuses it on retries; the server executes on first sight, stores status+body, and replays that stored response for any repeat.",
     "Concurrent duplicates must not execute in parallel: claim the key atomically (unique constraint / SETNX) and answer the loser with 409 or by waiting for the winner.",
-    "Scope keys to caller + endpoint, reject same-key-different-body as a client error (Stripe: 422), and expire keys after a TTL longer than any retry window (Stripe: 24 h).",
+    "Scope keys to caller + endpoint, reject same-key-different-body as a client error (Stripe raises an `idempotency_error`; 400 or 422 both work in your own API), and expire keys after a TTL longer than any retry window (Stripe: 24 h).",
     "The client half of the contract: auto-retry only idempotent methods or keyed POSTs, with exponential backoff.",
   ],
 
@@ -286,7 +288,7 @@ console.log(\`retry got the original charge id: \${r1.body.chargeId === r2.body.
     },
     {
       q: "What are the tricky edge cases in implementing an idempotency-key store?",
-      a: "Four that matter. First, concurrency: if the retry arrives while the original is mid-flight, both must not execute — I claim the key atomically (a unique constraint or Redis SETNX), and the loser either waits or gets a 409 telling the client to retry shortly, which is Stripe's behaviour. Second, scoping: keys must be namespaced by authenticated caller and endpoint so two clients picking the same UUID can't read each other's responses. Third, key reuse with a different body — that's a client bug, so I store a request-body hash and reject mismatches with a 422 rather than replaying something the client didn't send. Fourth, storage lifecycle: the store must be shared across instances (Redis or a DB table, not process memory) and pruned by TTL — long enough to cover any retry window; Stripe uses 24 hours.",
+      a: "Four that matter. First, concurrency: if the retry arrives while the original is mid-flight, both must not execute — I claim the key atomically (a unique constraint or Redis SETNX), and the loser either waits or gets a 409 telling the client to retry shortly, which is Stripe's behaviour. Second, scoping: keys must be namespaced by authenticated caller and endpoint so two clients picking the same UUID can't read each other's responses. Third, key reuse with a different body — that's a client bug, so I store a request-body hash and reject mismatches with a 422 rather than replaying something the client didn't send (Stripe surfaces this as an `idempotency_error`; the exact status is your call). Fourth, storage lifecycle: the store must be shared across instances (Redis or a DB table, not process memory) and pruned by TTL — long enough to cover any retry window; Stripe uses 24 hours.",
     },
     {
       q: "PUT is already idempotent — why do payment APIs use POST plus an idempotency key instead of PUT?",
@@ -332,7 +334,7 @@ console.log(\`retry got the original charge id: \${r1.body.chargeId === r2.body.
       ],
       answerIndex: 2,
       explain:
-        "A key identifies one logical operation, so a different payload under the same key is a contradiction: replaying the $25 response would silently misreport, and executing $90 would break the one-key-one-operation invariant. Detect it by storing a hash of the original body and reject the mismatch — Stripe returns a 422 error for this.",
+        "A key identifies one logical operation, so a different payload under the same key is a contradiction: replaying the $25 response would silently misreport, and executing $90 would break the one-key-one-operation invariant. Detect it by storing a hash of the original body and reject the mismatch — Stripe raises an `idempotency_error` for exactly this case; 400 or 422 are both defensible codes in your own API.",
     },
     {
       question: "Why is a client allowed to blindly retry PUT and DELETE but not a bare POST?",

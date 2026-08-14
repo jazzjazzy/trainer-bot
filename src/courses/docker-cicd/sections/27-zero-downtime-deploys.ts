@@ -103,8 +103,7 @@ mv /var/www/html/maintenance.html \\
 # reverse_proxy app-blue:3000 → reverse_proxy app-green:3000
 
 # The whole "deploy window":
-docker compose up -d app-green        # start next version
-curl -fsS http://app-green:3000/health # gate on readiness
+docker compose up -d --wait app-green # start next version, block until healthy
 sed -i 's/app-blue/app-green/' Caddyfile
 docker compose exec proxy caddy reload --config /etc/caddy/Caddyfile
 # Rollback = the same sed, reversed. Blue is still running.`,

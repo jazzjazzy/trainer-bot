@@ -201,7 +201,9 @@ export default async function PhotoModal({
       "A miniature route resolver for a tree with a @modal slot and a (.)photo interceptor. Predict the slot-to-file mapping for each navigation — especially how /photo/42 differs between a Link click and a hard refresh — then run it.",
     code: `// The route tree, as data. In the real App Router the folder
 // names ARE this table.
-const tree = {
+type Slot = { interceptors: Record<string, string>; defaultFile: string };
+
+const tree: { pages: Record<string, string>; slots: Record<string, Slot> } = {
   pages: {
     '/': 'app/page.tsx',
     '/photo/[id]': 'app/photo/[id]/page.tsx',

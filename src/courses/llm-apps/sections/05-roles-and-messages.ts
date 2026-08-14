@@ -32,8 +32,9 @@ The rules:
 - The **system prompt is not a message.** Instructions about *how to behave*
   ("You are a terse senior engineer...") go in the top-level \`system\`
   parameter, separate from the turn-taking. (A mid-conversation
-  \`role: "system"\` exists as an Opus-4.8-only feature — don't design
-  around it.)
+  \`role: "system"\` message is a separate, model-gated feature — Claude
+  Opus 5, Opus 4.8, Fable 5 and Mythos 5 accept one, Sonnet 5 does not —
+  and it is not how you set the system prompt.)
 - The model's reply is the *next* assistant turn. It never sees your
   variable names or your database — the transcript is its entire reality.
 
@@ -260,7 +261,7 @@ render(transcript);
     },
     {
       q: "Where does the system prompt go in an Anthropic API call, and why does the placement matter?",
-      a: "It's the top-level `system` parameter — a sibling of `model` and `messages`, not a message with a system role. The separation is deliberate: `messages` models the turn-taking of a conversation (starting with a user turn), while `system` is standing instruction that frames all of it — persona, rules, tone. Practically it matters for history management: as a conversation grows I trim or summarize old *turns*, but the system prompt persists untouched on every call. There's a mid-conversation `role: 'system'` capability specific to Opus 4.8, but I wouldn't design a general integration around a single-model feature.",
+      a: "It's the top-level `system` parameter — a sibling of `model` and `messages`, not a message with a system role. The separation is deliberate: `messages` models the turn-taking of a conversation (starting with a user turn), while `system` is standing instruction that frames all of it — persona, rules, tone. Practically it matters for history management: as a conversation grows I trim or summarize old *turns*, but the system prompt persists untouched on every call. There's a mid-conversation `role: 'system'` capability on Claude Opus 5, Opus 4.8, Fable 5 and Mythos 5 — notably not Sonnet 5 — but I wouldn't design a general integration around a feature that isn't available on every model.",
     },
     {
       q: "A teammate's code ends the messages array with a partial assistant turn to force the reply to start with '{'. Review it.",
@@ -319,7 +320,7 @@ render(transcript);
       ],
       answerIndex: 2,
       explain:
-        "Prefill was a real technique on older models but current models reject a trailing assistant turn with a 400. Structured outputs (output_config with a JSON schema, or messages.parse with Zod) are the supported replacement — and 5-family models don't accept temperature at all.",
+        "Prefill was a real technique on older models but current models reject a trailing assistant turn with a 400. Structured outputs (output_config with a JSON schema, or messages.parse with Zod) are the supported replacement — and current frontier models don't accept temperature at all.",
     },
   ],
 };

@@ -71,11 +71,14 @@ final class ReportController extends AbstractController {
 
 ### Practical notes
 
-- \`ControllerBase\` and \`BlockBase\` give you helpers, but the moment you need
-  a service you must add \`implements ContainerInjectionInterface\` /
-  \`ContainerFactoryPluginInterface\` and write create(). Forgetting the
-  interface is the classic bug: create() is silently never called and your
-  constructor runs with defaults.
+- \`ControllerBase\` and \`FormBase\` **already implement**
+  \`ContainerInjectionInterface\`, so a subclass only *overrides* create() — and
+  since Drupal 10.2 they also use \`AutowireTrait\`, so a controller that omits
+  create() has its constructor type-hints resolved from the container. Plugin
+  bases such as \`BlockBase\` do **not** implement
+  \`ContainerFactoryPluginInterface\` — you add it yourself and write create().
+  Forgetting it on a plugin is the classic bug: create() is never called, your
+  constructor runs with defaults, and no error is raised.
 - Plugin constructors **must** call
   \`parent::__construct(\$configuration, \$plugin_id, \$plugin_definition)\`
   first — those three args are not yours to drop.

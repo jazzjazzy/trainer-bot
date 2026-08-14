@@ -19,8 +19,8 @@ at all. If the object has the method, Python calls it.
 
 \`class Child extends Parent\` becomes \`class Child(Parent):\`. Calling the parent
 constructor is \`super().__init__(...)\` instead of \`parent::__construct(...)\` —
-and unlike PHP, the parent's \`__init__\` is **not** called automatically if you
-define your own, so forgetting \`super().__init__()\` is a classic bug.
+and exactly as in PHP, the parent's \`__init__\` is **not** called automatically
+if you define your own, so forgetting \`super().__init__()\` is a classic bug.
 
 \`\`\`python
 class AdminUser(User):

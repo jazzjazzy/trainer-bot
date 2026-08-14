@@ -21,8 +21,10 @@ In Symfony every bundle contributes services, but you mostly touch a single
 \`config/services.yaml\` with a \`_defaults\` block that flips on autowiring for
 the whole \`App\\\` namespace. In Drupal each module ships its own
 \`my_module.services.yml\` (note: \`.yml\`, and prefixed with the machine name).
-There is **no \`_defaults\`, no autowire, and no autoconfigure by default** —
-Drupal 10/11 register services with everything spelled out:
+Drupal supports the same \`_defaults\`, \`autowire\` and \`autoconfigure\` keys
+Symfony does — core's own \`announcements_feed.services.yml\` uses them — but
+**none of them are on by default**, so idiomatic module code spells everything
+out:
 
 \`\`\`yaml
 services:
@@ -53,15 +55,18 @@ class is an implementation detail; the *id* is the contract.
 Because nothing infers dependencies from type-hints, the **order and contents
 of \`arguments\` must exactly match your constructor signature**. Miss one and
 you get a \`RuntimeException\` about too few arguments at build time. (Drupal
-10.1+ *does* let you opt in per-service with \`autowire: true\`, and 10.2/11 add
+9.3+ *does* let you opt in per-service with \`autowire: true\`, and 10.2/11 add
 PHP-attribute autowiring for some cases — but idiomatic module code, and every
 example you'll read, wires arguments explicitly.)
 
 ### Tags replace autoconfigure
 
 Symfony's \`autoconfigure: true\` inspects interfaces
-(\`EventSubscriberInterface\`, \`Voter\`…) and applies tags for you. Drupal never
-does this — you **add the tag by hand**. The common ones:
+(\`EventSubscriberInterface\`, \`Voter\`…) and applies tags for you. Drupal has the
+same machinery — \`CoreServiceProvider\` calls
+\`registerForAutoconfiguration(EventSubscriberInterface::class)\` — but it is off
+unless your services file sets \`autoconfigure: true\`, so by default you **add
+the tag by hand**. The common ones:
 
 - \`{ name: event_subscriber }\` — register a \`Drupal\\Core\\...\\EventSubscriber\`
 - \`{ name: access_check }\` — a route access checker
@@ -226,7 +231,7 @@ true
     "`arguments:` is an ordered, positional list that must match the constructor exactly — a mismatch fails at container-build time.",
     "Tags replace autoconfigure: add `{ name: event_subscriber }`, `{ name: access_check }`, etc. by hand or the service is never collected.",
     "Editing services.yml requires a cache rebuild (`drush cr`) — the compiled container is cached in the `cache_container` bin (database-backed by default), with no dev auto-rebuild.",
-    "Drupal 10.1+ allows opt-in `autowire: true` per service, and 10.2/11 add attribute autowiring — but idiomatic module code still wires explicitly.",
+    "Drupal 9.3+ allows opt-in `autowire: true` per service, and 10.2/11 add attribute autowiring — but idiomatic module code still wires explicitly.",
   ],
 
   interview: [
@@ -240,7 +245,7 @@ true
     },
     {
       q: "You added an event subscriber class but its listener never fires. What's the likely cause in Drupal?",
-      a: "You almost certainly forgot the `tags: [{ name: event_subscriber }]` entry in `my_module.services.yml`. In Symfony `autoconfigure` would detect `EventSubscriberInterface` and tag it for you, but Drupal has no autoconfigure, so an untagged subscriber is just an unreferenced class — it loads but is never collected into the dispatcher. The second thing to check is that you rebuilt the cache with `drush cr`, since the container is compiled and cached (in the `cache_container` bin, database-backed by default) and won't pick up services.yml edits until you do.",
+      a: "You almost certainly forgot the `tags: [{ name: event_subscriber }]` entry in `my_module.services.yml`. In Symfony `autoconfigure` would detect `EventSubscriberInterface` and tag it for you, but Drupal leaves autoconfigure off unless the file opts in with `_defaults: { autoconfigure: true }`, so by default an untagged subscriber is just an unreferenced class — it loads but is never collected into the dispatcher. The second thing to check is that you rebuilt the cache with `drush cr`, since the container is compiled and cached (in the `cache_container` bin, database-backed by default) and won't pick up services.yml edits until you do.",
     },
   ],
 
@@ -256,7 +261,7 @@ true
       ],
       answerIndex: 1,
       explain:
-        "Drupal ships without autowire by default, so you list each dependency as an '@id' in `arguments:`, in the same order as the constructor parameters. Attribute/opt-in autowiring exists (10.1+/10.2+) but is not the default.",
+        "Drupal ships without autowire by default, so you list each dependency as an '@id' in `arguments:`, in the same order as the constructor parameters. Attribute/opt-in autowiring exists (9.3+/10.2+) but is not the default.",
     },
     {
       question:
@@ -269,7 +274,7 @@ true
       ],
       answerIndex: 2,
       explain:
-        "autoconfigure inspects interfaces like EventSubscriberInterface and applies the matching tag automatically. Drupal has no equivalent, so you must write `tags: [{ name: event_subscriber }]` yourself or the service is never collected.",
+        "autoconfigure inspects interfaces like EventSubscriberInterface and applies the matching tag automatically. Drupal has the same mechanism (core registers EventSubscriberInterface for autoconfiguration) but leaves it off by default, so unless your file sets `_defaults: { autoconfigure: true }` you must write `tags: [{ name: event_subscriber }]` yourself or the service is never collected.",
     },
     {
       question:

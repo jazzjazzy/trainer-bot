@@ -166,7 +166,7 @@ class MetaCache {
 // preload.php:
 opcache_compile_file(__DIR__ . '/vendor/autoload.php');`,
       note:
-        "opcache.preload arrived in PHP 7.4, building on the OPcache bytecode cache that has shipped (and been on by default) since PHP 5.5.",
+        "opcache.preload arrived in PHP 7.4, building on the OPcache bytecode cache that has been bundled with PHP since 5.5 (you still load it with zend_extension=opcache.so).",
     },
   ],
 
@@ -238,7 +238,7 @@ served Whiskers`,
     },
     {
       q: "What is opcache.preload and how does it differ from ordinary OPcache?",
-      a: "Ordinary **OPcache** (bundled and on by default since 5.5) caches the *compiled bytecode* of each file so it isn't recompiled from source on every request — but classes and functions are still linked into each fresh request. **Preloading** (`opcache.preload`, PHP 7.4) goes further: a script runs once at server startup and the files it compiles stay **resident in memory and globally available to every request** without any per-request include or autoload. It's a startup-time win mainly for large frameworks; the trade-off is that changing preloaded files requires a server restart.",
+      a: "Ordinary **OPcache** (bundled with PHP since 5.5, loaded via `zend_extension`) caches the *compiled bytecode* of each file so it isn't recompiled from source on every request — but classes and functions are still linked into each fresh request. **Preloading** (`opcache.preload`, PHP 7.4) goes further: a script runs once at server startup and the files it compiles stay **resident in memory and globally available to every request** without any per-request include or autoload. It's a startup-time win mainly for large frameworks; the trade-off is that changing preloaded files requires a server restart.",
     },
     {
       q: "When would you reach for WeakReference, and what problem does it solve?",

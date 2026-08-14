@@ -136,7 +136,7 @@ drush config:import -y     # cim   — import the committed YAML into the DB
 drush cache:rebuild        # cr`,
       leftLang: "yaml",
       rightLang: "yaml",
-      note: "Drupal's config lives in the DB at runtime but ships as YAML; 'drush cex' snapshots it out, 'drush cim' applies it. 'drush deploy' is the D9.5+ one-shot deploy command.",
+      note: "Drupal's config lives in the DB at runtime but ships as YAML; 'drush cex' snapshots it out, 'drush cim' applies it. 'drush deploy' is Drush's one-shot deploy command (Drush 10.3+).",
     },
     {
       label: "Listings: a controller vs Views",

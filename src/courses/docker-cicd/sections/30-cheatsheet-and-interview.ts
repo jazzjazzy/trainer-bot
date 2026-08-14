@@ -84,7 +84,7 @@ jobs:
     permissions: { contents: read, packages: write }
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: npm }
       - run: npm ci && npm test
       - uses: docker/setup-buildx-action@v4
@@ -269,7 +269,7 @@ app-db-1   postgres:16
     "Model in one breath: image = immutable layered snapshot, container = running process from it, registry = where tagged images live, Dockerfile = the setup as code, and CI builds once so every environment runs the same artifact.",
     "The canonical Dockerfile is multi-stage with dependencies copied before source — so code edits reuse the cached `npm ci` layer and the final image carries no build tools.",
     "Modern compose files have NO `version:` key (the Compose Spec ignores it), are named compose.yaml by preference, and run via the `docker compose` plugin — the hyphenated Python `docker-compose` v1 binary is history.",
-    "CI skeleton to memorise: checkout@v6 → setup-node@v4 (cache: npm) → test → setup-buildx-action@v4 → login-action@v4 → metadata-action@v6 → build-push-action@v7 with `type=gha` layer caching.",
+    "CI skeleton to memorise: checkout@v6 → setup-node@v7 (cache: npm) → test → setup-buildx-action@v4 → login-action@v4 → metadata-action@v6 → build-push-action@v7 with `type=gha` layer caching.",
     "Deploy = `TAG=<sha> docker compose pull && ... up -d` over SSH; rollback = the same `up -d` with the previous tag; both under a minute.",
     "Security lines that land well: pin third-party actions to commit SHAs (GitHub's own hardening guidance), secrets live in Actions secrets/env files and never in image layers, and the server never builds.",
   ],

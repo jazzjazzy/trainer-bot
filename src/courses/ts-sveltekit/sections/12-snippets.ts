@@ -10,7 +10,7 @@ const lesson: Lesson = {
     "Snippets replace slots in Svelte 5 — reusable chunks of markup you can pass as props and type precisely with `Snippet<[...]>`.",
 
   concept: `
-Slots are gone. In Svelte 5, the way you pass markup into a component — and the
+Slots are deprecated (they still work, but warn). In Svelte 5, the way you pass markup into a component — and the
 way you reuse markup *within* a component — is the **snippet**. A snippet is a
 chunk of template with a name and (optionally) parameters, and unlike slots it
 is a real value: you can pass it around, and you can type it.

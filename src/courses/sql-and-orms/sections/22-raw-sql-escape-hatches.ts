@@ -37,7 +37,8 @@ The generic parameter (\`<{ id: number; name: string }[]>\`) is a **promise you 
 not something Prisma checks — raw results are untyped at runtime, so a wrong
 annotation is a lie the compiler believes. For raw queries you run constantly,
 Prisma's **TypedSQL** closes that gap: you write the query in a \`.sql\` file under
-\`prisma/sql/\`, \`prisma generate\` compiles it into a typed function, and you call it
+\`prisma/sql/\`, \`prisma generate --sql\` (with \`previewFeatures = ["typedSql"]\`)
+compiles it into a typed function, and you call it
 with \`prisma.$queryRawTyped(getUserActivity(userId))\` — argument types and result
 types both generated from the SQL itself.
 
@@ -208,7 +209,7 @@ console.log("concat: " + evil);
 
   keyPoints: [
     "Both hatches ride on tagged template literals: the function receives string pieces and interpolated values separately, turning each `${value}` into a `$n` bind parameter — PDO prepare/execute with the syntax inverted.",
-    "`prisma.$queryRaw<T[]>` types the rows via a generic, but that annotation is your unchecked claim; TypedSQL (.sql files under prisma/sql, compiled by `prisma generate`, called with `$queryRawTyped`) generates real types from the SQL.",
+    "`prisma.$queryRaw<T[]>` types the rows via a generic, but that annotation is your unchecked claim; TypedSQL (.sql files under prisma/sql, compiled by `prisma generate --sql` with the `typedSql` preview feature enabled, called with `$queryRawTyped`) generates real types from the SQL.",
     "`$queryRawUnsafe` takes a finished string — building that string with interpolation or concatenation from user input is textbook injection; reserve it for allowlisted dynamic identifiers.",
     "Drizzle's `sql` operator embeds raw fragments inside typed queries — in select fields, where, orderBy — and `db.execute` runs full raw statements.",
     "In a Drizzle sql fragment, interpolating a column object emits the identifier while interpolating a plain value emits a bind parameter — composition stays injection-safe.",

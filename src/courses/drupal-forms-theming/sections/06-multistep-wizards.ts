@@ -27,8 +27,9 @@ that omits \`setRebuild()\`, so the usual redirect finally fires.
 Storage survives the round trip because a rebuilt form is written to the
 expirable key-value collections \`form\` and \`form_state\`, keyed by the hidden
 \`form_build_id\` field that gets re-issued on every rebuild. That is the catch:
-core's \`FormCache\` stamps those entries with a **six-hour** lifetime (21600
-seconds). Leave the wizard open over lunch and the next POST finds no cached
+core's \`FormCache\` stamps those entries with a **six-hour** default lifetime
+(\`Settings::get('form_cache_expiration', 21600)\`, retunable from settings.php).
+Leave the wizard open over lunch and the next POST finds no cached
 build — Drupal treats it as a stale form and you get "The form has become
 outdated" plus a silent restart. Also note \`$form_state->setCached(TRUE)\`
 throws a \`LogicException\` on a GET-method form: caching form state is a
@@ -381,8 +382,10 @@ framework:
       ts: `# Drupal: two independent lifetimes.
 
 # 1. Form cache (engine 1 — setRebuild + form storage).
-#    NOT configurable: \\Drupal\\Core\\Form\\FormCache hard-codes
-#    $expire = 21600 (6 hours) for the 'form' and 'form_state'
+#    Six hours by DEFAULT, and tunable:
+#    \\Drupal\\Core\\Form\\FormCache::setCache() uses
+#    $expire = Settings::get('form_cache_expiration', 21600)
+#    for the 'form' and 'form_state'
 #    expirable key-value collections. Past that the form_build_id
 #    posted by the browser resolves to nothing and the user sees
 #    "The form has become outdated. Copy any unsaved work…"
@@ -501,7 +504,7 @@ POST step 3 [Finish]
   keyPoints: [
     "$form_state->setRebuild(TRUE) in a submit handler cancels the redirect and re-enters buildForm(), which is what makes a single form class behave like a wizard.",
     "Wizard memory lives in form storage — $form_state->set('step', N) and set('data', […]) — read back at the top of buildForm(); use cleanValues() before merging so form_build_id / form_token / op don't leak in.",
-    "Form storage is cached in the 'form' and 'form_state' expirable key-value collections keyed by form_build_id, and core's FormCache hard-codes a 6-hour lifetime — long wizards hit 'The form has become outdated'.",
+    "Form storage is cached in the 'form' and 'form_state' expirable key-value collections keyed by form_build_id, and FormCache::setCache() gives them Settings::get('form_cache_expiration', 21600) — six hours unless settings.php overrides it — so long wizards hit 'The form has become outdated'.",
     "Once steps are separate routes or a redirect happens between them, form storage is gone: inject tempstore.private, get('incident_tracker'), and set()/get()/delete() a draft array that is automatically scoped per user.",
     "PrivateTempStore defaults to a one-week lifetime via the tempstore.expire parameter, overridable in sites/default/services.yml; delete the key when the wizard completes or is cancelled.",
     "Back / Save-draft buttons need '#limit_validation_errors' (=> [] for none, [['title']] for a subset) plus their own '#submit'; values outside the limited paths are stripped from getValues(), so those handlers must read storage or tempstore instead.",
@@ -522,7 +525,7 @@ POST step 3 [Finish]
     },
     {
       q: "A client reports that users who leave the wizard open over lunch lose everything. Diagnose it.",
-      a: "That is the form cache expiring. A rebuilt form and its \`$form_state\` storage are written to the \`form\` and \`form_state\` expirable key-value collections under the hidden \`form_build_id\`, and \`FormCache\` stamps them with 21600 seconds — six hours — which is not configurable through settings. When the POST comes back after that, the build id resolves to nothing, Drupal rejects the submission as an outdated form and the wizard restarts. The fix is architectural, not a config tweak: move the accumulated values into \`PrivateTempStore\` (whose default expiry is a week and is tunable via \`tempstore.expire\`), or save a real draft — an unpublished entity or a row in a custom table — after each step. I'd also make sure cron is running, since both stores are pruned on cron and stale rows otherwise accumulate.",
+      a: "That is the form cache expiring. A rebuilt form and its \`$form_state\` storage are written to the \`form\` and \`form_state\` expirable key-value collections under the hidden \`form_build_id\`, and \`FormCache::setCache()\` stamps them with \`Settings::get('form_cache_expiration', 21600)\` — six hours unless the site sets \`$settings['form_cache_expiration']\` in settings.php. When the POST comes back after that, the build id resolves to nothing, Drupal rejects the submission as an outdated form and the wizard restarts. Raising that setting is a legitimate stopgap, but it inflates the \`key_value_expire\` table and only moves the cliff, so the real fix is architectural: move the accumulated values into \`PrivateTempStore\` (whose default expiry is a week and is tunable via \`tempstore.expire\`), or save a real draft — an unpublished entity or a row in a custom table — after each step. I'd also make sure cron is running, since both stores are pruned on cron and stale rows otherwise accumulate.",
     },
   ],
 
@@ -571,13 +574,13 @@ POST step 3 [Finish]
         "How long does core keep a rebuilt form and its $form_state storage before the user sees 'The form has become outdated'?",
       options: [
         "As long as the PHP session lives",
-        "Six hours — FormCache hard-codes a 21600-second expiry",
+        "Six hours — FormCache's default expiry is 21600 seconds",
         "One week, matching the tempstore.expire parameter",
         "Until the next cron run",
       ],
       answerIndex: 1,
       explain:
-        "\\Drupal\\Core\\Form\\FormCache writes the 'form' and 'form_state' expirable key-value entries with a 21600-second (6 hour) lifetime, and that value is not exposed as a setting. PrivateTempStore's one-week default (tempstore.expire) is a separate mechanism, which is precisely why long or interruptible wizards should use tempstore instead.",
+        "\\Drupal\\Core\\Form\\FormCache::setCache() writes the 'form' and 'form_state' expirable key-value entries with Settings::get('form_cache_expiration', 21600) — 21600 seconds (6 hours) by default, and overridable with $settings['form_cache_expiration'] in settings.php. PrivateTempStore's one-week default (tempstore.expire) is a separate mechanism, which is precisely why long or interruptible wizards should use tempstore instead.",
     },
   ],
 };

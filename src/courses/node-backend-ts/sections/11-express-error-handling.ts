@@ -64,9 +64,12 @@ One small class turns "which status code?" into a type check:
 
 \`\`\`ts
 export class HttpError extends Error {
-  constructor(message: string, readonly statusCode: number) {
+  readonly statusCode: number;
+
+  constructor(message: string, statusCode: number) {
     super(message);
     this.name = "HttpError";
+    this.statusCode = statusCode;
   }
 }
 
@@ -167,9 +170,12 @@ public function show(string $id)
 }`,
       ts: `// src/errors.ts
 export class HttpError extends Error {
-  constructor(message: string, readonly statusCode: number) {
+  readonly statusCode: number;
+
+  constructor(message: string, statusCode: number) {
     super(message);
     this.name = "HttpError";
+    this.statusCode = statusCode;
   }
 }
 

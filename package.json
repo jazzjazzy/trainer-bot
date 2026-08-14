@@ -1,9 +1,9 @@
 {
-  "name": "ts-for-php-veterans",
+  "name": "devcourses",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Interactive TypeScript course for PHP developers",
+  "description": "Interactive, multi-course coding platform for PHP developers retraining",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

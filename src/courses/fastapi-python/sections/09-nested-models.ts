@@ -161,7 +161,8 @@ async def create_order(order: Order):
       "type": "greater_than",
       "loc": ["body", "items", 1, "product", "unit_price"],
       "msg": "Input should be greater than 0",
-      "gt": 0
+      "input": -5,
+      "ctx": {"gt": 0.0}
     }
   ]
 }

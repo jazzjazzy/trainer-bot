@@ -49,7 +49,7 @@ with a \`type\` (\`string\`, \`integer\`, \`boolean\`, \`email\`, \`label\`,
 - **Typed values** — values are cast to their schema type on save, so
   \`get('retention_days')\` returns an int and exports stay stable.
 - **Validation** — attach Symfony-style \`constraints\` (\`Range\`,
-  \`NotBlank\`, \`Email\`); since Drupal 10.2 a top-level
+  \`NotBlank\`, \`Email\`); since Drupal 10.3 a top-level
   \`FullyValidatable: ~\` opts the whole object in, which \`#config_target\`
   forms surface as field errors. Note that constraints are *opt-in, not
   enforced on every save*: \`Config::save()\` only casts. They fire where
@@ -133,7 +133,7 @@ incident_tracker.settings:
   type: config_object          # base type for simple config
   label: 'Incident Tracker settings'
   constraints:
-    FullyValidatable: ~        # 10.2+: opt in to full validation
+    FullyValidatable: ~        # 10.3+: opt in to full validation
   mapping:
     notify_email:
       type: email              # core type carrying an Email constraint
@@ -357,7 +357,7 @@ Strict schema check: No schema for incident_tracker.settings:webhook_url`,
   keyPoints: [
     "config/install/incident_tracker.settings.yml ships default values that are imported into active config exactly once, at module install — the file name is the config name, and the incident_tracker. prefix marks ownership.",
     "Editing config/install after release does nothing on existing sites; ship a hook_post_update_NAME() that uses getEditable()->set()->save(), guarded so it only replaces the old default and never stomps admin-chosen values.",
-    "config/schema/incident_tracker.schema.yml is runtime type metadata: type: config_object at the root, a mapping of string/integer/boolean/email keys, and type: sequence for lists — it drives type casting on save, config translation labels, and validation constraints (FullyValidatable in 10.2+).",
+    "config/schema/incident_tracker.schema.yml is runtime type metadata: type: config_object at the root, a mapping of string/integer/boolean/email keys, and type: sequence for lists — it drives type casting on save, config translation labels, and validation constraints (FullyValidatable in 10.3+).",
     "Kernel and functional tests run with $strictConfigSchema = TRUE, so saving config with missing or wrong schema throws — the schema file is effectively mandatory for a production module.",
     "Symfony's Configuration TreeBuilder applies defaults and validation once at container compile and discards the metadata; Drupal keeps schema alive at runtime, which is what makes admin forms, drush cset, translation and #config_target validation possible.",
     "config/optional installs only when a file's declared dependencies are satisfiable (and retries when they later become available); uninstalling the module automatically deletes all incident_tracker.* config plus config entities that depend on it via dependencies.module — calculated or enforced — unless they repair themselves in onDependencyRemoval(). Shipped config that doesn't functionally use the module needs dependencies: enforced: module:, because calculated dependencies are recalculated on every save.",
@@ -370,11 +370,11 @@ Strict schema check: No schema for incident_tracker.settings:webhook_url`,
     },
     {
       q: "What does a config schema file actually buy you? Could you skip it for a small custom module?",
-      a: "Schema is Drupal's runtime type system for config: it casts values to their declared types on save (so `get('retention_days')` reliably returns an int), provides the labels and translatability metadata the config_translation UI needs, and since 10.2 carries validation constraints — with a top-level `FullyValidatable: ~` opting the object into complete validation that `#config_target` forms surface as errors. Practically you can't skip it: kernel and functional tests run with `$strictConfigSchema = TRUE`, so the first test that saves your config throws on missing schema. It's a few lines of YAML mirroring your settings file — for `incident_tracker.settings` that's a `config_object` with a `mapping` of typed keys and a `sequence` for the severity list.",
+      a: "Schema is Drupal's runtime type system for config: it casts values to their declared types on save (so `get('retention_days')` reliably returns an int), provides the labels and translatability metadata the config_translation UI needs, and carries validation constraints — with a top-level `FullyValidatable: ~` (Drupal 10.3+) opting the object into complete validation that `#config_target` forms surface as errors. Practically you can't skip it: kernel and functional tests run with `$strictConfigSchema = TRUE`, so the first test that saves your config throws on missing schema. It's a few lines of YAML mirroring your settings file — for `incident_tracker.settings` that's a `config_object` with a `mapping` of typed keys and a `sequence` for the severity list.",
     },
     {
       q: "Coming from Symfony, how do Drupal's config defaults and schema compare to a bundle's Configuration class?",
-      a: "Symfony's `Configuration` TreeBuilder is one compile-time artifact that declares keys, merges defaults, and validates — invalid config aborts the container build, and afterwards only frozen parameters remain. Drupal splits this in two runtime files: config/install carries the defaults (copied into the database once at install, like a Flex recipe copying YAML at `composer require`), while config/schema carries the types and is consulted on every save. The consequence of staying runtime is flexibility — admins edit values, config is translatable and exportable — but weaker guarantees: `drush cset` will *cast* your value to the schema type, yet it does not enforce constraints — `Config::save()` only casts, so `drush cset incident_tracker.settings retention_days 0` still succeeds even with `Range: min: 1`. Constraints only fire where something explicitly validates the typed object: a `#config_target` form, a recipe config action, or core's own tests. Symfony, by contrast, would have refused to boot. The 10.2+ validatable-schema work (constraints, FullyValidatable) is Drupal closing that gap.",
+      a: "Symfony's `Configuration` TreeBuilder is one compile-time artifact that declares keys, merges defaults, and validates — invalid config aborts the container build, and afterwards only frozen parameters remain. Drupal splits this in two runtime files: config/install carries the defaults (copied into the database once at install, like a Flex recipe copying YAML at `composer require`), while config/schema carries the types and is consulted on every save. The consequence of staying runtime is flexibility — admins edit values, config is translatable and exportable — but weaker guarantees: `drush cset` will *cast* your value to the schema type, yet it does not enforce constraints — `Config::save()` only casts, so `drush cset incident_tracker.settings retention_days 0` still succeeds even with `Range: min: 1`. Constraints only fire where something explicitly validates the typed object: a `#config_target` form, a recipe config action, or core's own tests. Symfony, by contrast, would have refused to boot. The validatable-schema work (constraints, and FullyValidatable in 10.3+) is Drupal closing that gap.",
     },
     {
       q: "What is config/optional for, and what happens to all this config when the module is uninstalled?",
@@ -433,7 +433,7 @@ Strict schema check: No schema for incident_tracker.settings:webhook_url`,
       ],
       answerIndex: 1,
       explain:
-        "config_object is the schema base type for simple config files like MODULE.settings — it extends the mapping with the standard langcode and _core keys so your own mapping only declares your keys. Config entities use different types (config_entity and friends), and full validation is a separate opt-in via the FullyValidatable constraint (10.2+).",
+        "config_object is the schema base type for simple config files like MODULE.settings — it extends the mapping with the standard langcode and _core keys so your own mapping only declares your keys. Config entities use different types (config_entity and friends), and full validation is a separate opt-in via the FullyValidatable constraint (10.3+).",
     },
   ],
 };

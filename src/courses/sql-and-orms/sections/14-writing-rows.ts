@@ -45,10 +45,12 @@ const user = await prisma.user.create({
 const [user] = await db.insert(users)
   .values({ email: 'ana@example.com', name: 'Ana' })
   .returning();
-// insert into "users" (...) values ($1, $2) returning *
+// insert into "users" (...) values ($1, $2)
+//   returning "id", "email", "name", "created_at"
 \`\`\`
 
-\`.returning()\` is literally \`RETURNING *\`; pass an object
+\`.returning()\` with no arguments returns every column — Drizzle spells that
+out as an explicit column list, not \`RETURNING *\`; pass an object
 (\`.returning({ id: users.id })\`) to narrow it — SQL and type together.
 Updates and deletes read exactly like the statements they emit:
 
@@ -123,7 +125,8 @@ const [user] = await db
   .returning();
 
 // SQL: insert into "users" ("email", "name")
-//      values ($1, $2) returning *
+//      values ($1, $2)
+//      returning "id", "email", "name", "created_at"
 // user: { id: number; email: string; name: string;
 //         createdAt: Date }  — defaults included.
 
@@ -252,7 +255,7 @@ console.log('rows in table:', usersTable.size);
   interview: [
     {
       q: "How do Prisma and Drizzle handle getting generated values back after an INSERT?",
-      a: "Both lean on Postgres RETURNING rather than the classic lastInsertId-then-SELECT pattern. Drizzle is explicit: `.returning()` appends RETURNING * and gives you typed rows, or you pass a projection object to narrow both the SQL and the type. Prisma's `create` does it implicitly — you get the full row back, generated id and column defaults included, in the insert's own round-trip. The practical wins over my PDO days: one statement instead of two, no sequence-name string in `lastInsertId('users_id_seq')`, and no race window between the insert and the read-back. For bulk inserts, Prisma's `createMany` returns just a count, with `createManyAndReturn` available on Postgres when you need the rows.",
+      a: "Both lean on Postgres RETURNING rather than the classic lastInsertId-then-SELECT pattern. Drizzle is explicit: `.returning()` appends a RETURNING clause listing every column and gives you typed rows, or you pass a projection object to narrow both the SQL and the type. Prisma's `create` does it implicitly — you get the full row back, generated id and column defaults included, in the insert's own round-trip. The practical wins over my PDO days: one statement instead of two, no sequence-name string in `lastInsertId('users_id_seq')`, and no race window between the insert and the read-back. For bulk inserts, Prisma's `createMany` returns just a count, with `createManyAndReturn` available on Postgres when you need the rows.",
     },
     {
       q: "Compare how the two ORMs express an upsert, and what SQL actually runs.",
@@ -274,7 +277,7 @@ console.log('rows in table:', usersTable.size);
         "What SQL does db.insert(users).values({...}).returning() emit on Postgres?",
       options: [
         "An INSERT followed by a SELECT ... WHERE id = lastval()",
-        "A single INSERT ... RETURNING * statement",
+        "A single INSERT ... RETURNING statement",
         "An INSERT inside a stored procedure that returns the row",
         "Two statements wrapped in a transaction",
       ],

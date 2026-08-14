@@ -38,9 +38,11 @@ Just as you never exposed PHP-FPM directly, uvicorn sits behind **nginx**,
 **Traefik**, or a cloud load balancer that terminates TLS and forwards plain
 HTTP. Two flags matter behind a proxy:
 
-- \`--proxy-headers\` — trust \`X-Forwarded-For\` / \`X-Forwarded-Proto\` so the
-  app sees the real client IP and knows the original request was HTTPS
-  (add \`--forwarded-allow-ips\` for non-local proxies).
+- \`--forwarded-allow-ips\` — uvicorn already parses \`X-Forwarded-For\` /
+  \`X-Forwarded-Proto\` (\`--proxy-headers\` is on by default), but it only
+  trusts them from \`127.0.0.1\`. Widen this to the proxy's address — a
+  separate container or host — so the app sees the real client IP and knows
+  the original request was HTTPS.
 - \`--root-path /api/v1\` — if the proxy strips a path prefix, this tells
   FastAPI, so \`/docs\` and \`openapi.json\` generate correct URLs.
 
@@ -106,8 +108,9 @@ uvicorn main:app --reload
 # production: bind all interfaces, one worker per core
 uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
 
-# behind nginx/Traefik: trust forwarded headers
-uvicorn main:app --host 0.0.0.0 --workers 4 --proxy-headers
+# behind nginx/Traefik on another host: forwarded headers are
+# parsed by default, but only trusted from 127.0.0.1
+uvicorn main:app --host 0.0.0.0 --workers 4 --forwarded-allow-ips=10.0.0.5
 
 # packaged equivalent (fastapi[standard], runs uvicorn)
 fastapi run main.py --workers 4`,
@@ -153,7 +156,8 @@ RUN useradd --create-home appuser
 USER appuser
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
-# behind a TLS proxy, add: "--proxy-headers"`,
+# behind a TLS proxy in another container, add:
+#   "--forwarded-allow-ips", "10.0.0.5"`,
       note:
         "Same caching logic: the pip/composer layer rebuilds only when the lock/requirements file changes. One visible difference: php-fpm still needs nginx in front to speak HTTP; uvicorn IS an HTTP server.",
       leftLang: "bash",
@@ -239,7 +243,7 @@ $ curl -s http://localhost:8000/healthz
     "`uvicorn main:app --host 0.0.0.0 --workers 4` — workers are **processes** (the GIL means one process uses one core for Python code), each with its own event loop and its own lifespan run.",
     "The mental model is a PHP-FPM pool: `--workers` ≈ `pm.max_children`, except each uvicorn worker handles thousands of concurrent requests, so you size workers to CPU cores, not to expected concurrency.",
     "`fastapi run main.py --workers 4` (from `fastapi[standard]`) is the packaged equivalent — it runs uvicorn under the hood.",
-    "Always put a reverse proxy (nginx/Traefik/cloud LB) in front for TLS; add `--proxy-headers` so the app trusts X-Forwarded-* headers, and `--root-path` if the proxy strips a path prefix.",
+    "Always put a reverse proxy (nginx/Traefik/cloud LB) in front for TLS; uvicorn parses X-Forwarded-* headers by default but only trusts them from `--forwarded-allow-ips` (default 127.0.0.1), so widen that for a proxy on another host or container, and add `--root-path` if the proxy strips a path prefix.",
     "Dockerfile order matters: `COPY requirements.txt` + `pip install` **before** `COPY ./app` caches the dependency layer; run as a non-root user; CMD must bind 0.0.0.0.",
     "Under an orchestrator, prefer one worker per container and scale with **replicas** (clean accounting, rolling deploys, per-replica health checks); use `--workers N` inside the container only on a plain VM. Ship a dependency-free `/healthz` and let lifespan handle graceful shutdown on SIGTERM.",
   ],
@@ -251,11 +255,11 @@ $ curl -s http://localhost:8000/healthz
     },
     {
       q: "Walk me through your production Dockerfile for a FastAPI service.",
-      a: "Base image `python:3.12-slim` — small but glibc-based, so wheels install cleanly. Then the layer-caching move: COPY only `requirements.txt`, run `pip install --no-cache-dir -r`, and COPY the application code *after* — dependency installation re-runs only when requirements change, not on every code edit; it's the same trick as copying `composer.json` before the source in a PHP image. Create and switch to a non-root user so a container escape isn't root. CMD is exec-form uvicorn bound to `0.0.0.0` — localhost isn't reachable through the port mapping — with `--proxy-headers` when it sits behind a TLS-terminating proxy. One worker per container by default, replicas for scale, a `/healthz` endpoint for the orchestrator's probes, and graceful shutdown handled by lifespan cleanup on SIGTERM.",
+      a: "Base image `python:3.12-slim` — small but glibc-based, so wheels install cleanly. Then the layer-caching move: COPY only `requirements.txt`, run `pip install --no-cache-dir -r`, and COPY the application code *after* — dependency installation re-runs only when requirements change, not on every code edit; it's the same trick as copying `composer.json` before the source in a PHP image. Create and switch to a non-root user so a container escape isn't root. CMD is exec-form uvicorn bound to `0.0.0.0` — localhost isn't reachable through the port mapping — plus `--forwarded-allow-ips` set to the proxy's address when it sits behind a TLS-terminating proxy, since uvicorn parses the X-Forwarded-* headers by default but only trusts them from 127.0.0.1. One worker per container by default, replicas for scale, a `/healthz` endpoint for the orchestrator's probes, and graceful shutdown handled by lifespan cleanup on SIGTERM.",
     },
     {
       q: "Why does your API generate wrong docs URLs and see the proxy's IP as every client behind nginx, and how do you fix it?",
-      a: "Both are trust problems of running behind a reverse proxy. The client IP issue: uvicorn sees the TCP peer, which is nginx — the real client is in `X-Forwarded-For`, which uvicorn ignores until you pass `--proxy-headers` (and `--forwarded-allow-ips` if the proxy isn't on localhost); that also fixes `https` detection via `X-Forwarded-Proto`. The URL issue happens when the proxy strips a prefix like `/api/v1` before forwarding: the app doesn't know its public path, so `/docs` and `openapi.json` links break — `--root-path /api/v1` tells FastAPI what prefix to prepend in the schema and docs. PHP devs have met this exact pair before as `fastcgi_param` forwarding and trusted-proxy configuration in Laravel.",
+      a: "Both are trust problems of running behind a reverse proxy. The client IP issue: uvicorn sees the TCP peer, which is nginx — the real client is in `X-Forwarded-For`. Uvicorn already parses that header — `--proxy-headers` is on by default — but it only trusts it from clients matching `--forwarded-allow-ips`, which defaults to 127.0.0.1, so with nginx in another container or on another host I have to widen that to the proxy's address; the same setting is what makes `https` detection via `X-Forwarded-Proto` work. The URL issue happens when the proxy strips a prefix like `/api/v1` before forwarding: the app doesn't know its public path, so `/docs` and `openapi.json` links break — `--root-path /api/v1` tells FastAPI what prefix to prepend in the schema and docs. PHP devs have met this exact pair before as `fastcgi_param` forwarding and trusted-proxy configuration in Laravel.",
     },
   ],
 

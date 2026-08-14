@@ -193,7 +193,7 @@ public function dashboard(): Response
 // /_fos_user_context_hash, then varies the cached object on the result.
 // fos_http_cache:
 //     user_context:
-//         user_hash_header: X-User-Context-Hash
+//         hash_header: X-User-Context-Hash
 //         user_identifier_headers: [Cookie, Authorization]`,
       ts: `// Drupal: page_cache already refuses anything with an open session, and
 // page_cache's PageCache middleware downgrades the response to 'private' when

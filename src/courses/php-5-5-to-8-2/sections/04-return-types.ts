@@ -166,7 +166,8 @@ function findUser(int $id): ?User {
 declare(strict_types=1);
 
 function half(int $n): float {
-    return $n / 2;            // int returned, coerced to float by the type
+    return $n / 2;            // int / int yields float unless exact; an
+                              // exact int result is widened by the type
 }
 
 function greet(string $name): ?string {

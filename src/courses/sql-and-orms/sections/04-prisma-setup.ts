@@ -80,8 +80,8 @@ export const prisma = new PrismaClient({ adapter });
 \`\`\`
 
 A bare \`new PrismaClient()\` — the line every pre-7 tutorial shows — now
-throws **P2038**: "PrismaClient requires a driver adapter to connect to
-your database". For Postgres the adapter is \`@prisma/adapter-pg\`, which
+throws a **PrismaClientInitializationError** at construction: the client
+requires a driver adapter to connect to your database. For Postgres the adapter is \`@prisma/adapter-pg\`, which
 wraps the same \`pg\` driver you'd use raw. Think of the adapter like PDO's
 driver layer: PDO defines the interface, \`pdo_pgsql\` does the talking —
 here Prisma defines the interface and \`pg\` does the talking.
@@ -128,7 +128,7 @@ export default defineConfig({
     {
       label: "What old tutorials show vs Prisma 7",
       intro:
-        "The pre-7 bootstrap you'll find all over the internet, next to what actually works today. If you paste the left side into a Prisma 7 project, the client constructor throws P2038.",
+        "The pre-7 bootstrap you'll find all over the internet, next to what actually works today. If you paste the left side into a Prisma 7 project, the client constructor throws.",
       php: `// ⚠️ Prisma 5/6 style — LEGACY
 // prisma/schema.prisma
 //   generator client {
@@ -142,8 +142,8 @@ export default defineConfig({
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-// In v7 this line throws P2038: "PrismaClient requires
-// a driver adapter to connect to your database"`,
+// In v7 this line throws at construction: PrismaClient
+// requires a driver adapter to connect to your database`,
       ts: `// ✅ Prisma 7
 // prisma/schema.prisma
 //   generator client {
@@ -183,7 +183,7 @@ import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 // PrismaClient = interface, PrismaPg (wrapping pg) = the
-// driver doing the talking. No adapter? P2038 at startup.
+// driver doing the talking. No adapter? Throws at startup.
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
 });
@@ -238,7 +238,7 @@ import { PrismaClient } from './generated/prisma/client'`,
     "Prisma 7 splits setup across three files: `prisma.config.ts` (paths + datasource URL via the throwing `env()` helper), `prisma/schema.prisma` (models + generator), and your db module (client + adapter).",
     "The current generator is `provider = \"prisma-client\"` with a REQUIRED explicit `output` path — generated code lives in your project, not node_modules; `prisma-client-js` is legacy.",
     "The Rust query engine is gone: a TypeScript query compiler plans queries and a JS driver adapter (`@prisma/adapter-pg` wrapping `pg`) executes them.",
-    "Bare `new PrismaClient()` throws P2038 in v7 — construction is `new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`.",
+    "Bare `new PrismaClient()` throws in v7 — construction is `new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`.",
     "`binaryTargets` no longer exists; the generator takes a `runtime` option (nodejs, bun, workerd, vercel-edge, ...) instead.",
     "The adapter layer mirrors PDO's architecture: generic client interface on top, database-specific driver underneath.",
   ],
@@ -246,7 +246,7 @@ import { PrismaClient } from './generated/prisma/client'`,
   interview: [
     {
       q: "What changed in Prisma 7 that breaks older setup tutorials?",
-      a: "Four things. First, the generator: it's now `provider = \"prisma-client\"` emitting plain TypeScript to a required, explicit `output` path in your project — `prisma-client-js` with its hidden node_modules output is legacy. Second, the Rust query engine is gone, replaced by a TypeScript query compiler, so the client must be given a JS driver adapter — `new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`; the bare `new PrismaClient()` every old tutorial shows throws P2038. Third, configuration moved to `prisma.config.ts` with a typed `env()` helper — the datasource block in the schema now only declares the provider, no more `.env` magic in the schema file. Fourth, `binaryTargets` is replaced by a `runtime` generator option, since there are no native binaries to ship anymore.",
+      a: "Four things. First, the generator: it's now `provider = \"prisma-client\"` emitting plain TypeScript to a required, explicit `output` path in your project — `prisma-client-js` with its hidden node_modules output is legacy. Second, the Rust query engine is gone, replaced by a TypeScript query compiler, so the client must be given a JS driver adapter — `new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`; the bare `new PrismaClient()` every old tutorial shows throws. Third, configuration moved to `prisma.config.ts` with a typed `env()` helper — the datasource block in the schema now only declares the provider, no more `.env` magic in the schema file. Fourth, `binaryTargets` is replaced by a `runtime` generator option, since there are no native binaries to ship anymore.",
     },
     {
       q: "Why did Prisma drop the Rust engine, and what are the practical consequences?",
@@ -264,13 +264,13 @@ import { PrismaClient } from './generated/prisma/client'`,
         "What happens in Prisma 7 if you construct `new PrismaClient()` with no arguments?",
       options: [
         "It connects using DATABASE_URL from .env automatically",
-        "It throws P2038 — a driver adapter (or accelerateUrl) is required",
+        "It throws — a driver adapter (or accelerateUrl) is required",
         "It falls back to the bundled Rust query engine",
         "It works but logs a deprecation warning",
       ],
       answerIndex: 1,
       explain:
-        "With the Rust engine removed, the client has no built-in way to reach the database. It requires a JS driver adapter — e.g. new PrismaClient({ adapter: new PrismaPg({ connectionString }) }) — and throws PrismaClientInitializationError P2038 without one.",
+        "With the Rust engine removed, the client has no built-in way to reach the database. It requires a JS driver adapter — e.g. new PrismaClient({ adapter: new PrismaPg({ connectionString }) }) — and throws a PrismaClientInitializationError without one.",
     },
     {
       question:

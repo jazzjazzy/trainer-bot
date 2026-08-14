@@ -12,8 +12,8 @@ const lesson: Lesson = {
   concept: `
 If you've written PHP classes, you already know this chapter. TypeScript inherits
 its OO model from the same family tree, so \`extends\`, \`abstract\`, and visibility
-modifiers all line up with what you do every day. There's one genuinely new tool —
-the \`override\` keyword — and it exists to catch a bug PHP can't.
+modifiers all line up with what you do every day. There's one keyword you haven't
+met — \`override\` — the compile-time twin of PHP 8.3's \`#[\\Override]\` attribute.
 
 ### extends and super()
 
@@ -121,16 +121,18 @@ class Dog extends Animal {
   }
 }`,
       note:
-        "parent::method() becomes super.method(). The override keyword is new — it has no PHP equivalent.",
+        "parent::method() becomes super.method(). TS's override keyword is the compile-time twin of PHP 8.3's #[\\Override] attribute.",
     },
     {
-      label: "The override safety net (new in TS)",
+      label: "The override safety net",
       intro:
         "A developer means to override describe() but accidentally types describ(). The example shows what each language does with that typo — silently in one, loudly in the other.",
       php: `<?php
-// PHP has no 'override' keyword. A typo silently
-// creates a NEW method instead of overriding:
+// Plain PHP: a typo silently creates a NEW method
+// instead of overriding. Add PHP 8.3's #[\\Override]
+// and it becomes a fatal error, exactly like TS:
 class Dog extends Animal {
+    // #[\\Override]
     public function describ(): string { // typo: should be describe()
         return "oops";
     }
@@ -143,7 +145,7 @@ class Dog extends Animal {
   }
 }`,
       note:
-        "override lets the compiler verify a real parent method exists — catching typos and renamed-parent bugs PHP can't.",
+        "override lets the compiler verify a real parent method exists — the same check PHP 8.3 added as the #[\\Override] attribute.",
     },
     {
       label: "Abstract class + abstract method",
@@ -246,8 +248,8 @@ for (const shape of shapes) {
 
   interview: [
     {
-      q: "What does the `override` keyword do, and why doesn't PHP need one?",
-      a: "`override` marks a method as intentionally replacing a method from the base class. The compiler then checks that a matching parent method really exists — so a typo (`describ` instead of `describe`) or a later rename of the parent method becomes a **build error** instead of a silent new method. PHP has no equivalent: an override is just a redeclaration, and a typo silently creates a brand-new method that never gets called as you expect. With `noImplicitOverride` on, TypeScript makes `override` mandatory, turning a whole class of subtle inheritance bugs into compile-time failures.",
+      q: "What does the `override` keyword do, and what is the PHP equivalent?",
+      a: "`override` marks a method as intentionally replacing a method from the base class. The compiler then checks that a matching parent method really exists — so a typo (`describ` instead of `describe`) or a later rename of the parent method becomes a **build error** instead of a silent new method. PHP 8.3 added the same safety net as an attribute, `#[\\Override]`, which fatals at compile time when no matching parent method exists; without it an override is just a redeclaration, so a typo silently creates a brand-new method that never gets called as you expect. With `noImplicitOverride` on, TypeScript makes `override` mandatory, turning a whole class of subtle inheritance bugs into compile-time failures.",
     },
     {
       q: "How is `super()` in TypeScript different from `parent::__construct()` in PHP?",
@@ -287,7 +289,7 @@ for (const shape of shapes) {
       ],
       answerIndex: 2,
       explain:
-        "override tells the compiler the method is meant to replace a parent method. If no such method exists (a typo, or the parent was renamed), the build fails — something PHP cannot catch.",
+        "override tells the compiler the method is meant to replace a parent method. If no such method exists (a typo, or the parent was renamed), the build fails — the same guarantee PHP 8.3's #[\\Override] attribute gives you.",
     },
     {
       question:

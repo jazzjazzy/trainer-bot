@@ -197,7 +197,7 @@ npm ci --omit=dev`,
 # node_modules/ is disposable: npm ci rebuilds it
 # identically from the lock (dist/ is build output).`,
       note:
-        "node_modules is famously huge because npm nests transitive deps rather than flattening like Composer — all the more reason it's never committed. The lockfile IS committed; it's the reproducibility contract.",
+        "node_modules is famously huge because the Node ecosystem leans on thousands of tiny transitive packages — npm actually hoists them flat at the top level by default, nesting a second copy only when two dependents need incompatible versions, something Composer's one-version-per-package vendor/ can't do at all. All the more reason it's never committed. The lockfile IS committed; it's the reproducibility contract.",
       leftLang: "bash",
       rightLang: "bash",
     },

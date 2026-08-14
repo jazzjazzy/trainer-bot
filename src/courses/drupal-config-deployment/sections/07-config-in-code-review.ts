@@ -392,7 +392,7 @@ printf("%d of %d changed objects need a named human sign-off.\\n", $needHuman, c
       ],
       answerIndex: 1,
       explain:
-        "drush config:export only writes objects that differ from the sync directory, so a large unexplained diff means the local database was not in sync with main before you started. Pull main, run drush config:import, confirm drush config:status reports no differences, then branch and re-export so your PR contains only your change.",
+        "drush config:export rewrites the whole sync directory from the active store, so the only files whose content actually changes in git are the ones that differ — a large unexplained diff means the local database was not in sync with main before you started. Pull main, run drush config:import, confirm drush config:status reports no differences, then branch and re-export so your PR contains only your change.",
     },
     {
       question:

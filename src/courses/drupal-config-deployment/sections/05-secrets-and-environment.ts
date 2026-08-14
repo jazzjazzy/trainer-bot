@@ -134,7 +134,7 @@ $settings['reverse_proxy_addresses'] = [getenv('LB_ADDRESS')];
 // A real config object, overridden at read time. cex still exports the
 // value that lives in active storage, not this one.
 $config['four_rivers.settings']['endpoint'] = getenv('COUNCIL_API_ENDPOINT');`,
-      note: "Symfony substitutes env vars while compiling the container; Drupal has no equivalent placeholder syntax in YAML — the substitution is literal PHP in settings.php, which is why settings.php is deliberately excluded from config management.",
+      note: "Symfony compiles %env() placeholders into the container and resolves them at runtime; Drupal has no equivalent placeholder syntax in YAML — the substitution is literal PHP in settings.php, which is why settings.php is deliberately excluded from config management.",
     },
     {
       label: "The local override file, and what git sees",

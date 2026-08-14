@@ -66,8 +66,8 @@ class Point {
 \`private\` is a **TypeScript-only**, compile-time rule. It vanishes when types are
 erased, so at runtime the field is just an ordinary public property — reachable
 from plain JavaScript callers or via an \`(obj as any)\` cast. Note that
-\`obj["secret"]\` written in TypeScript does **not** bypass the check: the compiler
-treats it the same as \`obj.secret\` and still reports the private-access error.
+\`obj["secret"]\` is a deliberate escape hatch: TypeScript **allows** bracket-notation
+access to a \`private\` member, which is why the handbook calls it *soft* private.
 
 The \`#name\` syntax is a **real JavaScript language feature**. It's genuinely
 inaccessible outside the class, even at runtime, even from JS. If you need true
@@ -249,7 +249,7 @@ console.log("Owner:", account.owner);
     },
     {
       q: "Explain the difference between TypeScript's `private` and JavaScript's `#private`.",
-      a: "`private` is a **TypeScript-only**, compile-time concept. The checker stops you from accessing the member from outside the class, but the keyword is **erased** during compilation — at runtime the field is an ordinary public property, reachable from plain JavaScript or via an `(obj as any)` cast (writing `obj[\"secret\"]` in TypeScript still triggers the same compile error as `obj.secret`). `#name` is a **native JavaScript** feature: the field is truly inaccessible outside its class at runtime, enforced by the engine, even from JS that never saw your types. Coming from PHP — where `private` is enforced at runtime — TS `private` is weaker than you'd expect, while `#` matches the strength you're used to.",
+      a: "`private` is a **TypeScript-only**, compile-time concept. The checker stops you from accessing the member from outside the class, but the keyword is **erased** during compilation — at runtime the field is an ordinary public property, reachable from plain JavaScript or via an `(obj as any)` cast (bracket notation is an intentional escape hatch — `obj[\"secret\"]` type-checks fine, so `private` is only *soft* private). `#name` is a **native JavaScript** feature: the field is truly inaccessible outside its class at runtime, enforced by the engine, even from JS that never saw your types. Coming from PHP — where `private` is enforced at runtime — TS `private` is weaker than you'd expect, while `#` matches the strength you're used to.",
     },
     {
       q: "Does `readonly` in TypeScript protect a field at runtime?",

@@ -110,7 +110,7 @@ async function callWithBackoff(attempt = 0): Promise<Result> {
     return await callApi();
   } catch (err) {
     if (!isRetryable(err) || attempt >= 5) throw err;
-    const retryAfterMs = (Number(err.headers?.["retry-after"]) || 0) * 1000;
+    const retryAfterMs = (Number(err.headers?.get("retry-after")) || 0) * 1000;
     const capped = Math.min(30000, 500 * 2 ** attempt);
     const jitter = Math.random() * capped;
     await sleep(Math.max(retryAfterMs, jitter));

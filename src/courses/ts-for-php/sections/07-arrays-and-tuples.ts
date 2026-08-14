@@ -95,7 +95,7 @@ function divmod(int $a, int $b): array {
 }
 [$q, $r] = divmod(17, 5); // $q = 3, $r = 2`,
       ts: `function divmod(a: number, b: number): [number, number] {
-  return [Math.floor(a / b), a % b];
+  return [Math.trunc(a / b), a % b];
 }
 const [q, r] = divmod(17, 5); // q: number, r: number`,
       note:

@@ -99,7 +99,8 @@ usort($users, function ($a, $b) {
       php: `<?php
 // PHP 5.5 — '$a - $b' looks clever but is buggy:
 // it overflows on big ints, truncates floats, and
-// fatals on non-numeric strings.
+// silently treats non-numeric strings as 0
+// (on PHP 8 that subtraction throws a TypeError).
 usort($nums, function ($a, $b) {
     return $a - $b;
 });`,

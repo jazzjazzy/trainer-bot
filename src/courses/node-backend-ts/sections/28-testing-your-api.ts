@@ -7,7 +7,7 @@ const lesson: Lesson = {
   part: "Scaling & Shipping",
   estMinutes: 12,
   summary:
-    "node:test is the built-in, zero-dependency PHPUnit: describe/it, node:assert/strict, mock.fn for test doubles — plus supertest driving your exported app for portless HTTP tests.",
+    "node:test is the built-in, zero-dependency PHPUnit: describe/it, node:assert/strict, mock.fn for test doubles — plus supertest driving your exported app over an ephemeral port it opens and closes for you.",
 
   concept: `
 You know exactly what a test suite should look like — you've written PHPUnit
@@ -56,13 +56,17 @@ assert.equal(findEmails.mock.callCount(), 1); // ≈ expects($this->once())
 \`mock.fn()\` is \`createMock\` and \`expects()\` rolled into one: it records
 every call (\`mock.calls[0].arguments\`, \`callCount()\`), and you assert
 afterwards instead of declaring expectations up front. \`mock.method(obj,
-'name')\` spies on an existing object's method and restores it automatically
-when the test ends.
+'name')\` spies on an existing object's method — take it off the test context
+(\`it("...", (t) => { t.mock.method(obj, 'name') })\`) and the runner restores
+the original automatically when the test ends. The top-level \`mock\` from
+\`node:test\` is NOT reset for you: its stubs leak into later tests unless you
+call \`mock.restoreAll()\` yourself.
 
 ### Integration tests: supertest against the exported app
 
 The app/server split exists for this moment. \`supertest\` takes the exported
-Express app and drives it directly — no port, no server boot:
+Express app, starts it on an ephemeral port for you (\`app.listen(0)\`), and
+closes it again when the response arrives — so you never pick or manage a port:
 
 \`\`\`ts
 import request from "supertest";
@@ -75,8 +79,8 @@ const res = await request(app)
 \`\`\`
 
 That's Laravel's \`$this->postJson('/api/users', [...])->assertStatus(201)\`,
-except nothing framework-magic is happening: supertest just feeds requests to
-the app's handler in-process.
+except nothing framework-magic is happening: supertest makes a real HTTP
+request to a throwaway localhost server it started in the test process.
 
 ### The async gotchas
 
@@ -143,7 +147,7 @@ describe("UserService", () => {
     {
       label: "Laravel HTTP test vs supertest",
       intro:
-        "An end-to-end request through routing, middleware, validation, and the handler — without binding a port in either framework.",
+        "An end-to-end request through routing, middleware, validation, and the handler — without either framework making you pick a port.",
       php: `<?php // tests/Feature/UsersApiTest.php
 final class UsersApiTest extends TestCase
 {
@@ -286,9 +290,9 @@ await runTests([
 
   keyPoints: [
     "`node --test` is the built-in runner — `describe`/`it` from `node:test`, assertions from `node:assert/strict` (`equal` ≈ assertSame, `deepEqual` ≈ assertEquals) — zero dev dependencies; Vitest is the popular Jest-flavoured alternative.",
-    "`mock.fn()` creates a recording test double (assert `callCount()` and `calls[n].arguments` after the fact); `mock.method(obj, 'name')` spies on an existing method — together they cover PHPUnit's `createMock` + `expects()`.",
+    "`mock.fn()` creates a recording test double (assert `callCount()` and `calls[n].arguments` after the fact); `mock.method(obj, 'name')` spies on an existing method — together they cover PHPUnit's `createMock` + `expects()`. Prefer the test-context form `t.mock.method(...)`, which the runner restores automatically; the top-level `mock` leaves its stubs in place until you call `mock.restoreAll()`.",
     "Unit-test services by injecting a fake repository — possible only because section-27 services take dependencies as parameters instead of importing them.",
-    "Integration-test HTTP with supertest against the exported app: `request(app).post('/api/users').send(body).expect(201)` ≈ Laravel's `$this->postJson(...)->assertStatus(201)` — no port, no server boot.",
+    "Integration-test HTTP with supertest against the exported app: `request(app).post('/api/users').send(body).expect(201)` ≈ Laravel's `$this->postJson(...)->assertStatus(201)` — supertest opens and closes an ephemeral port itself, so you never pick one.",
     "Async discipline: always `await` inside tests (un-awaited assertions run after the verdict), and use `await assert.rejects(promise, /msg/)` when the failure is the expectation.",
     "Mocks don't validate SQL — for repository confidence name Testcontainers or a dedicated test database with truncation, even though both are beyond this course.",
   ],
@@ -296,11 +300,11 @@ await runTests([
   interview: [
     {
       q: "How do you test a Node/Express API without a testing framework installed?",
-      a: "Node ships one: the node:test module with a describe/it API, run via node --test, with assertions from node:assert/strict — on current Node, TypeScript test files run directly thanks to type stripping. For unit tests I inject fake repositories into services — my services take their data access as a parameter precisely so tests can hand them a mock.fn() and assert callCount and arguments afterwards. For HTTP integration tests I use supertest against my exported Express app: request(app).post('/api/users').expect(201) drives routing, middleware, validation, and the handler in-process with no port bound, which is why I keep listen() out of app.ts. Vitest is a fine alternative with Jest-style expect(), but the built-in runner means the baseline needs zero dev dependencies — quite a contrast to pulling in PHPUnit via Composer.",
+      a: "Node ships one: the node:test module with a describe/it API, run via node --test, with assertions from node:assert/strict — on current Node, TypeScript test files run directly thanks to type stripping. For unit tests I inject fake repositories into services — my services take their data access as a parameter precisely so tests can hand them a mock.fn() and assert callCount and arguments afterwards. For HTTP integration tests I use supertest against my exported Express app: request(app).post('/api/users').expect(201) drives routing, middleware, validation, and the handler against a throwaway server supertest starts on an ephemeral port and closes again, which is why I keep listen() out of app.ts. Vitest is a fine alternative with Jest-style expect(), but the built-in runner means the baseline needs zero dev dependencies — quite a contrast to pulling in PHPUnit via Composer.",
     },
     {
       q: "How does node:test's mocking compare to PHPUnit's createMock?",
-      a: "Same job, inverted ergonomics. PHPUnit declares expectations up front — $repo->expects($this->once())->method('insert')->willReturn(...) — and fails at teardown if they weren't met. node:test's mock.fn() just records: you give it an optional implementation, run the code, then assert on the recording — mock.callCount(), mock.calls[0].arguments, even each call's result or thrown error. mock.method(obj, 'name') spies on an existing object's method and restores the original automatically. Because services receive dependencies as plain typed parameters, I usually don't even need mock.method — a hand-written object literal satisfying the repository interface is often clearer, with mock.fn reserved for when I need to assert call details.",
+      a: "Same job, inverted ergonomics. PHPUnit declares expectations up front — $repo->expects($this->once())->method('insert')->willReturn(...) — and fails at teardown if they weren't met. node:test's mock.fn() just records: you give it an optional implementation, run the code, then assert on the recording — mock.callCount(), mock.calls[0].arguments, even each call's result or thrown error. mock.method(obj, 'name') spies on an existing object's method — and if I take it off the test context as t.mock.method(...), the runner restores the original automatically when the test finishes, whereas the top-level mock tracker keeps the stub in place until I call mock.restoreAll() myself. Because services receive dependencies as plain typed parameters, I usually don't even need mock.method — a hand-written object literal satisfying the repository interface is often clearer, with mock.fn reserved for when I need to assert call details.",
     },
     {
       q: "What async mistakes make Node test suites lie, and how do you prevent them?",
@@ -338,13 +342,13 @@ await runTests([
       question: "Why does supertest need the Express app exported from app.ts rather than server.ts?",
       options: [
         "server.ts files cannot be imported by tests under ESM rules",
-        "supertest drives the app's request handling in-process — importing a file that calls listen() would bind a real port on every test run",
+        "supertest starts the exported app on an ephemeral port it manages itself — importing a file that calls listen() would bind your configured port on every test run",
         "supertest only supports apps created in files named app.ts",
         "Express apps stop accepting requests after listen() is called",
       ],
       answerIndex: 1,
       explain:
-        "request(app) feeds requests straight to the app without a network listener, so tests are fast, parallel-safe, and port-conflict-free. If the imported module called listen() as a side effect, every test file would try to occupy the port — the exact problem the app/server split removes.",
+        "request(app) calls app.listen(0) itself, drives the request against that ephemeral port, then closes the server — so tests are parallel-safe and port-conflict-free. If the imported module called listen() as a side effect, every test file would try to occupy the same fixed port — the exact problem the app/server split removes.",
     },
     {
       question:

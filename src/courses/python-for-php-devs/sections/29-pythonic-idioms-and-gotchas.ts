@@ -218,7 +218,7 @@ True False False
     },
     {
       q: "How do `is` and `==` differ, and where does PHP's `===` fit?",
-      a: "`==` asks 'equal values?' and `is` asks 'the very same object in memory?'. The correct uses of `is` are `None` checks (`if x is None:`) and sentinel objects. It sometimes *appears* to work for numbers because CPython caches small integers (-5 to 256) and interns some strings, so `a is b` can be True for 100 and False for 1000 — an implementation detail, never rely on it. PHP's `===` guarded against type-juggling (`0 == \"a\"` style); Python's `==` doesn't juggle types in the first place — `0 == \"0\"` is simply `False` — so plain `==` already gives you `===` semantics, and `is` is *not* its equivalent.",
+      a: "`==` asks 'equal values?' and `is` asks 'the very same object in memory?'. The correct uses of `is` are `None` checks (`if x is None:`) and sentinel objects. It sometimes *appears* to work for numbers because CPython caches small integers (-5 to 256) and interns some strings, so `a is b` can be True for 100 and False for 1000 — an implementation detail, never rely on it. PHP's `===` guarded against type-juggling (`\"1\" == \"01\"` is still true in PHP 8); Python's `==` doesn't juggle types in the first place — `0 == \"0\"` is simply `False` — so plain `==` already gives you `===` semantics, and `is` is *not* its equivalent.",
     },
   ],
 

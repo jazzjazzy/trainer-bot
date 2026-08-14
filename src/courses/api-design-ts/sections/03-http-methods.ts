@@ -79,10 +79,12 @@ effect. Saying that distinction precisely is an easy interview win.
   content type.
 - Never GET with side effects. Ever. Middleboxes will find it.
 
-Footnote for currency: OpenAPI 3.2 (Sept 2025) added support for describing
-the proposed \`QUERY\` method — "GET with a body" for huge filter expressions —
-via \`additionalOperations\`. Worth name-dropping as spec-awareness; not
-something to build on yet.
+Footnote for currency: OpenAPI 3.2 (Sept 2025) added a dedicated \`query\`
+field to the Path Item Object so the proposed \`QUERY\` method — "GET with a
+body" for huge filter expressions — can be described directly. (The sibling
+\`additionalOperations\` map covers other non-standard methods such as COPY,
+and must not repeat a method that already has a fixed field.) Worth
+name-dropping as spec-awareness; not something to build on yet.
 `,
 
   comparisons: [
@@ -250,7 +252,7 @@ console.log("same after replay:", JSON.stringify(again) === JSON.stringify(after
     "PUT is full replacement: the body is the complete new representation, omitted fields are deleted — and that totality is exactly why PUT is idempotent.",
     "PATCH's body is a patch *document*, not a representation: declare `application/merge-patch+json` (simple; null removes; arrays replace) or `application/json-patch+json` (op list; array surgery; `test` preconditions).",
     "PATCH is not idempotent by definition, though a fixed-value merge patch is idempotent in effect — say it exactly that way in interviews.",
-    "Never GET with side effects; and as a spec-currency footnote, OpenAPI 3.2 can describe the proposed QUERY method (GET-with-a-body) via additionalOperations.",
+    "Never GET with side effects; and as a spec-currency footnote, OpenAPI 3.2 can describe the proposed QUERY method (GET-with-a-body) via a dedicated `query` field on the Path Item Object — `additionalOperations` is for other non-standard methods.",
   ],
 
   interview: [

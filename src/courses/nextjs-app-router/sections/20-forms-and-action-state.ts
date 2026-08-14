@@ -109,8 +109,10 @@ submission — the jQuery spinner-on-submit, as a five-line component.
 The form component says \`'use client'\` (hooks need the client); the action
 stays \`'use server'\` in \`actions.ts\`. Validation still happens **on the
 server** — this isn't client-side validation, it's the PHP round trip with
-the page-reload cost removed. And because it's built on form actions,
-the no-JS fallback still submits and re-renders with errors.
+the page-reload cost removed. One caveat on progressive enhancement: because
+the form itself is a Client Component, it does *not* get the JS-disabled
+full-page POST a Server Component form gets — Next queues submissions made
+before hydration and replays them once the bundle loads.
 `,
 
   comparisons: [
@@ -317,7 +319,7 @@ console.log('submit #2 :', JSON.stringify(state));
     "Type the state: `{ errors?: Record<string,string>; values?: {...}; message?: string }` — the PHP `$errors` + old-input array as a declared contract.",
     "Repopulate deliberately: return submitted values in the state and feed them to `defaultValue`, so failed validation never eats the user's input — the `$_POST` echo, escaped for free.",
     "`useFormStatus` (from `react-dom`) gives `{ pending }` for the nearest enclosing form — but only in a component rendered *inside* the `<form>`, which is what makes a reusable `<SubmitButton />`.",
-    "The form component is `'use client'` (hooks), the action stays `'use server'` — validation still runs on the server, and the no-JS fallback still works.",
+    "The form component is `'use client'` (hooks), the action stays `'use server'` — validation still runs on the server; unlike a Server Component form, a Client Component form does NOT get the JS-disabled full-page POST: Next queues pre-hydration submissions and replays them after hydration.",
   ],
 
   interview: [

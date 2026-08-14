@@ -35,9 +35,11 @@ export default defineConfig({
 });
 \`\`\`
 
-\`npx prisma db seed\` runs that command, and the CLI also invokes it when
-\`prisma migrate reset\` rebuilds the database — so a fresh checkout goes from zero
-to working data in one command.
+\`npx prisma db seed\` runs that command. Note the v7 change: Prisma 7 removed
+the automatic seeding older versions did after \`prisma migrate reset\`, so a
+fresh checkout is \`prisma migrate reset --force\`, then \`prisma generate\`,
+then \`prisma db seed\` — the \`--skip-seed\`/\`--skip-generate\` flags are gone
+with the automatic behaviour.
 
 ### Idempotent seeds: upsert by natural key
 
@@ -248,7 +250,7 @@ for (const u of users) {
   },
 
   keyPoints: [
-    "Prisma 7 registers the seed command in prisma.config.ts under `migrations.seed` (e.g. `\"tsx prisma/seed.ts\"`); `npx prisma db seed` runs it, and `migrate reset` re-seeds automatically.",
+    "Prisma 7 registers the seed command in prisma.config.ts under `migrations.seed` (e.g. `\"tsx prisma/seed.ts\"`); `npx prisma db seed` runs it — and unlike v6, Prisma 7 does NOT re-seed automatically after `migrate reset`, so run `prisma db seed` yourself.",
     "Make seeds idempotent by upserting on a natural key — `prisma.user.upsert({ where: { email }, update, create })` is `INSERT ... ON CONFLICT DO UPDATE` in a typed coat.",
     "Truncate-and-reload is legitimate for disposable demo data but destroys hand-made state; upsert reference data (roles, plans) always, and gate destructive seeds by environment.",
     "Drizzle seeds are plain TS scripts you run with tsx: `db.insert(users).values(arrayOfRows)` emits one multi-row INSERT, with `onConflictDoNothing()`/`onConflictDoUpdate()` for rerun safety.",
@@ -263,7 +265,7 @@ for (const u of users) {
     },
     {
       q: "How does seeding get wired up in Prisma 7 versus Drizzle?",
-      a: "Prisma makes it a first-class hook: prisma.config.ts has a `migrations.seed` entry holding the command — typically `tsx prisma/seed.ts` — and the CLI runs it on `prisma db seed` and after `migrate reset`, so a fresh clone is one command away from a working dataset. Drizzle deliberately doesn't have a hook: the seed is an ordinary TypeScript script using my db instance and schema, wired to an npm script; what it adds is the drizzle-seed package, which generates fake data from the schema itself with a deterministic seed number. Either way the script is type-checked against the schema — a seed that sets a dropped column fails at compile time instead of at 2 a.m. on a colleague's machine.",
+      a: "Prisma makes it a first-class hook: prisma.config.ts has a `migrations.seed` entry holding the command — typically `tsx prisma/seed.ts` — and the CLI runs it on `prisma db seed`. One v7 gotcha worth naming: the automatic seed after `migrate reset` was removed, so a fresh clone is `prisma migrate reset --force && prisma generate && prisma db seed` rather than one command. Drizzle deliberately doesn't have a hook: the seed is an ordinary TypeScript script using my db instance and schema, wired to an npm script; what it adds is the drizzle-seed package, which generates fake data from the schema itself with a deterministic seed number. Either way the script is type-checked against the schema — a seed that sets a dropped column fails at compile time instead of at 2 a.m. on a colleague's machine.",
     },
     {
       q: "Why does deterministic test data matter, and how do you get it?",
@@ -282,7 +284,7 @@ for (const u of users) {
       ],
       answerIndex: 2,
       explain:
-        "Prisma 7 moved project configuration into prisma.config.ts; defineConfig's migrations.seed holds the command (e.g. \"tsx prisma/seed.ts\"), which db seed executes and migrate reset triggers automatically. The package.json key was the older mechanism.",
+        "Prisma 7 moved project configuration into prisma.config.ts; defineConfig's migrations.seed holds the command (e.g. \"tsx prisma/seed.ts\"), which db seed executes; in v7 migrate reset no longer triggers it for you. The package.json key was the older mechanism.",
     },
     {
       question: "Which seed-script pattern is idempotent?",

@@ -84,9 +84,10 @@ def min_max(values):
 low, high = min_max(scores)           # unpacks into names
 \`\`\`
 
-Tuples can be indexed and sliced like lists, but \`append\`/\`sort\`/item
-assignment all raise \`TypeError\` — the shape is sealed, like a readonly
-value object versus an entity.
+Tuples can be indexed and sliced like lists, but item assignment raises
+\`TypeError\`, and \`append\`/\`sort\` raise \`AttributeError\` because a tuple
+has no such methods — the shape is sealed, like a readonly value object
+versus an entity.
 
 ### The single-element trap
 

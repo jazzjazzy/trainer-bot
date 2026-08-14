@@ -93,7 +93,8 @@ app.post("/webhooks/payments",
   express.raw({ type: "application/json" }), // keep raw bytes!
   async (req, res) => {
     const ts = req.get("X-Timestamp") ?? "";
-    const sig = Buffer.from(req.get("X-Signature") ?? "", "hex");
+    const sig = Buffer.from(
+      (req.get("X-Signature") ?? "").replace(/^sha256=/, ""), "hex");
     const expected = createHmac("sha256", process.env.WEBHOOK_SECRET!)
       .update(ts + "." + req.body.toString())
       .digest();

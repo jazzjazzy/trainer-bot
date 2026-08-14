@@ -165,8 +165,9 @@ EOF
 # Build #2 — zero source changes, same Dockerfile:
 docker build -t api:dev .
 
-# Build #3 — commit some unrelated docs to git, build again:
-git commit -am "docs: update README" && docker build -t api:dev .`,
+# Build #3 — pure git activity that writes only inside .git
+# (README.md is still in the context, so editing IT would bust the cache):
+git fetch origin && git tag v1.4.2 && docker build -t api:dev .`,
     output: `$ docker build -t api:dev .
 [+] Building 24.1s (12/12) FINISHED
  => [internal] load build context                                 14.8s
@@ -189,10 +190,10 @@ $ docker build -t api:dev .
  => [5/6] COPY . .                                                 0.1s
  => [6/6] RUN npm run build                                        4.6s
 
-$ git commit -am "docs: update README" && docker build -t api:dev .
+$ git fetch origin && git tag v1.4.2 && docker build -t api:dev .
 [+] Building 0.9s (12/12) FINISHED
  => [internal] load build context                                  0.0s
- => => transferring context: 1.3kB                                 0.0s
+ => => transferring context: 2.1kB                                 0.0s
  => CACHED [3/6] COPY package*.json ./
  => CACHED [4/6] RUN npm ci
  => CACHED [5/6] COPY . .
@@ -201,9 +202,12 @@ $ git commit -am "docs: update README" && docker build -t api:dev .
 # Build #2: context collapses 890MB -> 2.1kB, but COPY . . still
 # re-runs ONCE — the set of files it copies changed (node_modules,
 # .git, dist vanished), so its checksum changed.
-# Build #3 is the payoff: a git commit no longer touches anything
-# COPY can see, so the whole build is CACHED. Before .dockerignore,
-# every commit busted this layer via .git churn.`,
+# Build #3 is the payoff: fetching and tagging write only inside .git,
+# which is now excluded, so COPY . . sees the identical 2.1kB file set
+# and the whole build is CACHED. Before .dockerignore, every fetch,
+# tag, or commit busted this layer via .git churn. (Editing a file that
+# IS still in the context — src/, or README.md — would correctly
+# invalidate COPY . . and everything below it.)`,
   },
 
   keyPoints: [

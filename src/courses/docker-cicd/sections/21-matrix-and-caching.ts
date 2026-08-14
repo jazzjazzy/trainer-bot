@@ -30,7 +30,7 @@ jobs:
         node-version: [20, 22]
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: \${{ matrix.node-version }}
       - run: npm ci && npm test
@@ -61,13 +61,13 @@ re-downloading identical packages.
 The easy path for Node is built into setup-node:
 
 \`\`\`yaml
-- uses: actions/setup-node@v4
+- uses: actions/setup-node@v7
   with:
     node-version: 22
     cache: npm        # also accepts yarn / pnpm
 \`\`\`
 
-Under the hood this is **actions/cache@v5** with sensible defaults: it caches
+Under the hood it wraps the same caching library as **actions/cache**, caching
 npm's global download cache (\`~/.npm\` — *not* \`node_modules\`), keyed on a
 **hash of your lockfile**. Same \`package-lock.json\` → cache hit → \`npm ci\`
 installs from local disk in seconds. Change the lockfile → new key → one slow
@@ -76,10 +76,10 @@ run repopulates the cache.
 ### Explicit actions/cache for everything else
 
 For anything setup-* actions don't cover (pip, composer, build artefacts), use
-\`actions/cache@v5\` directly:
+\`actions/cache@v6\` directly:
 
 \`\`\`yaml
-- uses: actions/cache@v5
+- uses: actions/cache@v6
   with:
     path: ~/.cache/pip
     key: pip-\${{ runner.os }}-\${{ hashFiles('requirements.txt') }}
@@ -121,7 +121,7 @@ jobs:
         node-version: [20, 22]
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: \${{ matrix.node-version }}
       - run: npm ci
@@ -135,7 +135,7 @@ jobs:
       php: `# no cache: every run downloads everything
 steps:
   - uses: actions/checkout@v6
-  - uses: actions/setup-node@v4
+  - uses: actions/setup-node@v7
     with:
       node-version: 22
   - run: npm ci
@@ -144,7 +144,7 @@ steps:
       ts: `# cache: npm — one extra line
 steps:
   - uses: actions/checkout@v6
-  - uses: actions/setup-node@v4
+  - uses: actions/setup-node@v7
     with:
       node-version: 22
       cache: npm
@@ -152,7 +152,7 @@ steps:
     # cache restored from key:
     #   node-cache-Linux-x64-npm-9f3b2a…
     # added 812 packages in 9s`,
-      note: "cache: npm is actions/cache@v5 preconfigured: it stores ~/.npm keyed on the lockfile hash — roughly 4 minutes down to seconds on a hit, and the key changes automatically when package-lock.json does.",
+      note: "cache: npm is actions/cache preconfigured: it stores ~/.npm keyed on the lockfile hash — roughly 4 minutes down to seconds on a hit, and the key changes automatically when package-lock.json does.",
       leftLang: "yaml",
     },
     {
@@ -168,7 +168,7 @@ $ composer install
 # Fast, but nobody knows if a fresh
 # install would even succeed.`,
       ts: `# .github/workflows/test.yml (python job)
-- uses: actions/cache@v5
+- uses: actions/cache@v6
   with:
     path: ~/.cache/pip
     key: pip-\${{ runner.os }}-\${{ hashFiles('requirements.txt') }}
@@ -197,7 +197,7 @@ jobs:
         os: [ubuntu-latest, ubuntu-22.04]
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: \${{ matrix.node-version }}
           cache: npm
@@ -213,7 +213,7 @@ jobs:
 all spawned from a single job definition and run in parallel.
 
 Log excerpt from "test (22, ubuntu-latest)":
-  Run actions/setup-node@v4
+  Run actions/setup-node@v7
     Found in cache @ /opt/hostedtoolcache/node/22.17.0/x64
     Cache restored successfully
     Cache restored from key: node-cache-Linux-x64-npm-9f3b2ac41d…
@@ -231,8 +231,8 @@ exact-key lookup that reports hit or miss via its cache-hit output.`,
     "`strategy.matrix` fans one job definition into one job per combination; read the current value with `${{ matrix.node-version }}`. Two axes multiply: 2 versions × 2 OSes = 4 parallel jobs.",
     "`fail-fast` defaults to true (first failure cancels the rest of the matrix); `exclude`/`include` prune or extend the grid.",
     "CI runners are fresh VMs — nothing persists between runs. Caching is how you opt specific paths back into persistence.",
-    "For Node, prefer `cache: npm` on actions/setup-node@v4 — it's actions/cache@v5 preconfigured to store `~/.npm` (not node_modules), keyed on the lockfile hash.",
-    "With explicit actions/cache@v5, `key` is the exact lookup and `restore-keys` are prefix fallbacks that restore the newest near-miss cache for a warm start.",
+    "For Node, prefer `cache: npm` on actions/setup-node@v7 — it's actions/cache preconfigured to store `~/.npm` (not node_modules), keyed on the lockfile hash.",
+    "With explicit actions/cache@v6, `key` is the exact lookup and `restore-keys` are prefix fallbacks that restore the newest near-miss cache for a warm start.",
     "A changed lockfile means a changed hash, one slow cache-miss run, then fast hits again — the cache invalidates itself off your dependency files.",
   ],
 
@@ -243,7 +243,7 @@ exact-key lookup that reports hit or miss via its cache-hit output.`,
     },
     {
       q: "CI runs are slow because npm ci takes four minutes every time. What do you do?",
-      a: "Cache the dependency downloads. Runners are fresh VMs, so by default every run re-downloads every package. For Node the fix is one line: `cache: npm` on actions/setup-node@v4. Under the hood that's actions/cache@v5 caching npm's global cache directory, keyed on a hash of package-lock.json — identical lockfile means a cache hit and npm ci completes in seconds; a changed lockfile means one slow run that saves the new cache. For ecosystems without a setup action I use actions/cache directly with a `hashFiles()` key and `restore-keys` prefix fallbacks so even a changed lockfile starts warm. Important nuance: we cache the download cache, not node_modules — npm ci still does a clean install, just from local disk.",
+      a: "Cache the dependency downloads. Runners are fresh VMs, so by default every run re-downloads every package. For Node the fix is one line: `cache: npm` on actions/setup-node@v7. Under the hood that's actions/cache caching npm's global cache directory, keyed on a hash of package-lock.json — identical lockfile means a cache hit and npm ci completes in seconds; a changed lockfile means one slow run that saves the new cache. For ecosystems without a setup action I use actions/cache directly with a `hashFiles()` key and `restore-keys` prefix fallbacks so even a changed lockfile starts warm. Important nuance: we cache the download cache, not node_modules — npm ci still does a clean install, just from local disk.",
     },
     {
       q: "What's the difference between key and restore-keys in actions/cache?",
@@ -266,7 +266,7 @@ exact-key lookup that reports hit or miss via its cache-hit output.`,
         "Matrix axes multiply: every node-version is paired with every os, so 2 × 2 = 4 jobs, each on its own runner in parallel. exclude: can remove specific cells from that grid.",
     },
     {
-      question: "What does `cache: npm` on actions/setup-node@v4 actually cache?",
+      question: "What does `cache: npm` on actions/setup-node@v7 actually cache?",
       options: [
         "The node_modules directory, restored as-is",
         "The built application output",
@@ -275,7 +275,7 @@ exact-key lookup that reports hit or miss via its cache-hit output.`,
       ],
       answerIndex: 2,
       explain:
-        "It's actions/cache@v5 preconfigured to store npm's download cache keyed on package-lock.json's hash. npm ci still performs a clean install — it's just installing from local disk instead of the network, which is also why it's safer than caching node_modules.",
+        "It's actions/cache preconfigured to store npm's download cache keyed on package-lock.json's hash. npm ci still performs a clean install — it's just installing from local disk instead of the network, which is also why it's safer than caching node_modules.",
     },
     {
       question:

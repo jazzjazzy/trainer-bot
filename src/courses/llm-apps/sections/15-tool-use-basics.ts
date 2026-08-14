@@ -15,7 +15,9 @@ hand the model a list of functions it may call — each with a name, a
 description, and a JSON Schema for its inputs — and instead of answering in
 prose, the model can reply with a **structured request** to call one:
 \`stop_reason: "tool_use"\` and a \`tool_use\` content block carrying an
-\`id\`, the \`name\` of the function, and a validated \`input\` object.
+\`id\`, the \`name\` of the function, and an \`input\` object matching your
+schema (guaranteed to conform only when the tool sets \`strict: true\` — see
+below).
 
 The crucial thing to internalise: **the model never executes anything.** It
 does not call your API, hit your database, or send your email. It emits a
@@ -111,7 +113,7 @@ const msg = await client.messages.create({
 if (msg.stop_reason === "tool_use") {
   const call = msg.content.find((b) => b.type === "tool_use");
   // call.name  -> "get_weather"
-  // call.input -> { city: "Sydney" }  (validated against the schema)
+  // call.input -> { city: "Sydney" }  (shaped by the schema)
   const result = await runWeather(call.input);
   // ...hand result back to the model (next section: the tool loop)
 }`,
@@ -246,7 +248,7 @@ for (const response of responses) {
   },
 
   keyPoints: [
-    "Tool use inverts the flow: you declare functions in the `tools` param, and the model replies with `stop_reason: \"tool_use\"` and a `tool_use` block containing an `id`, `name`, and validated `input`.",
+    "Tool use inverts the flow: you declare functions in the `tools` param, and the model replies with `stop_reason: \"tool_use\"` and a `tool_use` block containing an `id`, `name`, and an `input` object shaped by your schema (guaranteed to conform only with `strict: true`).",
     "The model never executes anything — it emits a structured request and stops. YOU run the code and return the result, exactly like handling a webhook round-trip.",
     "Write the tool `description` like API docs: be prescriptive about WHEN to call it (recent models reach for tools conservatively), describe every parameter, and use `enum` for fixed value sets.",
     "`tool_choice` controls freedom: `auto` (default, model decides), `any` (must use some tool), `{ type: \"tool\", name }` (must use that one), `none` (no tools this turn).",
@@ -280,7 +282,7 @@ for (const response of responses) {
       ],
       answerIndex: 1,
       explain:
-        "The model never executes your tool. It returns stop_reason \"tool_use\" with a tool_use content block (id, name, validated input); your code runs the actual function and sends the result back — a webhook-style round-trip, with the model as caller and your handler as endpoint.",
+        "The model never executes your tool. It returns stop_reason \"tool_use\" with a tool_use content block (id, name, and an input object shaped by your schema); your code runs the actual function and sends the result back — a webhook-style round-trip, with the model as caller and your handler as endpoint.",
     },
     {
       question: "Where does strict: true belong, and what does it require?",

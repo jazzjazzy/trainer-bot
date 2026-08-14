@@ -156,8 +156,8 @@ const user: CreateUser = result.data; // fully typed`,
     {
       label: "Zod 3 habits vs Zod 4 APIs",
       intro:
-        "The same schema written in deprecated v3 style and in current v4 style. Both still run today — only one is what you should write (and say in interviews).",
-      php: `// v3 style — deprecated, still widely seen in old code
+        "The same schema written in v3 style and in current v4 style. The v3 string-format methods still run (deprecated), but `required_error`/`invalid_type_error`/`errorMap` were removed in v4 — under zod 4 the left-hand `plan` field no longer type-checks and its custom messages are silently ignored.",
+      php: `// v3 style — deprecated or removed in v4, still widely seen in old code
 const Signup = z.object({
   email: z.string().email({ message: "Invalid email" }),
   website: z.string().url(),
@@ -321,7 +321,7 @@ try {
     },
     {
       q: "What changed in zod 4 that someone maintaining zod 3 code should know?",
-      a: "Two headline API changes. First, string formats moved to top-level functions: `z.email()`, `z.uuid()`, `z.url()`, `z.iso.datetime()` replace the deprecated `z.string().email()` method chains — terser and better for tree-shaking. Second, error customisation was unified: v3's four overlapping params — `message`, `required_error`, `invalid_type_error`, and `errorMap` — collapsed into a single `error` param that accepts a string or a function receiving the issue, so conditional messages like 'required vs wrong type' are one small function. The deprecated forms still work, which makes migration incremental, but new code should be written v4-style. The core workflow — `z.object`, `parse`/`safeParse`, `z.infer` — is unchanged.",
+      a: "Two headline API changes. First, string formats moved to top-level functions: `z.email()`, `z.uuid()`, `z.url()`, `z.iso.datetime()` replace the deprecated `z.string().email()` method chains — terser and better for tree-shaking. Second, error customisation was unified: v3's four overlapping params — `message`, `required_error`, `invalid_type_error`, and `errorMap` — collapsed into a single `error` param that accepts a string or a function receiving the issue, so conditional messages like 'required vs wrong type' are one small function. The split matters for migration: the old string-format methods and `message` are deprecated but still work, whereas `required_error`, `invalid_type_error`, and `errorMap` were removed outright — under zod 4 they type-error and their custom messages are silently ignored, so those are what actually breaks on upgrade. The core workflow — `z.object`, `parse`/`safeParse`, `z.infer` — is unchanged.",
     },
   ],
 
@@ -348,7 +348,7 @@ try {
       ],
       answerIndex: 1,
       explain:
-        "Zod 4 moved string formats to top-level functions (z.email, z.uuid, z.url, z.iso.datetime) and unified all message customisation into the single `error` param. Options using z.string().email() or message/invalid_type_error are deprecated v3 style — they still run, but they're not what you should write.",
+        "Zod 4 moved string formats to top-level functions (z.email, z.uuid, z.url, z.iso.datetime) and unified all message customisation into the single `error` param. The z.string().email() and `message` forms are deprecated v3 style — they still run, but they're not what you should write; `invalid_type_error` was removed outright in v4, so it type-errors and its message is silently ignored.",
     },
     {
       question: "A request handler needs to return a 422 listing every invalid field. Which call and property fit?",

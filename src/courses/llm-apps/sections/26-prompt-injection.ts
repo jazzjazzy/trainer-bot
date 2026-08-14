@@ -352,7 +352,7 @@ console.log(
     },
     {
       question:
-        "A response comes back and your code reads response.stop_details.reason unconditionally. What happens on a normal end_turn response?",
+        "A response comes back and your code reads response.stop_details.category unconditionally. What happens on a normal end_turn response?",
       options: [
         "It works — stop_details is populated on every response",
         "It throws, because stop_details is null unless stop_reason is 'refusal'",

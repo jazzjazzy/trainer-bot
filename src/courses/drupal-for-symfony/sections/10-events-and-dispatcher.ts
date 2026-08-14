@@ -29,7 +29,7 @@ container under the \`event_dispatcher\` service id, and you inject it the same 
 Note the modern dispatch signature both frameworks now share: the **event object
 comes first, the event name second** — \`$dispatcher->dispatch($event, MyEvents::THING)\`.
 
-### The one real difference: no autoconfigure
+### The one real difference: autoconfigure is off by default
 
 In Symfony, \`autoconfigure: true\` is on by default, so merely implementing
 \`EventSubscriberInterface\` is enough — the container tags it for you. **Drupal
@@ -134,7 +134,7 @@ services:
     tags:
       - { name: event_subscriber }
     # arguments: ['@state']  # Drupal wires by explicit reference, not autowire`,
-      note: "No autoconfigure in Drupal: the event_subscriber tag is mandatory, and dependencies are injected by explicit '@service' arguments, not autowiring.",
+      note: "Autoconfigure is off by default in Drupal, so unless the file sets _defaults: { autoconfigure: true } the event_subscriber tag is mandatory, and dependencies are injected by explicit '@service' arguments unless you opt in to autowire.",
     },
     {
       label: "Priorities & multiple methods",
@@ -241,7 +241,7 @@ done`,
   keyPoints: [
     "Drupal uses the exact same symfony/event-dispatcher — EventSubscriberInterface, getSubscribedEvents(), KernelEvents::REQUEST/RESPONSE/EXCEPTION all work unchanged.",
     "The subscriber class is essentially copy-paste from Symfony; only the registration differs.",
-    "Drupal does NOT autoconfigure — you must add tags: [{ name: event_subscriber }] in *.services.yml or the subscriber silently never fires.",
+    "Drupal supports autoconfigure but leaves it OFF by default — unless your *.services.yml sets _defaults: { autoconfigure: true }, you must add tags: [{ name: event_subscriber }] or the subscriber silently never fires.",
     "getSubscribedEvents() return shape (bare method, or [method, priority] tuples, higher-first) is identical because the shared package defines it.",
     "Modern dispatch signature is event-object-first: dispatch($event, EventName::CONST).",
     "Symfony-derived subsystems (kernel, routing, config) emit events; classic Drupal subsystems (forms, entity CRUD) use hooks — that's the next part.",
@@ -268,13 +268,13 @@ done`,
         "Your Drupal subscriber implements EventSubscriberInterface correctly but never runs. Most likely cause?",
       options: [
         "Drupal doesn't support Symfony events",
-        "You forgot the '{ name: event_subscriber }' tag in *.services.yml (Drupal has no autoconfigure)",
+        "You forgot the '{ name: event_subscriber }' tag in *.services.yml (Drupal doesn't enable autoconfigure by default)",
         "getSubscribedEvents() must be non-static in Drupal",
         "KernelEvents::REQUEST doesn't fire in Drupal",
       ],
       answerIndex: 1,
       explain:
-        "Drupal doesn't enable autoconfigure, so implementing the interface isn't enough — you must tag the service as event_subscriber by hand. The interface, the static method, and the kernel events are all identical to Symfony.",
+        "Drupal doesn't enable autoconfigure by default, so implementing the interface isn't enough — unless your file opts in with `_defaults: { autoconfigure: true }` you must tag the service as event_subscriber by hand. The interface, the static method, and the kernel events are all identical to Symfony.",
     },
     {
       question:

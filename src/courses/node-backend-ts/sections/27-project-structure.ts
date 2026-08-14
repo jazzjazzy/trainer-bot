@@ -46,8 +46,9 @@ src/
 The **app/server split** matters more than it looks: \`app.ts\` builds and
 exports the Express app without calling \`listen()\`; \`server.ts\` imports it,
 listens, and owns shutdown. Tests then import the app and drive it with
-supertest — no port, no boot script. This one habit pays for itself the first
-time you write an integration test.
+supertest, which starts it on an ephemeral port of its own — no port to pick,
+no boot script. This one habit pays for itself the first time you write an
+integration test.
 
 **Zod schemas get their own home** (\`schemas/\` or next to the route) because
 two layers need them: routes validate with \`schema.parse()\`, and services
@@ -207,7 +208,7 @@ Violations to catch in review:
   keyPoints: [
     "Layer like Laravel: routes ≈ controllers (HTTP only), services = framework-free business logic, repositories = the only layer that touches SQL and the pg Pool.",
     "The dependency rule is one-way: routes → services → repositories; a service must never import express or see `req`/`res`.",
-    "Split `app.ts` (builds and exports the app, no `listen()`) from `server.ts` (listens, owns shutdown) — supertest drives the exported app portless in tests.",
+    "Split `app.ts` (builds and exports the app, no `listen()`) from `server.ts` (listens, owns shutdown) — supertest then starts the exported app on its own ephemeral port per test, so no fixed port is ever bound.",
     "Zod schemas live in one place and serve two layers: routes call `schema.parse()`, services type parameters with `z.infer<typeof schema>`.",
     "ESM module caching makes `export const pool = new Pool()` a singleton — the import statement replaces most of Laravel's DI container; use factory-function injection only where tests need to swap a dependency.",
     "Barrel `index.ts` files re-exporting a folder invite circular imports that surface as `undefined` exports at runtime — prefer direct imports between siblings.",
@@ -260,12 +261,12 @@ Violations to catch in review:
       options: [
         "Calling listen() twice in one process is a syntax error",
         "Express 5 removed the listen() method from apps",
-        "So tests can import the app and drive it with supertest — no port binding needed — while server.ts owns listen() and shutdown",
+        "So tests can import the app and drive it with supertest — which binds an ephemeral port of its own — while server.ts owns listen() and shutdown",
         "To prevent the app from starting before the database is ready",
       ],
       answerIndex: 2,
       explain:
-        "The app/server split separates the testable artifact (the app: routes, middleware, error handling) from process concerns (port, SIGTERM handling, pool cleanup). supertest exercises the exported app in-memory, which is why integration tests need no running server.",
+        "The app/server split separates the testable artifact (the app: routes, middleware, error handling) from process concerns (port, SIGTERM handling, pool cleanup). supertest starts the exported app on an ephemeral port for the duration of each request and closes it again, which is why integration tests never need a server you booted yourself.",
     },
     {
       question: "What is the characteristic failure mode of barrel-file (index.ts) circular imports?",

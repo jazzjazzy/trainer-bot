@@ -285,7 +285,7 @@ for (const raw of requests) {
     },
     {
       question:
-        "With the default z.object({ displayName: z.string() }), a client sends { displayNmae: 'Ada' } (typo, and displayName is optional). What happens?",
+        "With the default z.object({ displayName: z.string().optional() }), a client sends { displayNmae: 'Ada' } (a typo). What happens?",
       options: [
         "Validation fails with 'unrecognized key displayNmae'",
         "The unknown key is stripped, parsing succeeds with an empty result, and the typo is invisible — strictObject is what would reject it",

@@ -51,9 +51,11 @@ form class with \`_form: '\\\\Drupal\\\\my_module\\\\Form\\\\ContactForm'\`. The
 layer renders the render array to HTML — you don't write the \`<form>\` markup, much
 like Symfony's form themes but driven by the array structure.
 
-Two things come **for free**, matching Symfony's built-ins: every Form-API form
-carries a CSRF token automatically (no \`csrf_protection\` config needed), and text
-values are sanitized on output by Twig auto-escaping. To show a "message saved"
+Two things come **for free**, matching Symfony's built-ins: Form API adds and
+validates a CSRF token automatically, with no \`csrf_protection\` config — though
+only for **authenticated** users, since tokens are session-bound and forms shown
+to anonymous users are page-cached. And text values are sanitized on output by
+Twig auto-escaping. To show a "message saved"
 notice after submit, you inject the \`messenger\` service and call
 \`\$this->messenger()->addStatus(...)\` — the equivalent of a Symfony flash.
 
@@ -277,7 +279,7 @@ ERROR on message: Message must be at least 10 characters.`,
     "All state flows through \`FormStateInterface\`: read submitted values with \`\$form_state->getValue()\`, flag problems with \`setErrorByName()\`, redirect with \`setRedirect()\`.",
     "There is **no data-class binding** by default — a plain form pulls scalars from the form state; only entity forms (\`ContentEntityForm\`) bind to an object.",
     "Validation is imperative inside \`validateForm()\`, not declarative constraint attributes; \`submitForm()\` runs only when no errors were set.",
-    "Route a form directly with the \`_form\` default (no controller); CSRF protection and output escaping are automatic, and \`messenger()->addStatus()\` is the flash-message equivalent.",
+    "Route a form directly with the \`_form\` default (no controller); CSRF protection (for authenticated users — anonymous forms are page-cached and get no token) and output escaping are automatic, and \`messenger()->addStatus()\` is the flash-message equivalent.",
   ],
 
   interview: [
@@ -291,7 +293,7 @@ ERROR on message: Message must be at least 10 characters.`,
     },
     {
       q: "How is validation done differently, and does Drupal give you CSRF protection like Symfony?",
-      a: "Drupal validation is imperative: in \`validateForm()\` you inspect \`\$form_state\` and call \`\$form_state->setErrorByName('field', \$this->t('...'))\` for anything invalid, and \`submitForm()\` only fires if no errors were set. That contrasts with Symfony's declarative constraints (\`#[Assert\\...]\`) on the data class. As for CSRF: yes — every Form-API form automatically includes and validates a CSRF token, so you don't configure \`csrf_protection\` the way you might in Symfony; it is on by default.",
+      a: "Drupal validation is imperative: in \`validateForm()\` you inspect \`\$form_state\` and call \`\$form_state->setErrorByName('field', \$this->t('...'))\` for anything invalid, and \`submitForm()\` only fires if no errors were set. That contrasts with Symfony's declarative constraints (\`#[Assert\\...]\`) on the data class. As for CSRF: Form API adds and validates the token for you with no \`csrf_protection\` config to write, so it is on by default. One caveat worth stating in an interview: \`FormBuilder\` only adds the \`form_token\` element for **authenticated** users — tokens are session-bound and forms rendered for anonymous users are page-cached, so an anonymous form carries no token.",
     },
   ],
 

@@ -146,7 +146,7 @@ Location: https://app.example.com/cb#access_token=eyJhbGciOi...
 # LEG 1 (front channel): only a hashed CHALLENGE travels
 GET /authorize?response_type=code&client_id=spa
     &redirect_uri=https://app.example.com/cb&scope=openid%20orders:read
-    &code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8U&code_challenge_method=S256 HTTP/1.1
+    &code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256 HTTP/1.1
 
 # LEG 2: redirect carries a ONE-TIME CODE, not a token
 HTTP/1.1 302 Found

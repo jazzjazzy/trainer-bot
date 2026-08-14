@@ -170,7 +170,7 @@ expect(
   playground: {
     lang: "typescript",
     intro:
-      "A miniature of user.type vs fireEvent.change: typeInto fires focus, then keydown → input → keyup per character against a tiny form 'component' whose submit button enables only on valid input. Predict which test fails before running.",
+      "A miniature of user.type vs fireEvent.change: typeInto fires focus, then keydown → input → keyup per character against a tiny form 'component' whose submit button enables only on valid input. Predict all three results before running.",
     code: `// ── mini test harness ──────────────────────────────────────
 function expect<T>(actual: T) {
   return {

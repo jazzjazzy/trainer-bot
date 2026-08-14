@@ -25,12 +25,15 @@ const users = await prisma.user.findMany({
 // users[0].posts: Post[] — nested, typed, ready to use
 \`\`\`
 
-On Postgres, Prisma's default relation load strategy is \`join\`: **one** SQL
+Out of the box Prisma uses the \`query\` strategy: one statement per relation
+level, merged in the client — a constant number of queries, never one per
+row. Turn on the \`relationJoins\` preview feature
+(\`previewFeatures = ["relationJoins"]\` in the generator block) and you get
+the \`relationLoadStrategy\` option, whose default is \`join\`: **one** SQL
 statement using \`LEFT JOIN LATERAL\` plus JSON aggregation
 (\`json_build_object\`, \`json_agg\`), so the nesting is built *inside
-Postgres* and no duplicated user columns cross the wire. You can opt into the
-older behaviour per query with \`relationLoadStrategy: "query"\`, which runs
-one query per table and joins in the app — occasionally cheaper for huge
+Postgres* and no duplicated user columns cross the wire. Per query you can
+still force \`relationLoadStrategy: "query"\` — occasionally cheaper for huge
 result sets, since JSON assembly costs the database CPU.
 
 ### Drizzle relational queries: with → nested objects
@@ -77,9 +80,10 @@ reports, aggregations, or joins that don't follow declared relations.
 
 The question to ask of any relation-loading API is: **who builds the
 nesting, and how many statements run?** PDO: you build it, one statement.
-Prisma \`include\` / Drizzle \`with\`: Postgres builds it via JSON
-aggregation, one statement. Drizzle \`leftJoin\`: you build it, one
-statement. Nobody respectable does N+1 round trips here — but you should be
+Prisma \`include\`: the client builds it from one statement per relation
+level, or Postgres builds it in a single statement once \`relationJoins\` is
+on. Drizzle \`with\`: Postgres builds it via JSON aggregation, one
+statement. Drizzle \`leftJoin\`: you build it, one statement. Nobody respectable does N+1 round trips here — but you should be
 able to say *why* on a whiteboard.
 `,
 
@@ -119,16 +123,19 @@ const users = await prisma.user.findMany({
 });
 
 // users[0].posts: { id: number; title: string }[]
-// Under the hood on Postgres (join strategy,
-// the default): ONE statement using
+// Under the hood on Postgres with the
+// relationJoins preview feature on (join is
+// then the default): ONE statement using
 // LEFT JOIN LATERAL + json_agg, so the
 // grouping happens inside the database.
+// Without the flag: one statement per
+// relation level, merged client-side.
 
 for (const user of users) {
   console.log(user.name, user.posts.length);
 }`,
       note:
-        "Same single-statement philosophy — but Prisma pushes your PHP grouping loop into Postgres as JSON aggregation, so user columns aren't duplicated per post row on the wire.",
+        "With the relationJoins preview feature on, Prisma pushes your PHP grouping loop into Postgres as JSON aggregation over a lateral join, so user columns aren't duplicated per post row on the wire; without it Prisma issues one statement per table and does the grouping in the client.",
     },
     {
       label: "Raw LEFT JOIN vs Drizzle leftJoin",
@@ -253,7 +260,7 @@ console.log(\`\${flatRows.length} flat rows -> \${nested.length} nested users\`)
   },
 
   keyPoints: [
-    "Prisma `include: { posts: true }` returns nested objects; on Postgres its default `join` strategy runs ONE statement with `LEFT JOIN LATERAL` + JSON aggregation (`relationLoadStrategy: \"query\"` opts into one-query-per-table).",
+    "Prisma `include: { posts: true }` returns nested objects; by default that is the `query` strategy (one statement per relation level, merged client-side), and with `previewFeatures = [\"relationJoins\"]` enabled the default becomes `join` — ONE statement with `LEFT JOIN LATERAL` + JSON aggregation on Postgres.",
     "Drizzle relational queries (`db.query.users.findMany({ with: { posts: true } })`) need relations declared via `relations()` and always emit exactly one SQL statement.",
     "Drizzle's explicit `.leftJoin()` returns flat rows keyed by table — `{ users: User; posts: Post | null }[]` — the PDO mental model with LEFT JOIN nullability enforced by the type system.",
     "The grouping loop you wrote in PHP hasn't disappeared: it either runs inside Postgres as `json_agg` or in the ORM/your code — know which, and say so in interviews.",
@@ -264,7 +271,7 @@ console.log(\`\${flatRows.length} flat rows -> \${nested.length} nested users\`)
   interview: [
     {
       q: "What SQL does Prisma's include actually generate?",
-      a: "On Postgres, the default relation load strategy is `join`: one statement per query, using `LEFT JOIN LATERAL` against the related table and JSON aggregation — `json_build_object` and `json_agg` — so Postgres itself assembles the nested arrays and no duplicated parent columns cross the wire. There's a per-query escape hatch, `relationLoadStrategy: \"query\"`, which instead runs one query per table and merges in the application — still a constant number of queries, never N+1. I'd reach for `query` only after profiling shows JSON assembly is loading the database server on a very large result set; for most workloads the lateral-join strategy wins because it's one round trip and less redundant data.",
+      a: "On Postgres, Prisma's out-of-the-box behaviour is the `query` strategy: one statement per relation level, merged in the client — still a constant number of queries, never N+1. Enabling the `relationJoins` preview feature unlocks the `relationLoadStrategy` option, whose default is `join`: one statement per query, using `LEFT JOIN LATERAL` against the related table and JSON aggregation — `json_build_object` and `json_agg` — so Postgres itself assembles the nested arrays and no duplicated parent columns cross the wire, and you can still ask for `relationLoadStrategy: \"query\"` per query. I'd reach for `query` only after profiling shows JSON assembly is loading the database server on a very large result set; for most workloads the lateral-join strategy wins because it's one round trip and less redundant data.",
     },
     {
       q: "Drizzle gives you both db.query with `with` and an explicit .leftJoin(). When do you use which?",
@@ -272,14 +279,14 @@ console.log(\`\${flatRows.length} flat rows -> \${nested.length} nested users\`)
     },
     {
       q: "Coming from PDO, what was the biggest mental shift in how ORMs load related data?",
-      a: "That flat rows versus nested objects is a *transformation with a location*, not magic. In PDO the driver hands you one row per user-post pair and you write the grouping loop keyed on user id. ORMs still need that exact transformation — the shift is that Prisma and Drizzle's relational APIs push it into Postgres as `json_agg` over a lateral join, one statement, nesting built server-side. Once I saw the generated SQL, the ORM stopped being a black box: `include` and `with` are code generators for a query pattern I could write by hand, plus derived TypeScript types for the nested result. That also tells me when *not* to use them — when I want row-shaped output, I use an explicit join like always.",
+      a: "That flat rows versus nested objects is a *transformation with a location*, not magic. In PDO the driver hands you one row per user-post pair and you write the grouping loop keyed on user id. ORMs still need that exact transformation — the shift is that Drizzle's relational API — and Prisma's, once the `relationJoins` preview feature is on — push it into Postgres as `json_agg` over a lateral join, one statement, nesting built server-side, and Prisma's default still keeps it to one statement per relation level rather than one per row. Once I saw the generated SQL, the ORM stopped being a black box: `include` and `with` are code generators for a query pattern I could write by hand, plus derived TypeScript types for the nested result. That also tells me when *not* to use them — when I want row-shaped output, I use an explicit join like always.",
     },
   ],
 
   quiz: [
     {
       question:
-        "On Postgres, what does Prisma's default strategy for include: { posts: true } emit?",
+        "On Postgres with the relationJoins preview feature enabled, what does Prisma's default relation load strategy for include: { posts: true } emit?",
       options: [
         "One query for users, then one query per user for posts",
         "A single statement using LEFT JOIN LATERAL and JSON aggregation, nesting built in the database",
@@ -288,7 +295,7 @@ console.log(\`\${flatRows.length} flat rows -> \${nested.length} nested users\`)
       ],
       answerIndex: 1,
       explain:
-        "The default join strategy generates one SQL statement with LEFT JOIN LATERAL plus json_agg/json_build_object, so Postgres returns the nested arrays directly. relationLoadStrategy: \"query\" switches to one-query-per-table merged in the app — but never one query per row.",
+        "With previewFeatures = [\"relationJoins\"] enabled, the default join strategy generates one SQL statement with LEFT JOIN LATERAL plus json_agg/json_build_object, so Postgres returns the nested arrays directly. Without the flag — or with relationLoadStrategy: \"query\" — Prisma runs one query per table and merges in the app, but never one query per row.",
     },
     {
       question:

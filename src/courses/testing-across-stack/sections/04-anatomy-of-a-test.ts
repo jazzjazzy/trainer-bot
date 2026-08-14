@@ -266,7 +266,7 @@ describe("applyCoupon", () => {
   interview: [
     {
       q: "What makes a good unit test? Walk me through your standards.",
-      a: "Structurally, Arrange-Act-Assert with exactly one act: build the state, perform the behaviour, assert the outcome. The name states the behaviour as a claim — 'rejects an expired coupon' — so the runner's output reads as a specification and a failure is a self-explanatory bug report. Then the FIRS qualities: fast, so the suite runs on every save; isolated, meaning each test arranges its own state and passes in any order or in parallel; repeatable, so no dependence on real time, network, or a shared database; and self-verifying, so pass/fail needs no human judgment. Finally I assert the most specific value available — 'expected 100, got 80' points at the bug, 'expected true, got false' points at a debugger.",
+      a: "Structurally, Arrange-Act-Assert with exactly one act: build the state, perform the behaviour, assert the outcome. The name states the behaviour as a claim — 'rejects an expired coupon' — so the runner's output reads as a specification and a failure is a self-explanatory bug report. Then the FIRST qualities: fast, so the suite runs on every save; isolated, meaning each test arranges its own state and passes in any order or in parallel; repeatable, so no dependence on real time, network, or a shared database; self-verifying, so pass/fail needs no human judgment; and timely, written alongside the code rather than bolted on months later. Finally I assert the most specific value available — 'expected 100, got 80' points at the bug, 'expected true, got false' points at a debugger.",
     },
     {
       q: "Is having multiple assertions in a single test a problem?",

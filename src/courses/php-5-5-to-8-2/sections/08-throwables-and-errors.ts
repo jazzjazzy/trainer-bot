@@ -92,7 +92,7 @@ function half($n) {
 }
 
 try {
-    echo half(new stdClass()); // fatal: unsupported operand
+    echo half([1, 2]); // fatal: Unsupported operand types
 } catch (Exception $e) {
     // never reached — fatals aren't Exceptions in 5.5
     echo "handled";

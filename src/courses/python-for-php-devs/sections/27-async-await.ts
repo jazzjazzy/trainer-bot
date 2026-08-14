@@ -17,7 +17,7 @@ provides concurrency: PHP-FPM runs many workers, each handling one request from
 start to finish. If your request makes three slow API calls with curl, they run
 one after another and your user waits for the sum. The workarounds —
 \`curl_multi_*\`, Guzzle promises, or since PHP 8.1 **fibers** (the low-level
-primitive Swoole/ReactPHP-style runtimes build on) — never became everyday PHP.
+primitive modern async PHP runtimes build on) — never became everyday PHP.
 
 Python bakes the alternative into the language: **asyncio**, an event loop that
 runs *inside your process* and interleaves many tasks whenever one of them is

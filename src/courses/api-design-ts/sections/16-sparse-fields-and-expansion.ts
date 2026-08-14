@@ -181,10 +181,10 @@ WHERE id IN ('cus_9', 'cus_14', 'cus_31', /* distinct ids only */ ...);`,
       "A miniature shaping pipeline: applyExpand embeds customers (via one batched lookup), applyFields picks the requested keys. Predict what each of the three query combinations returns, then run it.",
     code: `// One dataset, three differently-shaped responses.
 interface Customer { id: string; name: string; email: string }
-interface Order {
+type Order = {
   id: string; total: number; status: string; customerId: string;
   internalNotes: string;
-}
+};
 
 const customers: Customer[] = [
   { id: "cus_9", name: "Mei Tanaka", email: "mei@example.com" },

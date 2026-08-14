@@ -174,7 +174,8 @@ psql "$PROD_URL" -c \\
       ts: `# Capture what prod actually has vs the migrations folder:
 npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
-  --to-url "$PROD_URL" --script
+  --to-config-datasource \\
+  --config prisma.config.prod.ts --script
 # -> prints: CREATE INDEX idx_orders_status ...
 
 # Back-port it as a real migration file (create-only, paste
@@ -183,7 +184,7 @@ npx prisma migrate resolve \\
   --applied 20260707110000_add_orders_status_idx
 
 # migrate deploy now skips it on prod, applies it elsewhere.`,
-      note: "migrate diff answers 'what drifted?'; migrate resolve edits the _prisma_migrations ledger so a back-ported hotfix isn't applied twice. Neither command needs the shadow database.",
+      note: "migrate diff answers 'what drifted?'; migrate resolve edits the _prisma_migrations ledger so a back-ported hotfix isn't applied twice. migrate resolve needs no shadow database; migrate diff needs one whenever a --from-migrations/--to-migrations side has to be replayed — in v7 that URL comes from datasource.shadowDatabaseUrl in prisma.config.ts.",
       leftLang: "bash",
       rightLang: "bash",
     },

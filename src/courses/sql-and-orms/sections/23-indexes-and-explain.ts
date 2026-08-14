@@ -120,7 +120,7 @@ model Post {
   tags     Json?
 
   @@index([authorId, status])
-  @@index([tags], type: Gin)  // also: Hash, GiST, SP-GiST, BRIN
+  @@index([tags], type: Gin)  // also: Hash, Gist, SpGist, Brin
 }`,
       note:
         "The schema is the source of truth: prisma migrate dev diffs it and writes the CREATE INDEX statements into a migration you can read — the type argument covers Postgres's non-btree index methods.",

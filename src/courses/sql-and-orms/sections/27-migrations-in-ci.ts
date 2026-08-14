@@ -86,9 +86,9 @@ on the team who can spot the table rewrite hiding in a one-line schema change.
       intro:
         "Both add a mandatory tax_code column to a large busy table. The left version is one migration; the right is the same change split so no step blocks traffic or breaks running code.",
       php: `-- 20260707_add_tax_code.sql  (one risky step)
--- ACCESS EXCLUSIVE lock while EVERY row is checked;
--- and instantly breaks old code still INSERTing
--- without tax_code.
+-- ACCESS EXCLUSIVE lock (on PG 10 and older this
+-- rewrote every row); and it instantly breaks old
+-- code still INSERTing without tax_code.
 ALTER TABLE invoices
   ADD COLUMN tax_code text NOT NULL DEFAULT 'STD';
 

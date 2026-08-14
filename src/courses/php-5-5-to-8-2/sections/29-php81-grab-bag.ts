@@ -17,15 +17,16 @@ keeping in your pocket.
 ### Pure intersection types: \`A&B\`
 
 8.0 gave you *union* types (\`A|B\` = "either"). 8.1 adds *intersection* types
-(\`A&B\` = "both at once"): a value must implement **every** listed interface.
+(\`A&B\` = "both at once"): a value must satisfy **every** listed class-type.
 
 \`\`\`php
 function persist(Countable&Traversable $collection): void { /* ... */ }
 \`\`\`
 
 In 5.5 you'd accept \`mixed\`/no type and hope, or invent a marker interface that
-extends both. Now the engine enforces it. (8.1 allows *pure* intersections only —
-class types and \`A&B|C\` mixes had to wait for **DNF types in 8.2**.)
+extends both. Now the engine enforces it. Any class-type may be a member (classes as well as
+interfaces), but 8.1 allows *pure* intersections only — mixing \`&\` with \`|\`, as in
+\`(A&B)|null\`, had to wait for **DNF types in 8.2**.
 
 ### \`new\` in initializers
 
@@ -38,8 +39,9 @@ public function __construct(?Logger $log = null) {
 }
 \`\`\`
 
-8.1 lets \`new\` appear directly in default parameter values, property defaults,
-static variables, and attribute arguments:
+8.1 lets \`new\` appear directly in default parameter values, static variables,
+global constant initializers, and attribute arguments (plain property defaults and
+class constant initializers are still constant-expression only):
 
 \`\`\`php
 public function __construct(private Logger $log = new NullLogger()) {}
@@ -119,7 +121,7 @@ class Service {
     ) {}
 }`,
       note:
-        "`new` in initializers (PHP 8.1) lets default parameter/property values construct objects, removing the nullable-then-coalesce pattern.",
+        "`new` in initializers (PHP 8.1) lets default parameter values construct objects, removing the nullable-then-coalesce pattern.",
     },
     {
       label: "Merging two associative arrays",
@@ -200,12 +202,12 @@ Hearts`,
   },
 
   keyPoints: [
-    "Intersection types `A&B` (8.1) require a value to satisfy **all** listed interfaces — the opposite of 8.0 unions `A|B`.",
-    "`new` in initializers (8.1) lets default params/properties construct objects, killing the `?Type $x = null` then `?? new` pattern.",
+    "Intersection types `A&B` (8.1) require a value to satisfy **all** listed class-types — the opposite of 8.0 unions `A|B`.",
+    "`new` in initializers (8.1) lets default parameter values construct objects, killing the `?Type $x = null` then `?? new` pattern.",
     "Spread `...` accepts **string keys** in 8.1 (integer-only in 7.4), giving a literal-friendly `array_merge`.",
     "`final const` (8.1) stops subclasses from silently redefining a constant the parent depends on.",
     "Enums are classes, so they can hold `const` members — a clean place for a default case.",
-    "8.1 intersections are **pure** (interfaces only); mixing `A&B|C` needed DNF types in 8.2.",
+    "8.1 intersections are **pure** — any class-type may be a member (classes and interfaces), but mixing `&` with `|` as in `(A&B)|null` needed DNF types in 8.2.",
   ],
 
   interview: [

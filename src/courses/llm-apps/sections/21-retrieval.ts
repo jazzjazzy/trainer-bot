@@ -243,7 +243,7 @@ function report(label: string, queryVec: number[]) {
 report("how do refunds work?", [0.85, 0.1, 0.05, 0.1]);
 
 // An off-topic query: "best pizza in town?" — embeds near nothing.
-// It STILL has a best match (~0.63) — only the threshold saves us.
+// It STILL has a best match (~0.69) — only the threshold saves us.
 report("best pizza in town?", [0.25, 0.25, 0.25, 0.25]);`,
   },
 

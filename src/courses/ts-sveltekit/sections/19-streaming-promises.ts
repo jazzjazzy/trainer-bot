@@ -27,8 +27,9 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
   return {
-    post: await loadPost(params.slug), // blocks: page needs it
+    // start the slow one FIRST so it isn't blocked by the await below
     comments: loadComments(params.slug), // no await: streamed later
+    post: await loadPost(params.slug), // blocks: page needs it
   };
 };
 \`\`\`
@@ -118,10 +119,11 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
   return {
-    // awaited → blocks render (the page IS the post):
-    post: await loadPost(params.slug),
-    // un-awaited → streamed when ready:
+    // un-awaited → streamed when ready; start it FIRST:
     comments: loadComments(params.slug),
+    // awaited → blocks render (the page IS the post). Keep the
+    // await LAST, or comments can't start until post resolves:
+    post: await loadPost(params.slug),
   };
 };
 // PageData: { post: Post; comments: Promise<Comment[]> }`,
@@ -185,8 +187,8 @@ async function loadComments(slug: string): Promise<string[]> {
 // The load function: post awaited, comments NOT awaited.
 async function load(slug: string) {
   return {
-    post: await loadPost(slug),
-    comments: loadComments(slug), // stays a Promise<string[]>
+    comments: loadComments(slug), // stays a Promise<string[]>; started first
+    post: await loadPost(slug), // await LAST so comments isn't blocked by it
   };
 }
 // Inferred "PageData": { post: Post; comments: Promise<string[]> }
@@ -234,7 +236,7 @@ renderPage();`,
   quiz: [
     {
       question:
-        "A SvelteKit 2 server load returns `{ post: await loadPost(slug), comments: loadComments(slug) }`. What does the generated PageData say?",
+        "A SvelteKit 2 server load returns `{ comments: loadComments(slug), post: await loadPost(slug) }`. What does the generated PageData say?",
       options: [
         "Both post and comments are resolved values — SvelteKit awaits everything",
         "post is Post, comments is Promise<Comment[]> — the un-awaited promise streams",
