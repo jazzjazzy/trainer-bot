@@ -1,0 +1,112 @@
+name: CI & Deploy
+
+# Gates run on GitHub-hosted runners for every push and PR.
+# Deploy runs only for pushes to main, and only if the gates pass. It runs on
+# the self-hosted runner on the Coolify host, because the Coolify API listens
+# on the LAN (10.11.12.103:8000) and is deliberately not exposed to the
+# internet — the runner reaches it over localhost.
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+# One run per branch; a newer push supersedes an in-flight one. Deploys are
+# not cancelled mid-flight — see the deploy job's own concurrency group.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    name: Typecheck, content, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Executes every playground in every lesson and checks quiz integrity.
+      # PHP and Python are present on ubuntu-latest, so the PHP/Python
+      # snippets really run here rather than being skipped with a warning.
+      - name: Verify course content
+        run: npm run verify
+
+      - name: Build
+        run: npm run build
+
+      # The production server is what Coolify will actually run, so prove it
+      # boots and serves the build before we let a deploy happen.
+      - name: Smoke-test production server
+        run: |
+          set -euo pipefail
+          PORT=3999 node server/index.mjs &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          for i in $(seq 1 20); do
+            if curl -fsS -o /dev/null http://127.0.0.1:3999/; then break; fi
+            if [ "$i" = 20 ]; then echo "server did not come up"; exit 1; fi
+            sleep 0.5
+          done
+
+          echo "index.html served"
+          asset=$(curl -fsS http://127.0.0.1:3999/ \
+            | grep -oE 'assets/index-[A-Za-z0-9_-]+\.js' | head -1)
+          test -n "$asset" || { echo "no hashed bundle referenced"; exit 1; }
+          curl -fsS -o /dev/null "http://127.0.0.1:3999/$asset"
+          echo "bundle $asset served"
+
+          # No API key in CI, so the tutor must fail cleanly as JSON rather
+          # than crashing the process.
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST \
+            -H 'content-type: application/json' -d '{}' \
+            http://127.0.0.1:3999/api/ask)
+          test "$code" = "400" || { echo "/api/ask returned $code, expected 400"; exit 1; }
+          echo "/api/ask reachable and validating input"
+
+  deploy:
+    name: Deploy to Coolify
+    needs: gates
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, coolify]
+    # Never run two deploys of the same app at once, and never cancel one
+    # half-way through.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    env:
+      COOLIFY_URL: http://localhost:8000
+      COOLIFY_APP_UUID: cd0aw5iyjsl5t5dluoltbdp6
+    steps:
+      - name: Trigger Coolify deployment
+        run: |
+          set -euo pipefail
+          response=$(curl -fsS -X GET \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
+            "${COOLIFY_URL}/api/v1/deploy?uuid=${COOLIFY_APP_UUID}&force=false")
+          echo "$response"
+          echo "$response" | grep -q deployment_uuid \
+            || { echo "Coolify did not queue a deployment"; exit 1; }
+
+      - name: Summary
+        run: |
+          {
+            echo "### Deployed to Coolify"
+            echo ""
+            echo "- commit: \`${GITHUB_SHA::7}\`"
+            echo "- app: \`${COOLIFY_APP_UUID}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -80,11 +80,14 @@ Scripts:
 ```bash
 npm run dev         # dev server + AI-tutor proxy
 npm run build       # type-check (tsc --noEmit) + production build
+npm start           # serve the built dist/ + AI tutor (production server)
 npm run typecheck   # type-check only
+npm run verify      # validate every lesson across every course
 npm run preview     # preview the production build
-
-node scripts/verify-content.mjs   # validate every lesson across every course
 ```
+
+`npm start` runs `server/index.mjs` and expects `dist/` to exist, so
+`npm run build` first. It listens on `PORT` (default `3000`).
 
 ## How it works
 
@@ -141,16 +144,27 @@ things to an ex-PHP developer learning React, and the Drupal courses explain
 things to a Symfony developer.
 
 It's powered by **Claude Haiku 4.5** (`claude-haiku-4-5`) through a server-side
-proxy in `vite.config.ts`, so your API key never reaches the browser. To enable
-it, give the dev server credentials before `npm run dev`:
+handler, so your API key never reaches the browser. To enable it, give the
+server credentials before starting it:
 
 ```bash
 export ANTHROPIC_API_KEY=sk-ant-...   # or:  ant auth login
 ```
 
 Without credentials the courses work fully — the tutor just shows a "set a key"
-message. The proxy only runs under `npm run dev` / `npm run preview`; a static
-production build has no tutor.
+message.
+
+The handler lives in `server/tutor.mjs` and is mounted in **three** places from
+that one file, so dev and production can't drift:
+
+| Where | How it's mounted |
+|---|---|
+| `npm run dev` | Vite middleware (`configureServer`) |
+| `npm run preview` | Vite middleware (`configurePreviewServer`) |
+| `npm start` | `server/index.mjs`, the production server |
+
+The browser always talks to the same endpoint: `POST /api/ask`, which streams
+back `text/plain`.
 
 ## Project structure
 
@@ -170,10 +184,16 @@ src/
   ai/                       # course-aware AI tutor (AIContext + aiClient)
   lib/                      # runner (TS playground), progress, routing, theme
   styles.css
+server/
+  tutor.mjs                 # AI tutor handler — shared by dev, preview, prod
+  tutor.d.mts               # its types, for vite.config.ts
+  index.mjs                 # production server: serves dist/ + POST /api/ask
 scripts/
   verify-content.mjs        # content gate — see below
-vite.config.ts              # dev server + AI tutor proxy
-.github/secret_scanning.yml # excludes src/courses/** (see note below)
+vite.config.ts              # dev server; mounts the tutor handler
+.github/
+  workflows/ci-deploy.yml   # gates on every push; deploys main to Coolify
+  secret_scanning.yml       # excludes src/courses/** (see note below)
 ```
 
 ## Adding a course
@@ -245,8 +265,24 @@ nothing under that path should ever contain a working credential.
   markdown via `react-markdown` + `rehype-highlight` + `remark-gfm`.
 - The `typescript` package transpiles TS snippets to JS in the browser and runs
   them; async output is drained so `setTimeout`/`Promise` demos show results.
-- A small Vite dev-server proxy calls Claude for the tutor via
-  `@anthropic-ai/sdk`, keeping the key server-side.
+- The tutor calls Claude via `@anthropic-ai/sdk`, keeping the key server-side.
+- **Production** is a dependency-free Node server (`server/index.mjs`, Node
+  builtins only) that serves `dist/` and hosts the tutor endpoint.
+
+## Deployment
+
+Pushes to `main` deploy to Coolify. `.github/workflows/ci-deploy.yml` runs the
+gates (typecheck → content verification → build → production-server smoke test)
+on a GitHub-hosted runner; only if they pass does a second job trigger the
+Coolify deployment.
+
+That second job runs on a **self-hosted runner on the Coolify host**, because
+the Coolify API listens on the LAN and is deliberately not exposed to the
+internet — the runner reaches it over `localhost` and only ever connects
+*outbound* to GitHub. Pushes to `develop` and pull requests run the gates only.
+
+The deployed app runs `npm start`, so the AI tutor is live in production
+provided `ANTHROPIC_API_KEY` is set in the Coolify app's environment.
 
 ## License
 
