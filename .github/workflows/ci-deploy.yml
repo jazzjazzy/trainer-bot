@@ -26,6 +26,13 @@ jobs:
   gates:
     name: Typecheck, content, build
     runs-on: ubuntu-latest
+    env:
+      # GitHub's runners ship Xdebug, which replaces var_dump: it prefixes
+      # every dump with file:line and prints `double(3.5)` where stock PHP
+      # prints `float(3.5)`. The lessons document stock PHP, so turn Xdebug
+      # off rather than baking Xdebug's format into the course content.
+      # Quoted because bare `off` is boolean false in YAML.
+      XDEBUG_MODE: "off"
     steps:
       - uses: actions/checkout@v7
 
@@ -38,6 +45,17 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
+
+      # verify-content skips PHP/Python snippets with a warning when the
+      # interpreter is absent, and still exits 0. Fail loudly instead, so a
+      # change to the runner image can't quietly weaken the gate.
+      - name: Assert interpreters present
+        run: |
+          set -euo pipefail
+          php --version | head -1
+          python3 --version
+          test -z "$(php -m | grep -i '^xdebug$' || true)" \
+            || echo "note: xdebug is loaded but XDEBUG_MODE=off disables its var_dump override"
 
       # Executes every playground in every lesson and checks quiz integrity.
       # PHP and Python are present on ubuntu-latest, so the PHP/Python
