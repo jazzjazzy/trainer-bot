@@ -96,6 +96,13 @@ jobs:
           test "$code" = "400" || { echo "/api/ask returned $code, expected 400"; exit 1; }
           echo "/api/ask reachable and validating input"
 
+          # The site is unlisted — assert it stays that way.
+          curl -fsS http://127.0.0.1:3999/robots.txt | grep -q '^Disallow: /$' \
+            || { echo "robots.txt is not disallowing crawlers"; exit 1; }
+          curl -fsSI http://127.0.0.1:3999/ | grep -qi '^x-robots-tag:.*noindex' \
+            || { echo "X-Robots-Tag noindex header missing"; exit 1; }
+          echo "crawler directives present"
+
   deploy:
     name: Deploy to Coolify
     needs: gates

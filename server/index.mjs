@@ -73,8 +73,27 @@ async function serveFile(res, filePath, { immutable = false } = {}) {
   createReadStream(filePath).pipe(res);
 }
 
+// This site is unlisted: it should not appear in search results or be
+// scraped for training corpora. robots.txt asks crawlers not to fetch;
+// X-Robots-Tag tells the ones that do fetch not to index. Both are advisory —
+// they stop well-behaved crawlers, not a determined scraper. Anyone with the
+// URL can still read the site; this is obscurity, not access control.
+const ROBOTS_TXT = `# This site is intentionally unlisted.
+User-agent: *
+Disallow: /
+`;
+
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? "/", `http://${req.headers.host ?? "localhost"}`);
+
+  // Set before any writeHead so it lands on every response, including 404s,
+  // assets, and the tutor stream — not just HTML.
+  res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive, nosnippet");
+
+  if (url.pathname === "/robots.txt") {
+    send(res, 200, ROBOTS_TXT, { "cache-control": "public, max-age=3600" });
+    return;
+  }
 
   if (url.pathname === "/api/ask") {
     if (req.method !== "POST") {
