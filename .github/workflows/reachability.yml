@@ -1,0 +1,74 @@
+name: Public reachability check
+
+# Answers one question that cannot be answered from inside the LAN:
+# is the site actually reachable from the public internet?
+#
+# Every machine on the home network either resolves the hostname to a LAN
+# address via Pi-hole's split-horizon override, or reaches the WAN IP by NAT
+# hairpin. Both succeed even when inbound forwarding is broken, so a green
+# result from home means nothing. A GitHub-hosted runner has no such
+# relationship to the network, which makes it a valid vantage point.
+#
+# Run before showing the site to anyone: gh workflow run "Public reachability check"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [develop]
+    paths: [".github/workflows/reachability.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    name: Probe from the public internet
+    runs-on: ubuntu-latest
+    env:
+      HOSTNAME: training.oakdragon.com.au
+    steps:
+      - name: Where are we probing from
+        run: |
+          echo "runner public IP: $(curl -fsS --max-time 10 https://cloudflare.com/cdn-cgi/trace | awk -F= '/^ip=/{print $2}')"
+
+      - name: DNS
+        run: |
+          set -euo pipefail
+          resolved=$(getent ahostsv4 "$HOSTNAME" | awk '{print $1}' | sort -u | tr '\n' ' ')
+          echo "resolves to: ${resolved:-NOTHING}"
+          test -n "$resolved" || { echo "::error::$HOSTNAME does not resolve publicly"; exit 1; }
+
+      - name: Port 443 (HTTPS)
+        run: |
+          set -uo pipefail
+          out=$(curl -sS -m 20 -o /dev/null \
+            -w 'status=%{http_code} ip=%{remote_ip} tls=%{ssl_verify_result} time=%{time_total}s' \
+            "https://$HOSTNAME/" 2>&1) && rc=0 || rc=$?
+          echo "$out"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::HTTPS unreachable from the public internet (curl exit $rc). Port 443 is not forwarded to the Caddy host, or the ISP blocks it."
+            exit 1
+          fi
+          echo "::notice::HTTPS reachable"
+
+      - name: Port 80 (HTTP redirect)
+        # Non-fatal: the certificate is issued via DNS-01, so port 80 is only
+        # needed so that typing the bare hostname (no scheme) works.
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          out=$(curl -sS -m 15 -o /dev/null \
+            -w 'status=%{http_code} redirect=%{redirect_url}' \
+            "http://$HOSTNAME/" 2>&1) && rc=0 || rc=$?
+          echo "$out"
+          if [ "$rc" -ne 0 ]; then
+            echo "::warning::Port 80 unreachable. https:// works, but typing the bare hostname may fail in some browsers."
+          fi
+
+      - name: Content and crawler directives
+        run: |
+          set -euo pipefail
+          title=$(curl -fsS -m 20 "https://$HOSTNAME/" | grep -oE '<title>[^<]*</title>' | head -1)
+          echo "title: $title"
+          curl -fsSI -m 15 "https://$HOSTNAME/" | grep -i '^x-robots-tag' || echo "WARNING: no X-Robots-Tag"
+          curl -fsS -m 15 "https://$HOSTNAME/robots.txt" | head -3
