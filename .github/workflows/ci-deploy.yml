@@ -99,7 +99,9 @@ jobs:
   deploy:
     name: Deploy to Coolify
     needs: gates
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: [self-hosted, coolify]
     # Never run two deploys of the same app at once, and never cancel one
     # half-way through.
@@ -113,12 +115,28 @@ jobs:
       - name: Trigger Coolify deployment
         run: |
           set -euo pipefail
-          response=$(curl -fsS -X GET \
+          body=$(mktemp)
+          # Deliberately not using curl -f: it swallows the response body, and
+          # Coolify explains *why* it refused in that body.
+          status=$(curl -sS -o "$body" -w '%{http_code}' -X GET \
             -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
             "${COOLIFY_URL}/api/v1/deploy?uuid=${COOLIFY_APP_UUID}&force=false")
-          echo "$response"
-          echo "$response" | grep -q deployment_uuid \
-            || { echo "Coolify did not queue a deployment"; exit 1; }
+
+          echo "HTTP $status"
+          echo "--- response body ---"
+          cat "$body"; echo
+          echo "---------------------"
+
+          case "$status" in
+            200|201) ;;
+            401) echo "::error::Coolify rejected the token (401) — COOLIFY_TOKEN is invalid or expired."; exit 1 ;;
+            403) echo "::error::Coolify authenticated the token but refused the action (403). Check the token has deploy+write permission, and that Settings → API has no IP allowlist blocking this runner."; exit 1 ;;
+            404) echo "::error::Coolify has no application with uuid ${COOLIFY_APP_UUID} (404)."; exit 1 ;;
+            *)   echo "::error::Coolify returned HTTP $status"; exit 1 ;;
+          esac
+
+          grep -q deployment_uuid "$body" \
+            || { echo "::error::Coolify returned $status but queued no deployment"; exit 1; }
 
       - name: Summary
         run: |
