@@ -38,6 +38,24 @@ jobs:
           echo "resolves to: ${resolved:-NOTHING}"
           test -n "$resolved" || { echo "::error::$HOSTNAME does not resolve publicly"; exit 1; }
 
+      # If every forwarded port times out, the gateway rules are fine and
+      # something upstream (the ISP) is dropping inbound. If some answer and
+      # others don't, it's per-port filtering. This distinction decides
+      # whether the fix is a router change or a phone call to TPG.
+      - name: Which forwarded ports answer at all
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          ip=123.243.230.108
+          for spec in "80/http" "443/https" "8000/coolify-dashboard" "2222/ssh-headscale" "8443/headscale"; do
+            port=${spec%%/*}; label=${spec#*/}
+            if timeout 6 bash -c "exec 3<>/dev/tcp/$ip/$port" 2>/dev/null; then
+              printf '  %-5s %-20s OPEN\n' "$port" "$label"
+            else
+              printf '  %-5s %-20s no answer\n' "$port" "$label"
+            fi
+          done
+
       - name: Port 443 (HTTPS)
         run: |
           set -uo pipefail
