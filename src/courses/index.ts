@@ -19,6 +19,7 @@ import drupalModuleDev from "./drupal-module-dev/course";
 import drupalFormsTheming from "./drupal-forms-theming/course";
 import drupalCachingPerformance from "./drupal-caching-performance/course";
 import drupalConfigDeployment from "./drupal-config-deployment/course";
+import govcmsForDrupal from "./govcms-for-drupal/course";
 
 // The course catalog. To add a course, create `src/courses/<id>/course.ts`
 // exporting a Course, then import and list it here.
@@ -43,6 +44,7 @@ export const courses: Course[] = [
   drupalFormsTheming,
   drupalCachingPerformance,
   drupalConfigDeployment,
+  govcmsForDrupal,
 ];
 
 export function getCourse(id: string | null): Course | undefined {

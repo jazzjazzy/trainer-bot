@@ -2,7 +2,7 @@
 
 An interactive, multi-course platform for learning to code, built for one
 specific reader: a long-time PHP developer retraining for the current job
-market. **20 courses · 600 sections**, every one of them hands-on — live code
+market. **21 courses · 630 sections**, every one of them hands-on — live code
 playgrounds, side-by-side "the way you know it / the way it's done now" code
 comparisons, quizzes, interview prep, and a course-aware AI tutor.
 
@@ -47,7 +47,7 @@ data, the app renders it, and the code samples run.
 
 ### The Drupal track
 
-Six courses that go from "I know Symfony" to "I can take a Drupal build to
+Seven courses that go from "I know Symfony" to "I can take a Drupal build to
 production". Roughly in order:
 
 | # | Course | Level | What it covers |
@@ -58,6 +58,7 @@ production". Roughly in order:
 | 4 | **Drupal Forms, Render Arrays & the Theme Layer** | Advanced | The output half of Drupal. Form API beyond `buildForm()` — element plugins, `#states`, AJAX, wizards. Render arrays and the pipeline that turns them into markup. Theme hooks, template suggestions, preprocess, Drupal's Twig dialect, libraries, behaviors, Single Directory Components. |
 | 5 | **Drupal Caching & Performance** | Advanced | Cache tags, contexts and max-age as one contract, then every layer built on it: render cache, page caches, placeholders, BigPipe, Varnish and CDN purging. Plus N+1 entity loads, Views tuning, Redis, OPcache/FPM, profiling and CI regression gates. |
 | 6 | **Drupal Config Management & Deployment** | Advanced | The configuration system from the inside, then everything on top: `cex`/`cim` as review discipline, config_split and config_ignore, update hooks in deploy order, CI that gates a config import, recipes, multi-environment workflow, rollback, and auditing an inherited project. |
+| 7 | **GovCMS for Drupal Developers** | Intermediate | The Australian Government's whole-of-government Drupal platform. Why Finance built it, the OFFICIAL: Sensitive boundary, and the SaaS/PaaS fork that decides whether you are a site builder or a developer. Then the distribution, the `ahoy` scaffold, Lagoon, the deploy contract, and the validators that fail your pipeline for an enabled module or a committed file. |
 
 ### Career
 
@@ -122,7 +123,7 @@ Languages in use across the courses today:
 
 | Language | Sections | Mode |
 |---|---|---|
-| `php` | 210 | read-and-predict |
+| `php` | 240 | read-and-predict |
 | `typescript` | 208 | **runs live** |
 | `python` | 64 | read-and-predict |
 | `bash` | 39 | read-and-predict |
@@ -172,7 +173,7 @@ back `text/plain`.
 src/
   types.ts                  # Course + Lesson contracts — read this first
   courses/
-    index.ts                # the course registry (all 20 courses)
+    index.ts                # the course registry (all 21 courses)
     <course-id>/
       course.ts             # course metadata + tutor framing
       sections/
@@ -234,7 +235,7 @@ skipped with a warning.
 A healthy run ends with:
 
 ```
-600 sections across 20 course(s) · 0 failure(s) · 0 warning(s)
+630 sections across 21 course(s) · 0 failure(s) · 0 warning(s)
 ```
 
 ### Content accuracy
